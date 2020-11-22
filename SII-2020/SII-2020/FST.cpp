@@ -5,6 +5,7 @@
 #include <vector>
 #include "LT.h"
 #include "IT.h"
+#include <stack>
 //polish
 //получить приотритет для польской нотации
 short getPriority(char a)
@@ -35,159 +36,113 @@ short getPriority(char a)
 	}
 }
 
-struct stack {
-	LT::Entry elem[512];
-	int top;
-};
+std::stack<LT::Entry> EntryStack;
 
-void push(struct stack* stk, LT::Entry f) {
-	if (stk->top < 512) {
-		stk->elem[stk->top] = f;
-		stk->top++;
-	}
-}
-bool find(struct stack* stk, char f) {
-	short localTop = stk->top;
-	if (localTop != 0)
-		while (localTop != 0)
-		{
-			localTop--;
-			if (stk->elem[localTop].lexema == f)
-				return true;
-		}
-	return false;
-}
-
-LT::Entry pop(struct stack* stk) {
-	LT::Entry elem;
-	if ((stk->top) > 0)
-	{
-		stk->top--;
-		elem = stk->elem[stk->top];
-		return elem;
-	}
-};
-LT::Entry get(struct stack* stk) {
-	//LT::Entry elem;
-	if ((stk->top) > 0)
-	{
-		return stk->elem[stk->top - 1];
-	}
-};
-
-
-bool isEmpty(struct stack* stk) {
-	if (stk->top == 0)    return true;
-	else return false;
-}
-
-
-bool PolishNotation(
-	int lextablePos,
-	LT::LexTable& lextable,
-	IT::IdTable& idtable
-) {
-	char inString[256];
-	LT::Entry resultString[256];
-	struct stack* stk;
-	stk = (struct stack*)malloc(sizeof(struct stack));
-	stk->top = 0;
-	short inStringLength = 0;
-	short resultStringLength = 0;
-
-	short vCount = 0;
-	short lCount = 0;
-	short counter = 0;
-	for (short i = lextablePos; i < lextable.size; i++)
-	{
-		counter++;
-		switch (lextable.table[i].lexema)
-		{
-		case LEX_LEFTHESIS:
-		{
-			push(stk, lextable.table[i]);
-			break;
-		}
-		case LEX_RIGHTHESIS:
-		{
-			if (!find(stk, LEX_LEFTHESIS))
-				return false;
-			while (!isEmpty(stk) || get(stk).lexema == lextable.table[i].lexema)
-			{
-				if (get(stk).lexema != LEX_LEFTHESIS)
-					resultString[resultStringLength++] = pop(stk);
-				else if (get(stk).lexema == LEX_LEFTHESIS)
-					pop(stk);
-			}
-			break;
-		}
-		case LEX_PLUS:
-		{
-			vCount++;
-			//char tmp = get(stk).lexema[0];
-			
-			short currentPrior = getPriority(lextable.table[i].data);
-			if (getPriority(get(stk).data) >= currentPrior)
-				while (!isEmpty(stk))
-				{
-					if (getPriority(get(stk).data) >= currentPrior)
-						resultString[resultStringLength++] = pop(stk);
-					else 
-						break;
-				}
-			push(stk, lextable.table[i]);
-			
-			break;
-		}
-		case LEX_SEMICOLON:
-		{
-			while (!isEmpty(stk))
-			{
-				if (get(stk).lexema == LEX_LEFTHESIS || get(stk).lexema == LEX_RIGHTHESIS || lCount - vCount != 1)
-					return false;
-				resultString[resultStringLength++] = pop(stk);
-			}
-			std::cout << std::endl;
-			for (int pos = lextablePos; pos < resultStringLength; pos++)
-			{
-				if(resultString[pos].lexema == LEX_PLUS)
-					std::cout << resultString[pos].data;
-				else
-					std::cout << resultString[pos].lexema;
-				lextable.table[pos] = resultString[pos];
-			}
-			std::cout << std::endl;
-			LT::Entry empty;
-			empty.lexema = '\0';
-			empty.sn = 0;
-			empty.idxTI = 0;
-			empty.data = '\0';
-			for (int pos = resultStringLength; pos < counter; pos++)
-			{
-				lextable.table[pos] = empty;
-			}
-
-			return true;
-			break;
-		}
-		case LEX_COMMA:
-		{
-			while (!isEmpty(stk))
-			{
-				resultString[resultStringLength++] = pop(stk);
-			}
-		}
-
-		default:
-		{
-			if (lextable.table[i].lexema == LEX_ID || lextable.table[i].lexema == LEX_LITERAL)
-				lCount++;
-			resultString[resultStringLength++] = lextable.table[i];
-			break;
-		}
-		}
-	}
-}
+//bool PolishNotation(
+//	int lextablePos,
+//	LT::LexTable& lextable,
+//	IT::IdTable& idtable
+//) {
+//	char inString[256];
+//	LT::Entry resultString[256];
+//	struct stack* stk;
+//	
+//	short inStringLength = 0;
+//	short resultStringLength = 0;
+//
+//	short vCount = 0;
+//	short lCount = 0;
+//	short counter = 0;
+//	for (short i = lextablePos; i < lextable.size; i++)
+//	{
+//		counter++;
+//		switch (lextable.table[i].lexema)
+//		{
+//		case LEX_LEFTHESIS:
+//		{
+//			push(stk, lextable.table[i]);
+//			break;
+//		}
+//		case LEX_RIGHTHESIS:
+//		{
+//			if (!find(stk, LEX_LEFTHESIS))
+//				return false;
+//			while (!isEmpty(stk) || get(stk).lexema == lextable.table[i].lexema)
+//			{
+//				if (get(stk).lexema != LEX_LEFTHESIS)
+//					resultString[resultStringLength++] = pop(stk);
+//				else if (get(stk).lexema == LEX_LEFTHESIS)
+//					pop(stk);
+//			}
+//			break;
+//		}
+//		case LEX_PLUS:
+//		{
+//			vCount++;
+//			//char tmp = get(stk).lexema[0];
+//			
+//			short currentPrior = getPriority(lextable.table[i].data);
+//			if (getPriority(get(stk).data) >= currentPrior)
+//				while (!isEmpty(stk))
+//				{
+//					if (getPriority(get(stk).data) >= currentPrior)
+//						resultString[resultStringLength++] = pop(stk);
+//					else 
+//						break;
+//				}
+//			push(stk, lextable.table[i]);
+//			
+//			break;
+//		}
+//		case LEX_SEMICOLON:
+//		{
+//			while (!isEmpty(stk))
+//			{
+//				if (get(stk).lexema == LEX_LEFTHESIS || get(stk).lexema == LEX_RIGHTHESIS || lCount - vCount != 1)
+//					return false;
+//				resultString[resultStringLength++] = pop(stk);
+//			}
+//			std::cout << std::endl;
+//			for (int pos = lextablePos; pos < resultStringLength; pos++)
+//			{
+//				if(resultString[pos].lexema == LEX_PLUS)
+//					std::cout << resultString[pos].data;
+//				else
+//					std::cout << resultString[pos].lexema;
+//				lextable.table[pos] = resultString[pos];
+//			}
+//			std::cout << std::endl;
+//			LT::Entry empty;
+//			empty.lexema = '\0';
+//			empty.sn = 0;
+//			empty.idxTI = 0;
+//			empty.data = '\0';
+//			for (int pos = resultStringLength; pos < counter; pos++)
+//			{
+//				lextable.table[pos] = empty;
+//			}
+//
+//			return true;
+//			break;
+//		}
+//		case LEX_COMMA:
+//		{
+//			while (!isEmpty(stk))
+//			{
+//				resultString[resultStringLength++] = pop(stk);
+//			}
+//		}
+//
+//		default:
+//		{
+//			if (lextable.table[i].lexema == LEX_ID || lextable.table[i].lexema == LEX_LITERAL)
+//				lCount++;
+//			resultString[resultStringLength++] = lextable.table[i];
+//			break;
+//		}
+//		}
+//	}
+//}
 
 FST::RELATION::RELATION(char c, short ns)
 {
@@ -208,7 +163,6 @@ FST::NODE::NODE(short n, RELATION rel, ...) //с параметрами
 	for (short i = 0; i < n; i++)
 		relations[i] = p[i];
 };
-
 FST::FST::FST(char* s, short ns, NODE n, ...)
 {
 	string = s;
@@ -221,7 +175,6 @@ FST::FST::FST(char* s, short ns, NODE n, ...)
 	rstates[0] = 0;
 	position = -1;
 };
-
 bool step(FST::FST& fst, short*& rstates, int length) //один шаг автомата
 {
 	bool rc = false;
@@ -261,7 +214,6 @@ bool step(FST::FST& fst, short*& rstates, int length) //один шаг автомата
 	};
 	return rc;
 }
-
 struct col
 {
 
@@ -285,7 +237,6 @@ public:
 private:
 	int column;
 } colum;
-
 bool FST::execute(FST& fst) //выполнить распознование цепочки
 {
 
@@ -305,8 +256,6 @@ bool FST::execute(FST& fst) //выполнить распознование цепочки
 	delete[] rstates;
 	return (rc ? (fst.rstates[fst.nstates - 1] == lstring) : rc);
 }
-
-
 void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lextable, IT::IdTable& idtable) //выполнить распознование цепочки
 {
 	char* str = new char[255];
@@ -1034,18 +983,17 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	IT::IDTYPE type = (IT::IDTYPE)FALSYNUMBER;
 #pragma endregion
 
-
-
 #pragma region "перебор"
 	for (int i = 0; i < in.lexems.size(); i++)
 	{
 		In::lexem lex = in.lexems.front();
 		in.lexems.pop_front();
+
 		int len = strlen((const char*)(lex.lexem)); //длина строки ktrctvs
 #pragma region "запись лексемы в str"
 		for (int k = 0; k < len; k++)
 		{
-			str[k] = in.lexems[i].lexem[k];
+			str[k] = lex.lexem[k];
 		}
 		str[len] = '\0';
 #pragma endregion
@@ -1062,7 +1010,7 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 #pragma region "Установка флага"
 
 
-				LT::Entry tmp(checkArr[j].lexName, in.lexems[i].line, checkArr[j].position);
+				LT::Entry tmp(checkArr[j].lexName, lex.line, checkArr[j].position);
 				switch (checkArr[j].lexName)
 				{
 				case LEX_INTEGER:
@@ -1098,9 +1046,7 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						type = IT::P;
 					}
 					break;
-
 				case LEX_RIGHTHESIS:
-
 					if (isFunctionParam)
 					{
 						scopeStack.pop_back();
@@ -1123,8 +1069,6 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						isRequireBodyFunc = false;
 					}
 					break;
-
-
 				case LEX_RIGHTBRACE:
 					if (isRequireBodyFunc)
 					{
@@ -1151,18 +1095,9 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						IT::Entry ttmp(lextable.size - 1, (char*)"\0", scopeStack.back().c_str(), checkArr[j].iddatatype, IT::L, str);
 						IT::Add(idtable, ttmp);
 					}
-
-					
-
 					break;
 				}
-				
-				
-				
-			
-
 #pragma endregion
-
 #pragma region "Если итендификатор"
 				if (tmp.lexema == LEX_ID)
 				{
@@ -1174,15 +1109,10 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 							IT::Entry ttmp(lextable.size, str, scopeStack.back().c_str(), dataType, type);
 							IT::Add(idtable, ttmp);
 							tmp.idxTI = idtable.size - 1;
-
-
 							dataType = (IT::IDDATATYPE)FALSYNUMBER;
 							if (!isFunctionParam)
 								type = (IT::IDTYPE)FALSYNUMBER;
-
-
 							bool onceFlag = false;
-							
 						}
 						else
 						{
@@ -1207,7 +1137,7 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			}
 		}
 		if (!executedFlag) {
-			throw ERROR_THROW_IN(120, in.lexems[i].line, in.lexems[i].col);
+			throw ERROR_THROW_IN(120, lex.line, lex.col);
 		}
 	}
 #pragma endregion

@@ -189,7 +189,6 @@ namespace IT	//таблица итендификаторов
 		Entry* table;	//массив строк таблицы итендификаторов
 	};
 	IdTable Create(	//создать таблицу ID
-		int size	//Ємкость
 	);
 	void Add(
 		IdTable& idtable,	//экземпл€р таблицы итендификаторов

@@ -1,4 +1,4 @@
-integer fi(x,y)
+integer function fi(integer x, integer y)
 {
 declare integer z;
 z = 1 + fi(1,2,3)+x;
