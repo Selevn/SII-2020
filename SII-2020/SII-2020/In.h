@@ -273,7 +273,6 @@ namespace In
 	{
 		int line;
 		int col;
-		int len;
 		unsigned char* lexem;
 	};
 

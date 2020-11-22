@@ -1,3 +1,4 @@
-﻿  In.cpp
-C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\In.cpp(39,13): warning C4244: инициализация: преобразование "std::streamoff" в "int", возможна потеря данных
+﻿  Error.cpp
+  Log.cpp
+  Создание кода...
   SII-2020.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020.exe

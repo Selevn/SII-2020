@@ -28,19 +28,19 @@ namespace Error
 		ERROR_ENTRY_NODEF10(70),
 		ERROR_ENTRY_NODEF10(80),
 		ERROR_ENTRY_NODEF10(90),
-		ERROR_ENTRY(100, "[PARM]: Параметр -in должен быть задан"),//
+		ERROR_ENTRY(100, "[PARM]: Параметр -in должен быть задан"),//+
 		ERROR_ENTRY_NODEF(101),
 		ERROR_ENTRY_NODEF(102),
 		ERROR_ENTRY_NODEF(103),
-		ERROR_ENTRY(104, "[PARM]: Превышена длина входного параметра"),//
+		ERROR_ENTRY(104, "[PARM]: Превышена длина входного параметра"),//+
 		ERROR_ENTRY_NODEF(105),
 		ERROR_ENTRY_NODEF(106),
 		ERROR_ENTRY_NODEF(107),
 		ERROR_ENTRY_NODEF(108),
 		ERROR_ENTRY_NODEF(109),
 		ERROR_ENTRY(110, "[IN]: Ошибка при открытии файла с исходным кодом (-in)"),//+
-		ERROR_ENTRY(111, "[IN]: Недопустимый символ в исходном файле (-in)"),//
-		ERROR_ENTRY(112, "[IN]: Превышен предел размера входного кода"),//
+		ERROR_ENTRY(111, "[IN]: Недопустимый символ в исходном файле (-in)"),//+
+		ERROR_ENTRY(112, "[IN]: Превышен предел размера входного файла (-in)"),//+
 		ERROR_ENTRY(113, "[IN]: Превышен предел размера токена"),//
 		ERROR_ENTRY(114, "[IN]: Отсуствует закрывающая кавычка"),//
 		ERROR_ENTRY_NODEF(115),

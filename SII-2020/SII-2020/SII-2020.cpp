@@ -24,7 +24,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		Parm::PARM parm = Parm::getparm(argc, argv);
 		log = Log::getlog(parm.log);
 		out = Out::getout(parm.out);
+		Log::WriteParm(log,parm);
+		Log::WriteLog(log);
 		In::IN in = In::getin(parm.in);
+		Log::WriteIn(log, in);
 	}
 	catch (Error::ERROR e)
 	{

@@ -29,6 +29,7 @@ namespace Log //работа с протоколом
 			*(log.stream) << *temp;
 			temp++;
 		}
+		*(log.stream) << std::endl;
 	}
 	void WriteLine(LOG log, wchar_t* c, ...)
 	{
@@ -41,11 +42,12 @@ namespace Log //работа с протоколом
 			*(log.stream) << ttmp;
 			temp++;
 		}
+		*(log.stream) << std::endl;
 	}
 
 	void WriteLog(LOG log)
 	{
-		*(log.stream) << "\n---- Протокол ----- Дата: ";
+		*(log.stream) << "---- Протокол -----\n\tДата: ";
 		time_t time_sec = time(NULL);
 		tm time_date;
 		localtime_s(&time_date, &time_sec);
@@ -77,26 +79,29 @@ namespace Log //работа с протоколом
 		*log.stream << "\n-in: ";
 		while ((ch = wctob(parm.in[i++])) != EOF)
 			*log.stream << ch;
+		*(log.stream) << std::endl;
 	}
 	void WriteIn(LOG log, In::IN in)
 	{
-		*(log.stream) << "\n---- Исходные данные ------\n";
-		*(log.stream) << "Количество символов:" << in.size;
-		*(log.stream) << "\nПроигнорировано:" << in.ignor;
-		*(log.stream) << "\nКоличество строк:" << in.lines;
+		*(log.stream) << "---- Исходные данные ------\n";
+		*(log.stream) << "Количество символов: " << in.size;
+		*(log.stream) << "\nКоличество лексем: " << in.lexems.size();
+		*(log.stream) << "\nКоличество строк: " << in.lines<<std::endl;
 	}
 	void WriteError(LOG log, Error::ERROR error)
 	{
 
-		std::cout << "\nОшибка " << error.id << ": " << error.message;
+		std::cout << "Ошибка " << error.id << ": " << error.message;
 		if (error.inext.col != -1 && error.inext.line != -1)
-			std::cout << ", строка " << error.inext.line << ", столбец " << error.inext.col;
+			std::cout << ", строка " << error.inext.line << ", столбец " << error.inext.col<<std::endl;
 
 		if (log.stream != NULL)
 		{
 			*log.stream << "\nОшибка " << error.id << ": " << error.message;
 			if (error.inext.col != -1 && error.inext.line != -1)
-				*(log.stream) << ", строка " << error.inext.line << ", столбец " << error.inext.col;
+				*(log.stream) << ", строка " << error.inext.line << ", столбец " << error.inext.col << std::endl;
+			else
+				*(log.stream)<< std::endl;
 		}
 
 
