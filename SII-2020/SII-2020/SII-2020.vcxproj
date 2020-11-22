@@ -139,28 +139,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="D:\Ковчег\LP_LAB15\LP_LAB15\FST.cpp" />
-    <ClCompile Include="D:\Ковчег\LP_LAB15\LP_LAB15\GRB.cpp" />
-    <ClCompile Include="D:\Ковчег\LP_LAB15\LP_LAB15\IT.cpp" />
-    <ClCompile Include="D:\Ковчег\LP_LAB15\LP_LAB15\LT.cpp" />
-    <ClCompile Include="D:\Ковчег\LP_LAB15\LP_LAB15\MFST.cpp" />
     <ClCompile Include="Error.cpp" />
+    <ClCompile Include="FST.cpp" />
+    <ClCompile Include="GRB.cpp" />
     <ClCompile Include="In.cpp" />
+    <ClCompile Include="IT.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="LT.cpp" />
+    <ClCompile Include="MFST.cpp" />
     <ClCompile Include="Out.cpp" />
     <ClCompile Include="Parm.cpp" />
     <ClCompile Include="SII-2020.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="D:\Ковчег\LP_LAB15\LP_LAB15\FST.h" />
-    <ClInclude Include="D:\Ковчег\LP_LAB15\LP_LAB15\GRB.h" />
-    <ClInclude Include="D:\Ковчег\LP_LAB15\LP_LAB15\IT.h" />
-    <ClInclude Include="D:\Ковчег\LP_LAB15\LP_LAB15\LEX.h" />
-    <ClInclude Include="D:\Ковчег\LP_LAB15\LP_LAB15\LT.h" />
-    <ClInclude Include="D:\Ковчег\LP_LAB15\LP_LAB15\MFST.h" />
     <ClInclude Include="Error.h" />
+    <ClInclude Include="FST.h" />
+    <ClInclude Include="GRB.h" />
     <ClInclude Include="In.h" />
+    <ClInclude Include="IT.h" />
+    <ClInclude Include="LEX.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="LT.h" />
+    <ClInclude Include="MFST.h" />
     <ClInclude Include="Out.h" />
     <ClInclude Include="Parm.h" />
   </ItemGroup>

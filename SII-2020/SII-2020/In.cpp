@@ -3,27 +3,27 @@
 #include <fstream>
 #include "FST.h"
 
+
 #define SEP_LENGTH 8
 namespace In
 {
-	IN getin(wchar_t* infile)
+	/*IN getin(wchar_t* infile, Log::LOG log)
 	{
 
-		char separators[SEP_LENGTH] = { ' ',';','(',')','-','+','=',','};
-
 		
+	}*/
+	IN getin(wchar_t infile[])
+	{
+		//char separators[SEP_LENGTH] = { ' ',';','(',')','-','+','=',','};
+
 		IN out;
 		out.lines = 1;
 		out.size = 0;
 		out.ignor = 0;
-		out.oneQuoteOpened = false;
-		out.doubleQuoteOpened = false;
-		out.tildaQuoteOpened = false;
 
 		bool spaceFlag = false;
 
-		out.lexemPos = 0;
-
+		//out.lexemPos = 0;
 
 		std::ifstream file(infile);
 		if (!file)
@@ -32,176 +32,128 @@ namespace In
 		}
 		else
 		{
+
 			unsigned int chars[] = IN_CODE_TABLE;
 			file >> std::noskipws;
 			file.seekg(0, std::ios_base::end);
 			int size = file.tellg();
 			file.seekg(0, std::ios_base::beg);
 
-			out.text = new unsigned char[sizeof(char) * size];
+			//ut.text = new unsigned char[sizeof(char) * size];
 
-			unsigned char word[500];
+			//unsigned char word[500];
 			int wordPosCount = 0;
 
 			unsigned char tmp;
-			int counter = 0; //счетчик символов
-			int line_counter = 1; //счетчик строки
+			int line_counter = 1; //счетчик символов строки строки
+
+			lexem currentLex;
+			unsigned char * lexContainer= new unsigned char[255];
+			int lexContainerLen = 0;
+
+			//WriteLine(log, "Начало чтения файла!");
+
 			while (!file.eof())
 			{
-				//Почему последний символ читает дважды?
 				file >> tmp;
-				
-
 				switch (chars[(int)tmp])
 				{
 				case IN::T://out.T://IN::T //введен
 				{
-					if (tmp == '\'')
-					{
-						if (!out.doubleQuoteOpened && !out.tildaQuoteOpened) //кавычки в кавычках
-							out.oneQuoteOpened = !out.oneQuoteOpened;
+					if (lexContainerLen == 0) {
+						currentLex.line = out.lines;
+						currentLex.col = line_counter;
 					}
-					if (tmp == L'"')
+					else
 					{
-						if (!out.oneQuoteOpened && !out.tildaQuoteOpened)//кавычки в кавычках
-							out.doubleQuoteOpened = !out.doubleQuoteOpened;
-					}
-					if (tmp == L'`')
-					{
-						if (!out.oneQuoteOpened && !out.doubleQuoteOpened)//кавычки в кавычках
-							out.tildaQuoteOpened = !out.tildaQuoteOpened;
-					}
-					if ((tmp == ' ' || tmp == '\n' || tmp == '\t'))//встретили первый пробел
-					{
-						if (out.doubleQuoteOpened || out.tildaQuoteOpened || out.oneQuoteOpened)
-							word[wordPosCount++] = tmp;
-						if (!spaceFlag)
-						{
-							spaceFlag = true;
-							out.text[out.size++] = tmp;
-							line_counter++;
-						}
-						if (wordPosCount != 0 && ((!out.oneQuoteOpened) && (!out.doubleQuoteOpened) && (!out.tildaQuoteOpened)))
-						{
-			
-							word[wordPosCount] = '\0';
-							out.lexems[out.lexemPos].line = out.lines;
-							out.lexems[out.lexemPos].col = line_counter;
-							out.lexems[out.lexemPos].lexem = new unsigned char[sizeof(char) * wordPosCount];
-							for (int j = 0; j < wordPosCount; j++)
-							{
-								out.lexems[out.lexemPos].lexem[j] = word[j];
-							}
-							out.lexems[out.lexemPos].lexem[wordPosCount] = '\0';
-							out.lexems[out.lexemPos].col = line_counter - wordPosCount;
-
-							out.lexemPos++;
-							wordPosCount = 0;
-						}
-
-						
-					}
-					
-					if (tmp != ' ')
-					{
-						spaceFlag = false;
-
 						line_counter++;
-						if (tmp != '\t' && tmp != '\n')
-						{
-							out.text[out.size++] = tmp;
-							word[wordPosCount++] = tmp; //нашли лексему начинаем писать
-						}
-
 					}
-
+					lexContainer[lexContainerLen++] = tmp;
+					break;
+				}
+				case IN::S://space
+				{
+					line_counter++;
+					if (lexContainerLen != 0) {
+						lexContainer[lexContainerLen++] = '\0';
+						currentLex.lexem = new unsigned char[lexContainerLen];
+						for (int i = 0; i < lexContainerLen; i++)
+							currentLex.lexem[i] = lexContainer[i];
+						out.lexems.push_back(currentLex);
+						delete lexContainer;
+						lexContainer = new unsigned char[255];
+						lexContainerLen = 0;
+					}
 					break;
 				}
 				case IN::I://out.I://IN::T //введен
 				{
+					line_counter++;
 					out.ignor++;
-					//line_counter++;
 					break;
 				}
 				case IN::L:// одиночная лексема
 				{
-					//нужно сохранить предыдущую и сделать новую
-					if (wordPosCount == 0)//если нет прошлой лексемы
-					{
-						out.text[out.size++] = tmp;
+					line_counter++;
+					if (lexContainerLen != 0) {
 						line_counter++;
-
-						out.lexems[out.lexemPos].col = line_counter;
-						out.lexems[out.lexemPos].line = out.lines;
-						out.lexems[out.lexemPos].lexem = new unsigned char[2];
-						out.lexems[out.lexemPos].lexem[0] = tmp;
-						out.lexems[out.lexemPos].lexem[1] = '\0';
-						out.lexemPos++;
+						lexContainer[lexContainerLen++] = '\0';
+						currentLex.lexem = new unsigned char[lexContainerLen];
+						for (int i = 0; i < lexContainerLen; i++)
+							currentLex.lexem[i] = lexContainer[i];
+						out.lexems.push_back(currentLex);
+						delete lexContainer;
+						lexContainerLen = 0;
 					}
-					else
-					{
-
-						out.text[out.size++] = tmp;
-						line_counter++;
-
-						word[wordPosCount] = '\0';
-						out.lexems[out.lexemPos].line = out.lines;
-						out.lexems[out.lexemPos].col = line_counter;
-						out.lexems[out.lexemPos].lexem = new unsigned char[sizeof(char) * wordPosCount];
-						for (int j = 0; j < wordPosCount; j++)
-						{
-							out.lexems[out.lexemPos].lexem[j] = word[j];
-						}
-						out.lexems[out.lexemPos].lexem[wordPosCount] = '\0';
-						out.lexems[out.lexemPos].col = line_counter - wordPosCount;
-
-						out.lexemPos++;
-						wordPosCount = 0;
-
-
-						out.lexems[out.lexemPos].col = line_counter;
-						out.lexems[out.lexemPos].line = out.lines;
-						out.lexems[out.lexemPos].lexem = new unsigned char[2];
-						out.lexems[out.lexemPos].lexem[0] = tmp;
-						out.lexems[out.lexemPos].lexem[1] = '\0';
-						out.lexemPos++;
-					}
-
+					lexContainer = new unsigned char[255];
+					lexContainer[0] = tmp;
+					lexContainer[1] = '\0';
+					lexContainerLen = 2;
+					currentLex.line = out.lines;
+					currentLex.col = line_counter;
+					currentLex.lexem = new unsigned char[lexContainerLen];
+					for (int i = 0; i < lexContainerLen; i++)
+						currentLex.lexem[i] = lexContainer[i];
+					out.lexems.push_back(currentLex);
+					delete lexContainer;
+					lexContainer = new unsigned char[255];
+					lexContainerLen = 0;
 					break;
 				}
 				case IN::F://out.F://IN::T //введен
 				{
-					if ((!out.oneQuoteOpened) && (!out.doubleQuoteOpened) && (!out.tildaQuoteOpened)) //если все кавычки закрыты
-					{
+					line_counter++;
 					throw ERROR_THROW_IN(111, out.lines, line_counter)
 						break;
+				}
+				case IN::N://out.F://IN::T //введен
+				{
+					out.lines++;
+					line_counter = 1;
+					if (lexContainerLen != 0) {
+						lexContainer[lexContainerLen++] = '\0';
+						currentLex.lexem = new unsigned char[lexContainerLen];
+						for (int i = 0; i < lexContainerLen; i++)
+							currentLex.lexem[i] = lexContainer[i];
+						out.lexems.push_back(currentLex);
+						delete lexContainer;
+						lexContainerLen = 0;
+						lexContainer = new unsigned char[255];
 					}
-					else
-					{
-					
-						word[wordPosCount++] = tmp;
-						out.text[out.size++] = tmp;
-						line_counter++;
-						break;
-					}
+					break;
 				}
 				default:
 				{
-					out.text[out.size++] = (unsigned char)chars[tmp];
-					line_counter++;
+					std::cout << "Default input: " << tmp;
 					break;
 				}
 				}
-				if (tmp == IN_CODE_ENDL)
-				{
-					line_counter = 1;
-					out.lines++;
-				}
-
 			}
-			out.text[out.size--] = '\0';
+			delete lexContainer;
 			file.close();
+			//WriteLine(log, "Конец чтения файла!");
 
+			for (lexem n : out.lexems) std::cout << n.lexem << "\n";
 		}
 
 		return out;

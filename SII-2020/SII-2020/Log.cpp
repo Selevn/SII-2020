@@ -1,6 +1,7 @@
 #include "Parm.h"
 #include "Error.h"
 #include "Log.h"
+#include "In.h"
 #include <fstream>
 
 #include <iostream>
@@ -22,7 +23,6 @@ namespace Log //работа с протоколом
 	}
 	void WriteLine(LOG log, const char* c, ...)
 	{
-
 		const char** temp = &c;
 		while (*temp != "")
 		{

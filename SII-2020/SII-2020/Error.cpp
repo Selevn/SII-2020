@@ -38,7 +38,7 @@ namespace Error
 		ERROR_ENTRY_NODEF(107),
 		ERROR_ENTRY_NODEF(108),
 		ERROR_ENTRY_NODEF(109),
-		ERROR_ENTRY(110, "[IN]: Ошибка при открытии файла с исходным кодом (-in)"),//
+		ERROR_ENTRY(110, "[IN]: Ошибка при открытии файла с исходным кодом (-in)"),//+
 		ERROR_ENTRY(111, "[IN]: Недопустимый символ в исходном файле (-in)"),//
 		ERROR_ENTRY(112, "[IN]: Превышен предел размера входного кода"),//
 		ERROR_ENTRY(113, "[IN]: Превышен предел размера токена"),//

@@ -3,10 +3,11 @@
 #define IN_MAX_LEN_TEXT 1024*1024 //макс размер исходного кода 1 мб
 #define IN_CODE_ENDL '\n' //символ конца строки
 #define DIVIDE ';' //разделитель
+#include <list>
+
 //таблица проверки входной информации, индекс = код(Windows-1251) символа
 //значения IN::F - запрещенный символ, IN::T - разрешенный символ, IN::I - игнорировать(не вводить),
 // если 0Б= значение 256 - то вводится данное значение
-
 #define IN_CODE_TABLE {\
 IN::T,/**/\
 IN::F,/**/\
@@ -18,7 +19,7 @@ IN::F,/**/\
 IN::F,/**/\
 IN::F,/**/\
 IN::T,/* */\
-IN::T,/*newline*/\
+IN::N,/*New line*/\
 IN::F,/**/\
 IN::F,/**/\
 IN::T,/*newline*/\
@@ -40,14 +41,14 @@ IN::F,/**/\
 IN::F,/**/\
 IN::F,/**/\
 IN::F,/**/\
-IN::T,/* */\
+IN::S,/* */\
 IN::T,/*!*/\
-IN::T,/*"*/\
+IN::F,/*"*/\
 IN::T,/*#*/\
 IN::T,/*$*/\
 IN::T,/*%*/\
 IN::T,/*&*/\
-IN::T,/*'*/\
+IN::F,/*'*/\
 IN::L,/*(*/\
 IN::L,/*)*/\
 IN::L,/***/\
@@ -104,7 +105,7 @@ IN::T,/*\*/\
 IN::L,/*]*/\
 IN::L,/*^*/\
 IN::T,/*_*/\
-IN::T,/*`*/\
+IN::F,/*`*/\
 IN::T,/*a*/\
 IN::T,/*b*/\
 IN::T,/*c*/\
@@ -268,32 +269,26 @@ IN::F,/**/\
 
 namespace In
 {
-	struct lexems
+	struct lexem
 	{
 		int line;
 		int col;
+		int len;
 		unsigned char* lexem;
 	};
 
 	struct IN //исходные данные
 	{
-		enum { T = 1024, F = 2048, I = 4096, L = 256, S = 0 }; //S - space t - допустимый символ F- недопустимый I- игнорировать, иначе заменить L - Single lexem
+		enum { T = 1024, F = 2048, I = 4096, L = 256,C = 128, N = 64, S = 0  }; //S - space t - допустимый символ F- недопустимый I- игнорировать, иначе заменить, C-comma, L - Single lexem
 		int size;		//размер исходного кода
 		int lines;		//количество строк
 		int ignor;		//кол-во проигнорированных символов
-		unsigned char* text;		//Исходный код (Windows - 1251)
+		//unsigned char* text;		
 		int code[256];		//таблица проверки T, F, I новое значение
 
-		//UPD
-
-		bool oneQuoteOpened;
-		bool doubleQuoteOpened;
-		bool tildaQuoteOpened;
-
-		//UPD 2
-		lexems lexems[4096];
-		int lexemPos;
+		std::list<lexem> lexems;//Исходный код (Windows - 1251)
 
 	};
+
 	IN getin(wchar_t infile[]);  //ввести и проверить входной поток
 }
