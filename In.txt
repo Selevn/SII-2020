@@ -1,10 +1,10 @@
-integer function fi(integer x, integer y)
+declare integer function fi(integer x, integer y)
 {
 declare integer z;
-z = 1 + fi(1,2,3)+x;
+z = 1+x;
 return z;
 };
-string function fs (string a, string b)
+declare string function fs (string a, string b)
 {
 declare string c;
 declare string function substr(string a, integer p,integer n);

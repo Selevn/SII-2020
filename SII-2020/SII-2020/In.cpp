@@ -3,8 +3,6 @@
 #include <fstream>
 #include "FST.h"
 
-
-#define SEP_LENGTH 8
 namespace In
 {
 	IN getin(wchar_t infile[])
@@ -26,9 +24,9 @@ namespace In
 			if(size > IN_MAX_LEN_TEXT)
 				throw ERROR_THROW(112)
 			unsigned char tmp;
-			int line_counter = 1; //счетчик символов строки строки
+			int line_counter = 0; //счетчик символов строки
 			lexem currentLex;
-			unsigned char * lexContainer= new unsigned char[255];
+			unsigned char * lexContainer= new unsigned char[MAX_LEXEM_LENGTH];
 			int lexContainerLen = 0;
 			//WriteLine(log, "Начало чтения файла!");
 			while (file >> tmp)
@@ -37,15 +35,14 @@ namespace In
 				{
 				case IN::T://out.T://IN::T //введен
 				{
+					line_counter++;
 					out.size++;
 					if (lexContainerLen == 0) {
 						currentLex.line = out.lines;
 						currentLex.col = line_counter;
 					}
-					else
-					{
-						line_counter++;
-					}
+					if (lexContainerLen > MAX_LEXEM_LENGTH)
+						throw ERROR_THROW_IN(113, out.lines, line_counter);
 					lexContainer[lexContainerLen++] = tmp;
 					break;
 				}
@@ -60,7 +57,7 @@ namespace In
 							currentLex.lexem[i] = lexContainer[i];
 						out.lexems.push_back(currentLex);
 						delete []lexContainer;
-						lexContainer = new unsigned char[255];
+						lexContainer = new unsigned char[MAX_LEXEM_LENGTH];
 						lexContainerLen = 0;
 					}
 					break;
@@ -76,7 +73,7 @@ namespace In
 					out.size++;
 					line_counter++;
 					if (lexContainerLen != 0) {
-						line_counter++;
+						//line_counter++;
 						lexContainer[lexContainerLen++] = '\0';
 						currentLex.lexem = new unsigned char[lexContainerLen];
 						for (int i = 0; i < lexContainerLen; i++)
@@ -85,7 +82,7 @@ namespace In
 						delete []lexContainer;
 						lexContainerLen = 0;
 					}
-					lexContainer = new unsigned char[255];
+					lexContainer = new unsigned char[MAX_LEXEM_LENGTH];
 					lexContainer[0] = tmp;
 					lexContainer[1] = '\0';
 					lexContainerLen = 2;
@@ -96,7 +93,7 @@ namespace In
 						currentLex.lexem[i] = lexContainer[i];
 					out.lexems.push_back(currentLex);
 					delete []lexContainer;
-					lexContainer = new unsigned char[255];
+					lexContainer = new unsigned char[MAX_LEXEM_LENGTH];
 					lexContainerLen = 0;
 					break;
 				}
@@ -110,7 +107,7 @@ namespace In
 				{
 					out.size++;
 					out.lines++;
-					line_counter = 1;
+					line_counter = 0;
 					if (lexContainerLen != 0) {
 						lexContainer[lexContainerLen++] = '\0';
 						currentLex.lexem = new unsigned char[lexContainerLen];
@@ -119,7 +116,7 @@ namespace In
 						out.lexems.push_back(currentLex);
 						delete []lexContainer;
 						lexContainerLen = 0;
-						lexContainer = new unsigned char[255];
+						lexContainer = new unsigned char[MAX_LEXEM_LENGTH];
 					}
 					break;
 				}
@@ -133,7 +130,7 @@ namespace In
 			delete []lexContainer;
 			file.close();
 			//WriteLine(log, "Конец чтения файла!");
-			for (lexem n : out.lexems) std::cout << n.lexem << "\n";
+			//for (lexem n : out.lexems) std::cout << n.lexem << "\n";
 		}
 
 		return out;

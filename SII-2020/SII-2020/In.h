@@ -3,6 +3,7 @@
 #define IN_MAX_LEN_TEXT 1024*1024 //макс размер исходного кода 1 мб
 #define IN_CODE_ENDL '\n' //символ конца строки
 #define DIVIDE ';' //разделитель
+#define MAX_LEXEM_LENGTH 16 //максимальная длина лексемы
 #include <list>
 
 //таблица проверки входной информации, индекс = код(Windows-1251) символа

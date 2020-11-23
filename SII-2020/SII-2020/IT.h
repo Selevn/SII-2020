@@ -1,6 +1,6 @@
 #pragma once
 
-#define ID_MAXSIZE		5 //макс кол-во символов в итендиф
+#define ID_MAXSIZE		25 //макс кол-во символов в итендиф
 #define	TI_MAXSIZE		4096 //макс кол-во строк в табл итендификаторов
 #define TI_INT_DEFAULT	0x00000000	//значение int по дефолту
 #define	TI_STR_DEFAULT	0x00		//значение string по дефолту
@@ -11,14 +11,13 @@
 
 namespace IT	//таблица итендификаторов
 {
-	enum IDDATATYPE {INT=1, STR=2};//таблица данных итендификаторов fls - empty
-	enum IDTYPE		{V=1, F=2, P=3, L=4};//типы итендификаторов - переменная функция параметр литерал
+	enum IDDATATYPE { INT = 1, STR = 2 };//таблица данных итендификаторов fls - empty
+	enum IDTYPE { V = 1, F = 2, P = 3, L = 4 };//типы итендификаторов - переменная функция параметр литерал
 
 	struct Entry //строка таблицы итендификаторов
 	{
 		int idxfirstLE; //индекс первой строки в таблице лексем
 		char id[ID_MAXSIZE]; //итендификатор
-		char scope[ID_MAXSIZE]; //итендификатор
 		IDDATATYPE iddatatype; //тип данных
 		IDTYPE idtype; //тип итендификатора
 		union {
@@ -29,12 +28,11 @@ namespace IT	//таблица итендификаторов
 				char str[TI_STR_MAXSIZE];//символы стринг
 			} vstr;//значение sting
 		} value; //значение итендификатора
-		
-		Entry(int idxfirstLE, char* id, const char* scope, IDDATATYPE iddatatype, IDTYPE idtype) {
+
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype) {
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
-			//this->scope = scope;
 			if (iddatatype == STR)
 			{
 				this->value.vstr.str[0] = '\0';
@@ -45,10 +43,10 @@ namespace IT	//таблица итендификаторов
 				this->value.vint = 0;
 			}
 
-				
+
 #pragma region "Writedown id name"
 			int len = 0;
-			for (int i = 0; id[i]!='\0' && i< ID_MAXSIZE; i++)
+			for (int i = 0; id[i] != '\0' && i < ID_MAXSIZE; i++)
 			{
 				len++;
 				this->id[i] = id[i];
@@ -61,26 +59,26 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-#pragma region "Writedown scope name"
-			len = 0;
-			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
-			{
-				len++;
-				this->scope[i] = scope[i];
-			}
-
-			for (int i = 0; i < len && i< ID_MAXSIZE; i++)
-			{
-				this->scope[i] = scope[i];
-			}
-			if (len >= ID_MAXSIZE)
-				this->scope[ID_MAXSIZE - 1] = '\0';
-			else
-				this->scope[len] = '\0';
-#pragma endregion
+			//#pragma region "Writedown scope name"
+			//			len = 0;
+			//			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
+			//			{
+			//				len++;
+			//				this->scope[i] = scope[i];
+			//			}
+			//
+			//			for (int i = 0; i < len && i< ID_MAXSIZE; i++)
+			//			{
+			//				this->scope[i] = scope[i];
+			//			}
+			//			if (len >= ID_MAXSIZE)
+			//				this->scope[ID_MAXSIZE - 1] = '\0';
+			//			else
+			//				this->scope[len] = '\0';
+			//#pragma endregion
 
 		};
-		Entry(int idxfirstLE, char* id, const char* scope, IDDATATYPE iddatatype, IDTYPE idtype, int data) {
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, int data) {
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
@@ -100,26 +98,26 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-#pragma region "Writedown scope name"
-			len = 0;
-			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
-			{
-				len++;
-				this->scope[i] = scope[i];
-			}
-
-			for (int i = 0; i < len && i < ID_MAXSIZE; i++)
-			{
-				this->scope[i] = scope[i];
-			}
-			if (len >= ID_MAXSIZE)
-				this->scope[ID_MAXSIZE - 1] = '\0';
-			else
-				this->scope[len] = '\0';
-#pragma endregion
+			//#pragma region "Writedown scope name"
+			//			len = 0;
+			//			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
+			//			{
+			//				len++;
+			//				this->scope[i] = scope[i];
+			//			}
+			//
+			//			for (int i = 0; i < len && i < ID_MAXSIZE; i++)
+			//			{
+			//				this->scope[i] = scope[i];
+			//			}
+			//			if (len >= ID_MAXSIZE)
+			//				this->scope[ID_MAXSIZE - 1] = '\0';
+			//			else
+			//				this->scope[len] = '\0';
+			//#pragma endregion
 
 		};
-		Entry(int idxfirstLE, char* id, const char* scope, IDDATATYPE iddatatype, IDTYPE idtype, char* data) {
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char* data) {
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
@@ -138,23 +136,23 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-#pragma region "Writedown scope name"
-			len = 0;
-			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
-			{
-				len++;
-				this->scope[i] = scope[i];
-			}
-
-			for (int i = 0; i < len && i < ID_MAXSIZE; i++)
-			{
-				this->scope[i] = scope[i];
-			}
-			if (len >= ID_MAXSIZE)
-				this->scope[ID_MAXSIZE - 1] = '\0';
-			else
-				this->scope[len] = '\0';
-#pragma endregion
+			//#pragma region "Writedown scope name"
+			//			len = 0;
+			//			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
+			//			{
+			//				len++;
+			//				this->scope[i] = scope[i];
+			//			}
+			//
+			//			for (int i = 0; i < len && i < ID_MAXSIZE; i++)
+			//			{
+			//				this->scope[i] = scope[i];
+			//			}
+			//			if (len >= ID_MAXSIZE)
+			//				this->scope[ID_MAXSIZE - 1] = '\0';
+			//			else
+			//				this->scope[len] = '\0';
+			//#pragma endregion
 
 			len = 0;
 			for (int i = 1; data[i] != '\''; i++)
@@ -172,9 +170,9 @@ namespace IT	//таблица итендификаторов
 				//this->value.vstr.str = new char[len];
 				for (int i = 1; i < len; i++)
 				{
-					this->value.vstr.str[i-1] = data[i];
+					this->value.vstr.str[i - 1] = data[i];
 				}
-				this->value.vstr.str[len-1] = '\0';
+				this->value.vstr.str[len - 1] = '\0';
 			}
 		};
 
@@ -189,6 +187,7 @@ namespace IT	//таблица итендификаторов
 		Entry* table;	//массив строк таблицы итендификаторов
 	};
 	IdTable Create(	//создать таблицу ID
+		int size	//ёмкость
 	);
 	void Add(
 		IdTable& idtable,	//экземпляр таблицы итендификаторов
@@ -200,8 +199,7 @@ namespace IT	//таблица итендификаторов
 	);
 	int IsId(
 		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
-		char id[ID_MAXSIZE], //итендификатор
-		char scope[ID_MAXSIZE]
+		char id[ID_MAXSIZE] //итендификатор
 	);
 
 	void Delete(IdTable& idtable);	//удалить таблицу итендификаторов

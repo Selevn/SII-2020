@@ -42,37 +42,15 @@ namespace IT
 	};
 	int IsId(
 		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLIDX(если нет)
-		char id[ID_MAXSIZE], //итендификатор
-		char scope[ID_MAXSIZE]
+		char id[ID_MAXSIZE] //итендификатор
 	) {
 		int flag = -1;
 		bool isRightScope = false;
-		bool bflag = true;
+		bool bflag = false;
 		for (int i = 0; i < idtable.size; i++)
 		{
-			//checkScope
-			if (idtable.table[i].idtype != F) {
-			for (int j = 0; j < strlen(scope) && j < ID_MAXSIZE; j++)
-			{
-					if (idtable.table[i].scope[j] != scope[j])
-					{
-						isRightScope = false;
-						break;
-					}
-					isRightScope = true;
-				}
-			}
-			else
-			{
-				isRightScope = true;
-			}
-			////////////
-
-			if (isRightScope)
-			{
 				for (int j = 0; j < strlen(id) && j < ID_MAXSIZE; j++)
 				{
-
 					if (idtable.table[i].id[j] != id[j])
 					{
 						bflag = false;
@@ -81,11 +59,9 @@ namespace IT
 					else {
 						bflag = true;
 					}
-
 				}
 				if (bflag)
 					return i;
-			}
 		}
 		return TI_NULLIDX;
 	};

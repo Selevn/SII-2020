@@ -28,6 +28,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		Log::WriteLog(log);
 		In::IN in = In::getin(parm.in);
 		Log::WriteIn(log, in);
+
+		LEX::LEX tables(LT::Create(in.lexems.size()), IT::Create(in.lexems.size()));
+		FST::LexAnalyzer(in,out,log, tables.lextable,tables.idtable);
 	}
 	catch (Error::ERROR e)
 	{

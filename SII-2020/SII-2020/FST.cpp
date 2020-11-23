@@ -256,7 +256,7 @@ bool FST::execute(FST& fst) //выполнить распознование цепочки
 	delete[] rstates;
 	return (rc ? (fst.rstates[fst.nstates - 1] == lstring) : rc);
 }
-void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lextable, IT::IdTable& idtable) //выполнить распознование цепочки
+void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lextable, IT::IdTable& idtable) //выполнить распознование цепочки
 {
 	char* str = new char[255];
 
@@ -967,6 +967,7 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 #pragma region "Флаги"
 	std::string scopeName;
 	std::vector <std::string> scopeStack;
+	int lexCount = 0;
 	scopeStack.push_back("\0");
 	int scopeCount = 0;
 	int scopeNumber = 0; // aka currentScope
@@ -979,12 +980,14 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	bool isFunctionParam = false;
 	bool isParametr = false;
 	bool isLiteral = false;
+	bool wasMain = false;
 	IT::IDDATATYPE dataType = (IT::IDDATATYPE)FALSYNUMBER;
 	IT::IDTYPE type = (IT::IDTYPE)FALSYNUMBER;
 #pragma endregion
 
+	int sizze = in.lexems.size();
 #pragma region "перебор"
-	for (int i = 0; i < in.lexems.size(); i++)
+	for (int i = 0; i < sizze; i++)
 	{
 		In::lexem lex = in.lexems.front();
 		in.lexems.pop_front();
@@ -1005,11 +1008,7 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			if (execute(*checkArr[j].chain))
 			{
 				executedFlag = true;
-
-
 #pragma region "Установка флага"
-
-
 				LT::Entry tmp(checkArr[j].lexName, lex.line, checkArr[j].position);
 				switch (checkArr[j].lexName)
 				{
@@ -1056,13 +1055,20 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					}
 					break;
 
+				case LEX_MAIN: {
+					if (!wasMain) {
+						scopeStack.push_back("main\0");
+						isRequireBodyFunc = false;
+						wasMain = true;
+						break;
+					}
+					throw ERROR_THROW_IN(125, lex.line, lex.col);
+					
+				}
 				case LEX_LEFTBRACE:
 					if (lextable.table[lextable.size - 1].lexema == LEX_RIGHTHESIS && isRequireBodyFunc)//точная проверка на функцию
 					{
 						scopeStack.push_back(scopeName.c_str());
-					}
-					else if (lextable.table[lextable.size - 1].lexema == LEX_MAIN){
-						scopeStack.push_back("main\0");
 					}
 					else
 					{
@@ -1083,16 +1089,26 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					break;
 
 				case LEX_LITERAL:
+					lexCount++;
 					tmp.idxTI = idtable.size;
+					std::string scope;
+					for (int j = scopeStack.size()-1; j >=0; j--) {
+						scope = scope + scopeStack.at(j);
+					}
+					scope += "LEX";
+					char* t = new char[6];
+					_itoa_s(lexCount, t,6, 10);
+					scope += t;
+
 					if (checkArr[j].iddatatype == IT::INT)
 					{
 						int out = atoi(str);
-						IT::Entry ttmp(lextable.size - 1, (char*)"\0", scopeStack.back().c_str(), checkArr[j].iddatatype, IT::L, out);
+						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, out);
 						IT::Add(idtable, ttmp);
 					}
 					if (checkArr[j].iddatatype == IT::STR)
 					{
-						IT::Entry ttmp(lextable.size - 1, (char*)"\0", scopeStack.back().c_str(), checkArr[j].iddatatype, IT::L, str);
+						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, str);
 						IT::Add(idtable, ttmp);
 					}
 					break;
@@ -1101,12 +1117,26 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 #pragma region "Если итендификатор"
 				if (tmp.lexema == LEX_ID)
 				{
-					if (IT::IsId(idtable, str, (char*)scopeStack.back().c_str()) == TI_NULLIDX)
+					std::string scope;
+					if (IT::GetEntry(idtable, IT::IsId(idtable, str)).idtype == (IT::IDTYPE::F))
 					{
+						scope += str;
+					}
+					else {
+						for (int j = scopeStack.size() - 1; j >= 0; j--) {
+							scope = scope + scopeStack.at(j);
+						}
+						scope += str;
+					}
+					if (IT::IsId(idtable, (char*)scope.c_str()) == TI_NULLIDX)
+					{
+						if (type !=(IT::IDTYPE::P) && !isDeclare) {
+							throw ERROR_THROW_IN(121, lex.line, lex.col)
+						}
 						if (dataType != (IT::IDDATATYPE)FALSYNUMBER && type != (IT::IDTYPE)FALSYNUMBER)
 						{
 							isDeclare = false;
-							IT::Entry ttmp(lextable.size, str, scopeStack.back().c_str(), dataType, type);
+							IT::Entry ttmp(lextable.size, scope.c_str(), dataType, type);
 							IT::Add(idtable, ttmp);
 							tmp.idxTI = idtable.size - 1;
 							dataType = (IT::IDDATATYPE)FALSYNUMBER;
@@ -1120,7 +1150,7 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						}
 					}
 					else {
-						tmp.idxTI = IT::IsId(idtable, str, (char*)scopeStack.back().c_str());
+						tmp.idxTI = IT::IsId(idtable, (char*)scope.c_str());
 					}
 				}
 #pragma endregion
@@ -1140,6 +1170,8 @@ void FST::check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			throw ERROR_THROW_IN(120, lex.line, lex.col);
 		}
 	}
+	if (!wasMain)
+		throw ERROR_THROW(124);
 #pragma endregion
 
 
@@ -1199,13 +1231,13 @@ else -> error;
 
 #pragma region "вывод в консоль итендификаторов"
 	std::cout << "\n\n\n______ITENDIFICATORS_____\n";
-	std::cout << "Number   |Name     |Scope     |IdTYPE     |IdDATATYPE     |Value\n";
+	std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
 	for (int i = 0; i < idtable.size; i++)
 	{
 		IT::Entry a = IT::GetEntry(idtable, i);
 		char* intStr = new char[4];
 		_itoa_s(a.idxfirstLE, intStr, 4, 10);
-		std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << a.scope << std::setw(9) << a.idtype << std::setw(9) << a.iddatatype<< std::setw(9) << a.value.vint<<" | "<<a.value.vstr.str<<" | " << std::endl;
+		std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id  << std::setw(9) << a.idtype << std::setw(9) << a.iddatatype<< std::setw(9) << a.value.vint<<" | "<<a.value.vstr.str<<" | " << std::endl;
 		//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
 	}
 #pragma endregion

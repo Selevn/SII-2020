@@ -42,5 +42,5 @@ namespace FST
 
 	};
 	bool execute(FST& fst);
-	void check_chain(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& a, IT::IdTable& b);
+	void LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& a, IT::IdTable& b);
 }
