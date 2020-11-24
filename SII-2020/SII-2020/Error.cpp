@@ -49,7 +49,7 @@ namespace Error
 		ERROR_ENTRY_NODEF(118),
 		ERROR_ENTRY_NODEF(119),
 		ERROR_ENTRY(120, "[LA]: ќшибка при разборе токена"),//+
-		ERROR_ENTRY(121, "[LA]: »спользуетс€ необъ€вленный идентификатор"),//
+		ERROR_ENTRY(121, "[LA]: »спользуетс€ необъ€вленный идентификатор"),//+
 		ERROR_ENTRY_NODEF(122),
 		ERROR_ENTRY_NODEF(123),
 		ERROR_ENTRY(124, "[LA]: ќтсутствует точка входа"),//+

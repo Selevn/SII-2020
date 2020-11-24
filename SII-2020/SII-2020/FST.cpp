@@ -1144,10 +1144,6 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 								type = (IT::IDTYPE)FALSYNUMBER;
 							bool onceFlag = false;
 						}
-						else
-						{
-							std::cout << "";//
-						}
 					}
 					else {
 						tmp.idxTI = IT::IsId(idtable, (char*)scope.c_str());

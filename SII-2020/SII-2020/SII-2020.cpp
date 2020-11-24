@@ -10,7 +10,27 @@
 #include "In.h"
 #include "FST.h"
 #include "IT.h"
+#pragma region "Для вывода в консоль"
 
+std::string type(IT::IDTYPE type) {
+	switch (type) {
+	case IT::IDTYPE::F: return "Function"; break;
+	case IT::IDTYPE::V: return "Variable"; break;
+	case IT::IDTYPE::P: return "Parameter"; break;
+	case IT::IDTYPE::L: return "Literal"; break;
+	default: return "ERROR"; break;
+	}
+}
+
+std::string datatype(IT::IDDATATYPE type) {
+	switch (type) {
+	case IT::IDDATATYPE::INT: return "INT"; break;
+	case IT::IDDATATYPE::STR: return "STRING"; break;
+	default: return "ERROR"; break;
+	}
+}
+
+#pragma endregion
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -31,6 +51,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		LEX::LEX tables(LT::Create(in.lexems.size()), IT::Create(in.lexems.size()));
 		FST::LexAnalyzer(in,out,log, tables.lextable,tables.idtable);
+
+
+		MFST_TRACE_START(log)
+			MFST::Mfst mfst(tables, GRB::getGreibach());
+		mfst.start(log);
 	}
 	catch (Error::ERROR e)
 	{
