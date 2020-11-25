@@ -873,7 +873,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	);
 	FST l_printi(
 		str,
-		6, //количество состояний
+		5, //количество состояний
 		NODE(1, RELATION('s', 1)),
 		NODE(1, RELATION('a', 2)),
 		NODE(1, RELATION('y', 3)),
@@ -882,7 +882,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	);
 	FST l_prints(
 		str,
-		6, //количество состояний
+		5, //количество состояний
 		NODE(1, RELATION('s', 1)),
 		NODE(1, RELATION('a', 2)),
 		NODE(1, RELATION('y', 3)),
@@ -991,7 +991,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 #pragma region "Флаги"
 	std::string scopeName;
 	std::vector <std::string> scopeStack;
-	int lexCount = 0;
+	int literalCount = 0;
 	scopeStack.push_back("\0");
 	int scopeCount = 0;
 	int scopeNumber = 0; // aka currentScope
@@ -1034,10 +1034,19 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			{
 				executedFlag = true;
 #pragma region "Установка флага"
-				LT::Entry tmp(checkArr[j].lexName, lex.line, checkArr[j].position);
+				LT::Entry lexTableObject(checkArr[j].lexName, lex.line, checkArr[j].position);
+				//нет until
+				//проверяем что за лексема
 				switch (checkArr[j].lexName)
 				{
-				case LEX_INTEGER:
+					//если встретили declare
+				case LEX_DECLARE: {
+					isDeclare = true; 
+					type = IT::V;
+					break;
+				}
+								//если встретили uint/symbol
+				case LEX_TYPE: {
 					if (checkArr[j].iddatatype == IT::INT)
 					{
 						dataType = IT::INT;
@@ -1052,103 +1061,25 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						dataType = (IT::IDDATATYPE)FALSYNUMBER;
 					}
 					break;
-
-				case LEX_FUNCTION:
+				}
+							 //функция
+				case LEX_FUNCTION: {
 					type = IT::F;
 					break;
-				case LEX_EXPORT:
-					type = IT::F;
-					isExported = true;
-					isDeclare = true;
-					break;
-
-				case LEX_LEFTHESIS:
-					if (lextable.size!=0
-						&&
-						lextable.table[lextable.size - 1].idxTI != LT_TI_NULLIDX //если предыдущий - имя функции
-						&&
-						idtable.table[lextable.table[lextable.size - 1].idxTI].idtype == IT::F)
-					{
-						isFunctionParam = true; //проверили что это все параметры функции
-						scopeStack.push_back(idtable.table[lextable.table[lextable.size - 1].idxTI].id);
-						scopeName = idtable.table[lextable.table[lextable.size - 1].idxTI].id;
-						type = IT::P;
-					}
-					break;
-				case LEX_RIGHTHESIS:
-					if (isFunctionParam)
-					{
-						scopeStack.pop_back();
-						isFunctionParam = false;
-						isRequireBodyFunc = true;//закончили смотреть параметры, сейчас ожидаем тело функции
-						type = (IT::IDTYPE)FALSYNUMBER;
-					}
-					break;
-
-				case LEX_MAIN: {
-					if (!wasMain) {
-						scopeStack.push_back("main\0");
-						isRequireBodyFunc = false;
-						wasMain = true;
-						break;
-					}
-					throw ERROR_THROW_IN(125, lex.line, lex.col);
-					
 				}
-				case LEX_LEFTBRACE:
-					if (lextable.table[lextable.size - 1].lexema == LEX_RIGHTHESIS && isRequireBodyFunc)//точная проверка на функцию
-					{
-						scopeStack.push_back(scopeName.c_str());
-					}
-					else
-					{
-						isRequireBodyFunc = false;
-					}
-					break;
-				case LEX_RIGHTBRACE:
-					if (isRequireBodyFunc)
-					{
-						scopeStack.pop_back();
-						isRequireBodyFunc = false;
-					}
-					break;
-
-				case LEX_DECLARE:
-					isDeclare = true;
-					type = IT::V;
-					break;
-
-				case LEX_LITERAL:
-					lexCount++;
-					tmp.idxTI = idtable.size;
-					std::string scope;
-					for (int j = scopeStack.size()-1; j >=0; j--) {
-						scope = scope + scopeStack.at(j);
-					}
-					scope += "LEX";
-					char* t = new char[6];
-					_itoa_s(lexCount, t,6, 10);
-					scope += t;
-
-					if (checkArr[j].iddatatype == IT::INT)
-					{
-						int out = atoi(str);
-						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, out);
-						IT::Add(idtable, ttmp);
-					}
-					if (checkArr[j].iddatatype == IT::STR)
-					{
-						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, str);
-						IT::Add(idtable, ttmp);
-					}
+								 //вывод
+				case LEX_PRINTI: {
 					break;
 				}
-#pragma endregion
-#pragma region "Если итендификатор"
-				if (tmp.lexema == LEX_ID)
-				{
+				case LEX_PRINTS: {
+					break;
+				}
+								 //итендификатор
+				case LEX_ID: {
+					//область видимости
 					std::string scope;
-					if (IT::GetEntry(idtable, IT::IsId(idtable, str)).idtype == (IT::IDTYPE::F))
+					//если функция, то не учитываем скоуп
+					if (IT::IsId(idtable, str) != TI_NULLIDX && IT::GetEntry(idtable, IT::IsId(idtable, str)).idtype == (IT::IDTYPE::F))
 					{
 						scope += str;
 					}
@@ -1158,130 +1089,248 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						}
 						scope += str;
 					}
+					//если нет такого итендфикатора
 					if (IT::IsId(idtable, (char*)scope.c_str()) == TI_NULLIDX)
 					{
-						if (type !=(IT::IDTYPE::P) && !isDeclare) {
+						//если не параметр и не объявлен
+						if (type != (IT::IDTYPE::P) && !isDeclare && !isExported) {
+							//то мы пытаемся работать с необъявленным итендификатором
 							throw ERROR_THROW_IN(121, lex.line, lex.col)
 						}
 						if (dataType != (IT::IDDATATYPE)FALSYNUMBER && type != (IT::IDTYPE)FALSYNUMBER)
 						{
+							//добавляем в таблицу 
+							IT::Entry idTableObject(lextable.size, scope.c_str(), dataType, type, isExported);
+							IT::Add(idtable, idTableObject);
+							lexTableObject.idxTI = idtable.size - 1;
+							//снимаем флаг объявлённости и экспорта
 							isDeclare = false;
-							
-							IT::Entry ttmp(lextable.size, scope.c_str(), dataType, type, isExported);
 							isExported = false;
-							IT::Add(idtable, ttmp);
-							tmp.idxTI = idtable.size - 1;
+							//зануляем тип и вид
 							dataType = (IT::IDDATATYPE)FALSYNUMBER;
 							if (!isFunctionParam)
 								type = (IT::IDTYPE)FALSYNUMBER;
-							bool onceFlag = false;
 						}
+						else //дропаем ошибку если тип или вид не определён
+							throw ERROR_THROW_IN(122, lex.line, lex.col);
 					}
 					else {
-						tmp.idxTI = IT::IsId(idtable, (char*)scope.c_str());
+						//если в таблице итендификаторов есть запись - ссылаемся на неё
+						lexTableObject.idxTI = IT::IsId(idtable, (char*)scope.c_str());
 					}
+					break;
 				}
-#pragma endregion
+						   //экспорт
+				case LEX_EXPORT: {
+					isExported = true;
+					break; }
+							   //левая скобка
+				case LEX_LEFTHESIS: {
+					//если предыдущий - имя функции
+					if (lextable.size != 0
+						&&
+						lextable.table[lextable.size - 1].idxTI != LT_TI_NULLIDX
+						&&
+						idtable.table[lextable.table[lextable.size - 1].idxTI].idtype == IT::F)
+					{
+						//если функцию только объявили
+						if (lextable.table[lextable.size - 4].lexema == LEX_EXPORT || lextable.table[lextable.size - 4].lexema == LEX_DECLARE)
+						{
+							scopeName = idtable.table[lextable.table[lextable.size - 1].idxTI].id;
+							isFunctionParam = true;
+							type = IT::P;
+							scopeStack.push_back(idtable.table[lextable.table[lextable.size - 1].idxTI].id);
+						}
+						//если функцию вызвали
+						else {
+							isFunctionParam = false;
 
+						}
+					}
+					break; }
+					//правая скобочка
+				case LEX_RIGHTHESIS: {
+					//если параметры функции шли
+					if (isFunctionParam)
+					{
+						//убираем область видимости
+						scopeStack.pop_back();
+						//большене параметры функции
+						isFunctionParam = false;
+						//закончили смотреть параметры, сейчас ожидаем тело функции
+						isRequireBodyFunc = true;
+						//тип больше не параметр
+						type = (IT::IDTYPE)FALSYNUMBER;
+					}
+					//аргументы функции, то что передаётся в объявленную
+					else
+						type = (IT::IDTYPE)FALSYNUMBER;
+						//throw ERROR_THROW_IN(126, lex.line, lex.col);
+					break; }
+								   //левая фигурная
+				case LEX_LEFTBRACE: {
+					//если предыдущая лексема закрытсая скобочка и ожидаем тело функции
+					if (lextable.table[lextable.size - 1].lexema == LEX_RIGHTHESIS && isRequireBodyFunc)
+						scopeStack.push_back(scopeName.c_str());
+					//если main
+					else if (lextable.table[lextable.size - 1].lexema == LEX_MAIN)
+						scopeStack.push_back("main");
+					//не будет тела функции
+					else
+						isRequireBodyFunc = false;
+					break;
+				}
+								  //правая фигурная
+				case LEX_RIGHTBRACE: {
+					if (isRequireBodyFunc)
+					{
+						scopeStack.pop_back();
+						isRequireBodyFunc = false;
+					}
+					else
+						throw ERROR_THROW_IN(127, lex.line, lex.col);
+					break;
+				}
+								   //main
+				case LEX_MAIN: {
+					if (!wasMain) {
+						//ожидеам тело функции
+						isRequireBodyFunc = true;
+						//встречался ли main
+						wasMain = true;
+						break;
+					}
+					else
+						throw ERROR_THROW_IN(125, lex.line, lex.col);
+				}
+							 //литерал
+				case LEX_LITERAL: {
+					//количество литералов
+					literalCount++;
+					lexTableObject.idxTI = idtable.size;
+					//формируем имя литерала
+					std::string scope;
+					for (int j = scopeStack.size() - 1; j >= 0; j--) {
+						scope = scope + scopeStack.at(j);
+					}
+					scope += "LEX";
+					char* t = new char[6];
+					_itoa_s(literalCount, t, 6, 10);
+					scope += t;
+
+					if (checkArr[j].iddatatype == IT::INT)
+					{
+						int out = atoi(str);
+						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, out);
+						IT::Add(idtable, ttmp);
+					}
+					else if (checkArr[j].iddatatype == IT::STR)
+					{
+						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, str);
+						IT::Add(idtable, ttmp);
+					}
+					else ERROR_THROW_IN(122, lex.line, lex.col);
+					break;
+				}
+								
+				
+				}
 #pragma region "Если знаковая лексема"
-				if (tmp.lexema == LEX_MINUS || tmp.lexema == LEX_LEFTBRACE || tmp.lexema == LEX_RIGHTBRACE || tmp.lexema == LEX_LEFTHESIS ||tmp.lexema == LEX_RIGHTHESIS)
-				{
-					tmp.data = str[0];
-				}
+				if (lexTableObject.lexema == LEX_MINUS || lexTableObject.lexema == LEX_LEFTBRACE || lexTableObject.lexema == LEX_RIGHTBRACE || lexTableObject.lexema == LEX_LEFTHESIS || lexTableObject.lexema == LEX_RIGHTHESIS)
+					lexTableObject.data = str[0];
 #pragma endregion
-
-				LT::Add(lextable, tmp);
+#pragma endregion
+				LT::Add(lextable, lexTableObject);
 				break;
 			}
 		}
-		if (!executedFlag) {
+		//если не распознали цепочку
+		if (!executedFlag)
 			throw ERROR_THROW_IN(120, lex.line, lex.col);
-		}
 	}
-	if (!wasMain)
-		throw ERROR_THROW(124);
+		//если не было main
+		if (!wasMain)
+			throw ERROR_THROW(124);
 #pragma endregion
 
 
-	/*if (PolishNotation(0, lextable, idtable))
-		std::cout << "Польская запись успешно составлена!" << std::endl;
-	else
-		std::cout << "Польская запись не составлена!" << std::endl;*/
-	/*
-on itendificator->
-if (! in Itendificators -> error) else -> create Entry
-->
-if -1 == n - integer
-if -1 == s - string
-Entry in buf
-
-next if literal ->
-on literal ->
-if -1 == IT -> add
-if -1 == v -> pass
-else -> error;
-*/
-	int prevline = 1;
-	Out::WriteLine(out, " ", "");
-	for (int i = 0; i < lextable.size; i++)
-	{
-		char* tmpChar = new char[2];
-		tmpChar[0] = lextable.table[i].lexema;
-		tmpChar[1] = '\0';
-		if (lextable.table[i].sn == prevline)
-		{
-			Out::WriteLine(out, tmpChar, "");
-		}
+		/*if (PolishNotation(0, lextable, idtable))
+			std::cout << "Польская запись успешно составлена!" << std::endl;
 		else
+			std::cout << "Польская запись не составлена!" << std::endl;*/
+			/*
+		on itendificator->
+		if (! in Itendificators -> error) else -> create Entry
+		->
+		if -1 == n - integer
+		if -1 == s - string
+		Entry in buf
+
+		next if literal ->
+		on literal ->
+		if -1 == IT -> add
+		if -1 == v -> pass
+		else -> error;
+		*/
+		int prevline = 1;
+		Out::WriteLine(out, " ", "");
+		for (int i = 0; i < lextable.size; i++)
 		{
-			prevline = lextable.table[i].sn;
-			char* intStr = new char[4];
-			_itoa_s(lextable.table[i].sn, intStr, 4, 10);
-			Out::WriteLine(out, "\n", "");
-			Out::WriteLine(out, intStr, "");
-			Out::WriteLine(out, " ", "");
-			Out::WriteLine(out, tmpChar, "");
+			char* tmpChar = new char[2];
+			tmpChar[0] = lextable.table[i].lexema;
+			tmpChar[1] = '\0';
+			if (lextable.table[i].sn == prevline)
+			{
+				Out::WriteLine(out, tmpChar, "");
+			}
+			else
+			{
+				prevline = lextable.table[i].sn;
+				char* intStr = new char[4];
+				_itoa_s(lextable.table[i].sn, intStr, 4, 10);
+				Out::WriteLine(out, "\n", "");
+				Out::WriteLine(out, intStr, "");
+				Out::WriteLine(out, " ", "");
+				Out::WriteLine(out, tmpChar, "");
+			}
 		}
-	}
 
 
-	/*Out::WriteLine(out, "\n", "");
-	Out::WriteLine(out, "Itendificators:\n", "");
-	prevline = 1;
-	for (int i = 0; i < idtable.size; i++)
-	{
-		IT::Entry a = IT::GetEntry(idtable, i);
-		char* intStr = new char[4];
-		_itoa_s(a.idxfirstLE, intStr, 4, 10);
-		Out::WriteLine(out, intStr, " ", a.id, "\n", "");
-	}*/
+		/*Out::WriteLine(out, "\n", "");
+		Out::WriteLine(out, "Itendificators:\n", "");
+		prevline = 1;
+		for (int i = 0; i < idtable.size; i++)
+		{
+			IT::Entry a = IT::GetEntry(idtable, i);
+			char* intStr = new char[4];
+			_itoa_s(a.idxfirstLE, intStr, 4, 10);
+			Out::WriteLine(out, intStr, " ", a.id, "\n", "");
+		}*/
 
 
 #pragma region "вывод в консоль итендификаторов"
-	std::cout << "\n\n\n______ITENDIFICATORS_____\n";
-	std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
-	for (int i = 0; i < idtable.size; i++)
-	{
-		IT::Entry a = IT::GetEntry(idtable, i);
-		char* intStr = new char[4];
-		_itoa_s(a.idxfirstLE, intStr, 4, 10);
-		std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id  << std::setw(9) << a.idtype << std::setw(9) << a.iddatatype<< std::setw(9) << a.value.vint<<" | "<<a.value.vchar<<" | " << std::endl;
-		//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
-	}
+		std::cout << "\n\n\n______ITENDIFICATORS_____\n";
+		std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
+		for (int i = 0; i < idtable.size; i++)
+		{
+			IT::Entry a = IT::GetEntry(idtable, i);
+			char* intStr = new char[4];
+			_itoa_s(a.idxfirstLE, intStr, 4, 10);
+			std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << a.idtype << std::setw(9) << a.iddatatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;
+			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
+		}
 #pragma endregion
 
 #pragma region "вывод в консоль лексем"
-	std::cout << "\n\n\n______LEXEMS_____\n";
-	std::cout << "Position   |StringNumber     |lexema     |idxTI\n";
-	for (int i = 0; i < lextable.size; i++)
-	{
-		LT::Entry a = LT::GetEntry(lextable, i);
-		char* intStr = new char[4];
+		std::cout << "\n\n\n______LEXEMS_____\n";
+		std::cout << "Position   |StringNumber     |lexema     |idxTI\n";
+		for (int i = 0; i < lextable.size; i++)
+		{
+			LT::Entry a = LT::GetEntry(lextable, i);
+			char* intStr = new char[4];
 
-		std::cout << std::setw(9) << i << std::setw(9) << a.sn << std::setw(19) << a.lexema << std::setw(19) << a.idxTI << std::endl;
-		//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
-	}
+			std::cout << std::setw(9) << i << std::setw(9) << a.sn << std::setw(19) << a.lexema << std::setw(19) << a.idxTI << std::endl;
+			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
+		}
 #pragma endregion
-
-
 }

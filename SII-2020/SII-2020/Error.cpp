@@ -50,12 +50,15 @@ namespace Error
 		ERROR_ENTRY_NODEF(119),
 		ERROR_ENTRY(120, "[LA]: Ошибка при разборе токена"),//+
 		ERROR_ENTRY(121, "[LA]: Используется необъявленный идентификатор"),//+
-		ERROR_ENTRY_NODEF(122),
+		ERROR_ENTRY(122, "[LA]: Итендификатор не имеет типа"),//+
 		ERROR_ENTRY_NODEF(123),
+		//ERROR_ENTRY_NODEF(123),
 		ERROR_ENTRY(124, "[LA]: Отсутствует точка входа"),//+
 		ERROR_ENTRY(125, "[LA]: Обнаружена вторая точка входа"),//+
-		ERROR_ENTRY_NODEF(126),
-		ERROR_ENTRY_NODEF(127),
+		ERROR_ENTRY(126, "[LA]: Ошибка закрывающей скобки - открывающая скобка не обработана"),//+
+		ERROR_ENTRY(127, "[LA]: Ошибка закрывающей фигурной скобки - открывающая скобка не обработана"),//+
+		//ERROR_ENTRY_NODEF(126),
+		//ERROR_ENTRY_NODEF(127),
 		ERROR_ENTRY_NODEF(128),
 		ERROR_ENTRY_NODEF(129),
 		ERROR_ENTRY(130, "[ITable]: Ошибка создания таблицы итендификаторов: размер превышает допустимое значение"),//+

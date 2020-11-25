@@ -4,7 +4,8 @@
 #define LT_TI_NULLIDX 0XFFFFFFFF
 #define LEX_INTEGER 't'
 #define LEX_STRING	't'
-//#define LEX_STRING	't'
+#define LEX_TYPE	LEX_STRING //лексема типа(uint/symbol)
+
 #define LEX_ID		'i'
 #define LEX_UNTIL		'u'
 #define LEX_MAIN	'm'

@@ -52,10 +52,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		LEX::LEX tables(LT::Create(in.lexems.size()), IT::Create(in.lexems.size()));
 		FST::LexAnalyzer(in,out,log, tables.lextable,tables.idtable);
 
-
-		MFST_TRACE_START(log)
+		system("pause");
+		/*MFST_TRACE_START(log)
 			MFST::Mfst mfst(tables, GRB::getGreibach());
-		mfst.start(log);
+		mfst.start(log);*/
 	}
 	catch (Error::ERROR e)
 	{

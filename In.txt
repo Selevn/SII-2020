@@ -1,6 +1,14 @@
+bind symbol func fs (symbol a,symbol b)
+{
+bind symbol c;
+extern symbol func substr(symbol a,   symbol p,uint n);
+c = substr(a, 1,3)+ b;
+bind uint s;
+stop c;
+};
 bind uint func fi(uint x, uint y)
 {
-bind integer z;
+bind uint z;
 z = 1+x;
 stop z;
 };
@@ -25,8 +33,8 @@ x = 123;
 y = 5;
 z = fi(x,y);
 sc = fs(sa,sb);
-sayi(z);
-says(sc);
-sayi(strlen(sc));
+sayi z;
+says sc;
+sayi strlen(sc);
 stop 0;
 };
