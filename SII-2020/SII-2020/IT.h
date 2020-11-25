@@ -18,25 +18,22 @@ namespace IT	//таблица итендификаторов
 	{
 		int idxfirstLE; //индекс первой строки в таблице лексем
 		char id[ID_MAXSIZE]; //итендификатор
+		bool isExternal; //итендификатор
 		IDDATATYPE iddatatype; //тип данных
 		IDTYPE idtype; //тип итендификатора
 		union {
 			int vint; //значение integer
-			struct
-			{
-				char len;//кол-во символов в string
-				char str[TI_STR_MAXSIZE];//символы стринг
-			} vstr;//значение sting
+			char vchar;//значение sting
 		} value; //значение итендификатора
 
 		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype) {
+			this->isExternal = false;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
 			if (iddatatype == STR)
 			{
-				this->value.vstr.str[0] = '\0';
-				this->value.vstr.len = 0;
+				this->value.vchar = '\0';
 			}
 			if (iddatatype == INT)
 			{
@@ -59,26 +56,38 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-			//#pragma region "Writedown scope name"
-			//			len = 0;
-			//			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
-			//			{
-			//				len++;
-			//				this->scope[i] = scope[i];
-			//			}
-			//
-			//			for (int i = 0; i < len && i< ID_MAXSIZE; i++)
-			//			{
-			//				this->scope[i] = scope[i];
-			//			}
-			//			if (len >= ID_MAXSIZE)
-			//				this->scope[ID_MAXSIZE - 1] = '\0';
-			//			else
-			//				this->scope[len] = '\0';
-			//#pragma endregion
+		};Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, bool e) {
+			this->isExternal = e;
+			this->idxfirstLE = idxfirstLE;
+			this->iddatatype = iddatatype;
+			this->idtype = idtype;
+			if (iddatatype == STR)
+			{
+				this->value.vchar = '\0';
+			}
+			if (iddatatype == INT)
+			{
+				this->value.vint = 0;
+			}
+
+#pragma region "Writedown id name"
+			int len = 0;
+			for (int i = 0; id[i] != '\0' && i < ID_MAXSIZE; i++)
+			{
+				len++;
+				this->id[i] = id[i];
+			}
+			if (len >= ID_MAXSIZE)
+				this->id[ID_MAXSIZE - 1] = '\0';
+			else
+			{
+				this->id[len] = '\0';
+			}
+#pragma endregion
 
 		};
 		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, int data) {
+			this->isExternal = false;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
@@ -98,26 +107,32 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-			//#pragma region "Writedown scope name"
-			//			len = 0;
-			//			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
-			//			{
-			//				len++;
-			//				this->scope[i] = scope[i];
-			//			}
-			//
-			//			for (int i = 0; i < len && i < ID_MAXSIZE; i++)
-			//			{
-			//				this->scope[i] = scope[i];
-			//			}
-			//			if (len >= ID_MAXSIZE)
-			//				this->scope[ID_MAXSIZE - 1] = '\0';
-			//			else
-			//				this->scope[len] = '\0';
-			//#pragma endregion
+		};
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, int data,bool e) {
+			this->isExternal = e;
+			this->idxfirstLE = idxfirstLE;
+			this->iddatatype = iddatatype;
+			this->idtype = idtype;
+			this->value.vint = data;
+#pragma region "Writedown id name"
+			int len = 0;
+			for (int i = 0; id[i] != '\0' && i < ID_MAXSIZE; i++)
+			{
+				len++;
+				this->id[i] = id[i];
+			}
+			if (len >= ID_MAXSIZE)
+				this->id[ID_MAXSIZE - 1] = '\0';
+			else
+			{
+				this->id[len] = '\0';
+			}
+#pragma endregion
 
 		};
-		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char* data) {
+
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data, bool e) {
+			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
@@ -136,44 +151,56 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-			//#pragma region "Writedown scope name"
-			//			len = 0;
-			//			for (int i = 0; scope[i] != '\0' && i < ID_MAXSIZE; i++)
-			//			{
-			//				len++;
-			//				this->scope[i] = scope[i];
-			//			}
-			//
-			//			for (int i = 0; i < len && i < ID_MAXSIZE; i++)
-			//			{
-			//				this->scope[i] = scope[i];
-			//			}
-			//			if (len >= ID_MAXSIZE)
-			//				this->scope[ID_MAXSIZE - 1] = '\0';
-			//			else
-			//				this->scope[len] = '\0';
-			//#pragma endregion
-
-			len = 0;
-			for (int i = 1; data[i] != '\''; i++)
+			this->value.vchar = '\0';
+			//if (len > TI_STR_MAXSIZE)
+			//{
+			//	//error
+			//	//std::cout << "TI STR MAXSIZE ERROR" << std::endl;
+			//}
+			//else
+			//{
+			//	//this->value.vstr.str = new char[len];
+			//	for (int i = 1; i < len; i++)
+			//	{
+			//		this->value.vstr.str[i - 1] = data[i];
+			//	}
+			//	this->value.vstr.str[len - 1] = '\0';
+			//}
+		};Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data) {
+			this->isExternal = false;
+			this->idxfirstLE = idxfirstLE;
+			this->iddatatype = iddatatype;
+			this->idtype = idtype;
+#pragma region "Writedown id name"
+			int len = 0;
+			for (int i = 0; id[i] != '\0' && i < ID_MAXSIZE; i++)
 			{
 				len++;
+				this->id[i] = id[i];
 			}
-			this->value.vstr.len = len;
-			if (len > TI_STR_MAXSIZE)
-			{
-				//error
-				//std::cout << "TI STR MAXSIZE ERROR" << std::endl;
-			}
+			if (len >= ID_MAXSIZE)
+				this->id[ID_MAXSIZE - 1] = '\0';
 			else
 			{
-				//this->value.vstr.str = new char[len];
-				for (int i = 1; i < len; i++)
-				{
-					this->value.vstr.str[i - 1] = data[i];
-				}
-				this->value.vstr.str[len - 1] = '\0';
+				this->id[len] = '\0';
 			}
+#pragma endregion
+
+			this->value.vchar = '\0';
+			//if (len > TI_STR_MAXSIZE)
+			//{
+			//	//error
+			//	//std::cout << "TI STR MAXSIZE ERROR" << std::endl;
+			//}
+			//else
+			//{
+			//	//this->value.vstr.str = new char[len];
+			//	for (int i = 1; i < len; i++)
+			//	{
+			//		this->value.vstr.str[i - 1] = data[i];
+			//	}
+			//	this->value.vstr.str[len - 1] = '\0';
+			//}
 		};
 
 

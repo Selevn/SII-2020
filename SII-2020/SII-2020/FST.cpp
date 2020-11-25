@@ -264,16 +264,36 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 	FST l_integer(
 		str,
-		8, //количество состояний
-		NODE(1, RELATION('i', 1)),
-		NODE(1, RELATION('n', 2)),
-		NODE(1, RELATION('t', 3)),
-		NODE(1, RELATION('e', 4)),
-		NODE(1, RELATION('g', 5)),
-		NODE(1, RELATION('e', 6)),
-		NODE(1, RELATION('r', 7)),
+		5, //количество состояний
+		NODE(1, RELATION('u', 1)),
+		NODE(1, RELATION('i', 2)),
+		NODE(1, RELATION('n', 3)),
+		NODE(1, RELATION('t', 4)),
 		NODE()
 	);
+	FST l_until(
+		str,
+		5, //количество состояний
+		NODE(1, RELATION('u', 1)),
+		NODE(1, RELATION('n', 2)),
+		NODE(1, RELATION('t', 3)),
+		NODE(1, RELATION('i', 4)),
+		NODE(1, RELATION('l', 5)),
+		NODE()
+	);
+
+	FST l_export(
+		str,
+		7, //количество состояний
+		NODE(1, RELATION('e', 1)),
+		NODE(1, RELATION('x', 2)),
+		NODE(1, RELATION('t', 3)),
+		NODE(1, RELATION('e', 4)),
+		NODE(1, RELATION('r', 5)),
+		NODE(1, RELATION('n', 6)),
+		NODE()
+	);
+
 	FST l_numberLiteral(
 		str,
 		2, //количество состояний
@@ -816,67 +836,65 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		str,
 		7, //количество состояний
 		NODE(1, RELATION('s', 1)),
-		NODE(1, RELATION('t', 2)),
-		NODE(1, RELATION('r', 3)),
-		NODE(1, RELATION('i', 4)),
-		NODE(1, RELATION('n', 5)),
-		NODE(1, RELATION('g', 6)),
+		NODE(1, RELATION('y', 2)),
+		NODE(1, RELATION('m', 3)),
+		NODE(1, RELATION('b', 4)),
+		NODE(1, RELATION('o', 5)),
+		NODE(1, RELATION('l', 6)),
 		NODE()
 	);
 
 	FST l_function(
 		str,
-		9, //количество состояний
+		5, //количество состояний
 		NODE(1, RELATION('f', 1)),
 		NODE(1, RELATION('u', 2)),
 		NODE(1, RELATION('n', 3)),
 		NODE(1, RELATION('c', 4)),
-		NODE(1, RELATION('t', 5)),
-		NODE(1, RELATION('i', 6)),
-		NODE(1, RELATION('o', 7)),
-		NODE(1, RELATION('n', 8)),
 		NODE()
 	);
 	FST l_declare(
 		str,
-		8, //количество состояний
-		NODE(1, RELATION('d', 1)),
-		NODE(1, RELATION('e', 2)),
-		NODE(1, RELATION('c', 3)),
-		NODE(1, RELATION('l', 4)),
-		NODE(1, RELATION('a', 5)),
-		NODE(1, RELATION('r', 6)),
-		NODE(1, RELATION('e', 7)),
+		5, //количество состояний
+		NODE(1, RELATION('b', 1)),
+		NODE(1, RELATION('i', 2)),
+		NODE(1, RELATION('n', 3)),
+		NODE(1, RELATION('d', 4)),
 		NODE()
 	);
 	FST l_return(
 		str,
-		7, //количество состояний
-		NODE(1, RELATION('r', 1)),
-		NODE(1, RELATION('e', 2)),
-		NODE(1, RELATION('t', 3)),
-		NODE(1, RELATION('u', 4)),
-		NODE(1, RELATION('r', 5)),
-		NODE(1, RELATION('n', 6)),
+		5, //количество состояний
+		NODE(1, RELATION('s', 1)),
+		NODE(1, RELATION('t', 2)),
+		NODE(1, RELATION('o', 3)),
+		NODE(1, RELATION('p', 4)),
 		NODE()
 	);
-	FST l_print(
+	FST l_printi(
 		str,
 		6, //количество состояний
-		NODE(1, RELATION('p', 1)),
-		NODE(1, RELATION('r', 2)),
-		NODE(1, RELATION('i', 3)),
-		NODE(1, RELATION('n', 4)),
-		NODE(1, RELATION('t', 5)),
+		NODE(1, RELATION('s', 1)),
+		NODE(1, RELATION('a', 2)),
+		NODE(1, RELATION('y', 3)),
+		NODE(1, RELATION('i', 4)),
 		NODE()
 	);
+	FST l_prints(
+		str,
+		6, //количество состояний
+		NODE(1, RELATION('s', 1)),
+		NODE(1, RELATION('a', 2)),
+		NODE(1, RELATION('y', 3)),
+		NODE(1, RELATION('s', 4)),
+		NODE()
+	);
+
 	FST l_main(
 		str,
-		5, //количество состояний
-		NODE(1, RELATION('m', 1)),
-		NODE(1, RELATION('a', 2)),
-		NODE(1, RELATION('i', 3)),
-		NODE(1, RELATION('n', 4)),
+		3, //количество состояний
+		NODE(1, RELATION('g', 1)),
+		NODE(1, RELATION('o', 2)),
 		NODE()
 	);
 	FST l_semicolon(
@@ -941,25 +959,31 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 	Checker checkArr[] = {
 		Checker(&l_integer,LEX_INTEGER,IT::INT,0xffffffff),
+		Checker(&l_until,LEX_UNTIL,IT::INT,0xffffffff),
 		Checker(&l_string,LEX_STRING,IT::STR,0xffffffff),
 		Checker(&l_function,LEX_FUNCTION,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_declare,LEX_DECLARE,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		
 		Checker(&l_return,LEX_RETURN,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		Checker(&l_export,LEX_EXPORT,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_main,LEX_MAIN,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_print,LEX_PRINT,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		Checker(&l_printi,LEX_PRINTI,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		Checker(&l_prints,LEX_PRINTS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		
 		Checker(&l_braceleft,LEX_LEFTBRACE,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_braceright,LEX_RIGHTBRACE,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_lefthesis,LEX_LEFTHESIS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_righthesis,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_comma,LEX_COMMA,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		
 		Checker(&l_semicolon,LEX_SEMICOLON,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_verb,LEX_PLUS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_itendificator,LEX_ID,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_numberLiteral,LEX_LITERAL,IT::INT,0xffffffff),
 		Checker(&l_stringLiteral,LEX_LITERAL,IT::STR,0xffffffff),
-		//len = 17
+		//len = 20
 	};
-	const int checkArrLen = 17;
+	const int checkArrLen = 20;
 
 
 #pragma endregion
@@ -973,6 +997,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	int scopeNumber = 0; // aka currentScope
 	int openedBrace = 0;
 	bool isDeclare = false;
+	bool isExported = false;
 	bool isRequireBodyFunc = false;
 	bool isMain = false;
 	bool isFunction = false;
@@ -1030,6 +1055,11 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 				case LEX_FUNCTION:
 					type = IT::F;
+					break;
+				case LEX_EXPORT:
+					type = IT::F;
+					isExported = true;
+					isDeclare = true;
 					break;
 
 				case LEX_LEFTHESIS:
@@ -1136,7 +1166,9 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						if (dataType != (IT::IDDATATYPE)FALSYNUMBER && type != (IT::IDTYPE)FALSYNUMBER)
 						{
 							isDeclare = false;
-							IT::Entry ttmp(lextable.size, scope.c_str(), dataType, type);
+							
+							IT::Entry ttmp(lextable.size, scope.c_str(), dataType, type, isExported);
+							isExported = false;
 							IT::Add(idtable, ttmp);
 							tmp.idxTI = idtable.size - 1;
 							dataType = (IT::IDDATATYPE)FALSYNUMBER;
@@ -1233,7 +1265,7 @@ else -> error;
 		IT::Entry a = IT::GetEntry(idtable, i);
 		char* intStr = new char[4];
 		_itoa_s(a.idxfirstLE, intStr, 4, 10);
-		std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id  << std::setw(9) << a.idtype << std::setw(9) << a.iddatatype<< std::setw(9) << a.value.vint<<" | "<<a.value.vstr.str<<" | " << std::endl;
+		std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id  << std::setw(9) << a.idtype << std::setw(9) << a.iddatatype<< std::setw(9) << a.value.vint<<" | "<<a.value.vchar<<" | " << std::endl;
 		//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
 	}
 #pragma endregion
