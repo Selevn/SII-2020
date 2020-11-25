@@ -51,7 +51,8 @@ namespace Error
 		ERROR_ENTRY(120, "[LA]: Ошибка при разборе токена"),//+
 		ERROR_ENTRY(121, "[LA]: Используется необъявленный идентификатор"),//+
 		ERROR_ENTRY(122, "[LA]: Итендификатор не имеет типа"),//+
-		ERROR_ENTRY_NODEF(123),
+		ERROR_ENTRY(123, "[LA]: Повторное объявление итедификатора"),//+
+		//ERROR_ENTRY_NODEF(123),
 		//ERROR_ENTRY_NODEF(123),
 		ERROR_ENTRY(124, "[LA]: Отсутствует точка входа"),//+
 		ERROR_ENTRY(125, "[LA]: Обнаружена вторая точка входа"),//+

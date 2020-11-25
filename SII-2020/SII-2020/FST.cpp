@@ -1084,9 +1084,13 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						scope += str;
 					}
 					else {
-						for (int j = scopeStack.size() - 1; j >= 0; j--) {
+						/*for (int j = scopeStack.size() - 1; j >= 0; j--) {
+							scope = scope + scopeStack.at(j);
+						}*/
+						for (int j = 0; j < scopeStack.size(); j++) {
 							scope = scope + scopeStack.at(j);
 						}
+
 						scope += str;
 					}
 					//если нет такого итендфикатора
@@ -1099,6 +1103,9 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						}
 						if (dataType != (IT::IDDATATYPE)FALSYNUMBER && type != (IT::IDTYPE)FALSYNUMBER)
 						{
+							if (type == IT::F)
+								scopeName = str;
+
 							//добавл€ем в таблицу 
 							IT::Entry idTableObject(lextable.size, scope.c_str(), dataType, type, isExported);
 							IT::Add(idtable, idTableObject);
@@ -1115,6 +1122,8 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 							throw ERROR_THROW_IN(122, lex.line, lex.col);
 					}
 					else {
+						if(isDeclare || isExported)
+							throw ERROR_THROW_IN(123, lex.line, lex.col);
 						//если в таблице итендификаторов есть запись - ссылаемс€ на неЄ
 						lexTableObject.idxTI = IT::IsId(idtable, (char*)scope.c_str());
 					}
@@ -1136,15 +1145,13 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						//если функцию только объ€вили
 						if (lextable.table[lextable.size - 4].lexema == LEX_EXPORT || lextable.table[lextable.size - 4].lexema == LEX_DECLARE)
 						{
-							scopeName = idtable.table[lextable.table[lextable.size - 1].idxTI].id;
 							isFunctionParam = true;
 							type = IT::P;
-							scopeStack.push_back(idtable.table[lextable.table[lextable.size - 1].idxTI].id);
+							scopeStack.push_back(scopeName);
 						}
 						//если функцию вызвали
 						else {
 							isFunctionParam = false;
-
 						}
 					}
 					break; }

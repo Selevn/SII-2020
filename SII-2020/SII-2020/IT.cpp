@@ -49,7 +49,9 @@ namespace IT
 		bool bflag = false;
 		for (int i = 0; i < idtable.size; i++)
 		{
-				for (int j = 0; j < strlen(id) && j < ID_MAXSIZE; j++)
+				if (strlen(id) != strlen(idtable.table[i].id))
+					continue;
+				for (int j = 0; j < strlen(id); j++)
 				{
 					if (idtable.table[i].id[j] != id[j])
 					{
