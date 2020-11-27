@@ -4,8 +4,6 @@ bind uint z;
 z = 1+x;
 stop z;
 };
-go
-{
 bind symbol func fs (symbol a,symbol b)
 {
 bind symbol c;
@@ -14,6 +12,8 @@ c = substr(a, 1,3)+ b;
 bind uint s;
 stop c;
 };
+go
+{
 bind uint x;
 bind uint y;
 bind uint z;
@@ -26,7 +26,7 @@ y = 5;
 z = fi(x,y);
 sc = fs(sa,sb);
 sayi z;
-says sc;
+sayi sc;
 sayi strlen(sc);
 stop 0;
 };

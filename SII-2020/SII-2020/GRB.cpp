@@ -1,6 +1,7 @@
 #include "GRB.h"
 #include <string.h>
 #include "stdarg.h"
+#include "Lt.h"
 #define GRB_ERROR_SERIES 600
 
 
@@ -11,37 +12,43 @@ namespace GRB
 		6,
 		Rule(NS('S'), GRB_ERROR_SERIES + 0,
 			4, //todo m{NrE;};     tfi(F){NrE;};S     m{NrE;};S           tfi(F){NrE;};
-			Rule::Chain(8, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';')),
-			Rule::Chain(14, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
-			Rule::Chain(9, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
-			Rule::Chain(13, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'))
+			Rule::Chain(8, TS(LEX_MAIN), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';')),
+			Rule::Chain(15,TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
+			Rule::Chain(9, TS(LEX_MAIN), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
+			Rule::Chain(14, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'))
 		),
 		Rule(NS('N'), GRB_ERROR_SERIES + 1,
-			13, //todo dti;   rE;   i=E;   dtfi(F);   dti;N   rE;N   i=E;N   dtfi(F);N
-			Rule::Chain(4, TS('d'), TS('t'), TS('i'), TS(';')),
-			Rule::Chain(3, TS('r'), NS('E'), TS(';')),
-			Rule::Chain(4, TS('i'), TS('v'), NS('E'), TS(';')),
-			Rule::Chain(8, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS(';')),
-			Rule::Chain(5, TS('d'), TS('t'), TS('i'), TS(';'), NS('N')),
-			Rule::Chain(4, TS('r'), NS('E'), TS(';'), NS('N')),
-			Rule::Chain(5, TS('i'), TS('v'), NS('E'), TS(';'), NS('N')),
-			Rule::Chain(9, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS(';'), NS('N')),
-			Rule::Chain(4, TS('p'), TS('i'), TS(';'), NS('N')),
-			Rule::Chain(4, TS('p'), TS('l'), TS(';'), NS('N')),
-			Rule::Chain(3, TS('p'), TS('i'), TS(';')),
-			Rule::Chain(3, TS('p'), TS('l'), TS(';')),
-			Rule::Chain(6, TS('p'), TS('i'), TS('('), NS('W'), TS(')'), TS(';'))
+			15, //todo dti;   rE;   i=E;   dtfi(F);   dti;N   rE;N   i=E;N   dtfi(F);N pl;N pi;N pl; pi; pi(W);
+			Rule::Chain(4, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_ID), TS(';')),
+			Rule::Chain(3, TS(LEX_RETURN), NS('E'), TS(';')),
+			Rule::Chain(4, TS(LEX_ID), TS('v'), NS('E'), TS(';')),
+			Rule::Chain(8, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS(';')),
+			Rule::Chain(8, TS(LEX_EXPORT), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS(';')),
+
+			Rule::Chain(5, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_ID), TS(';'), NS('N')),
+			Rule::Chain(4, TS(LEX_RETURN), NS('E'), TS(';'), NS('N')),
+			Rule::Chain(5, TS(LEX_ID), TS('v'), NS('E'), TS(';'), NS('N')),
+			Rule::Chain(9, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS(';'), NS('N')),
+			Rule::Chain(9, TS(LEX_EXPORT), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS(';'), NS('N')),
+
+			Rule::Chain(4, TS('p'), TS(LEX_ID), TS(';'), NS('N')),
+			Rule::Chain(4, TS('p'), TS(LEX_LITERAL), TS(';'), NS('N')),
+
+			Rule::Chain(3, TS('p'), TS(LEX_ID), TS(';')),
+			Rule::Chain(3, TS('p'), TS(LEX_LITERAL), TS(';')),
+
+			Rule::Chain(6, TS('p'), TS(LEX_ID), TS('('), NS('W'), TS(')'), TS(';'))
 		),
 		Rule(NS('E'), GRB_ERROR_SERIES + 2,
 			8, //todo i   l   (E)   i(W)   iM   lM   (E)M   i(W)M
-			Rule::Chain(1, TS('i')),
-			Rule::Chain(1, TS('l')),
+			Rule::Chain(1, TS(LEX_ID)),
+			Rule::Chain(1, TS(LEX_LITERAL)),
 			Rule::Chain(3, TS('('), NS('E'), TS(')')),
-			Rule::Chain(4, TS('i'), TS('('), NS('W'), TS(')')),
-			Rule::Chain(2, TS('i'), NS('M')),
-			Rule::Chain(2, TS('l'), NS('M')),
+			Rule::Chain(4, TS(LEX_ID), TS('('), NS('W'), TS(')')),
+			Rule::Chain(2, TS(LEX_ID), NS('M')),
+			Rule::Chain(2, TS(LEX_LITERAL), NS('M')),
 			Rule::Chain(4, TS(')'), NS('E'), TS(')'), NS('M')),
-			Rule::Chain(5, TS('i'), TS('('), NS('W'), TS(')'), NS('M'))
+			Rule::Chain(5, TS(LEX_ID), TS('('), NS('W'), TS(')'), NS('M'))
 		),
 		Rule(NS('M'), GRB_ERROR_SERIES + 3,
 			4, //todo vE    vEM   v(E) v(E)M
@@ -52,15 +59,15 @@ namespace GRB
 		),
 		Rule(NS('F'), GRB_ERROR_SERIES + 4,
 			2, //todo ti   ti,F
-			Rule::Chain(2, TS('t'), TS('i')),
-			Rule::Chain(4, TS('t'), TS('i'), TS(','), NS('F'))
+			Rule::Chain(2, TS(LEX_TYPE), TS(LEX_ID)),
+			Rule::Chain(4, TS(LEX_TYPE), TS(LEX_ID), TS(','), NS('F'))
 		),
 		Rule(NS('W'), GRB_ERROR_SERIES + 5,
 			4, //todo i   l   i,W   l,W
-			Rule::Chain(1, TS('i')),
-			Rule::Chain(1, TS('l')),
-			Rule::Chain(3, TS('i'), TS(','), NS('W')),
-			Rule::Chain(3, TS('l'), TS(','), NS('W'))
+			Rule::Chain(1, TS(LEX_ID)),
+			Rule::Chain(1, TS(LEX_LITERAL)),
+			Rule::Chain(3, TS(LEX_ID), TS(','), NS('W')),
+			Rule::Chain(3, TS(LEX_LITERAL), TS(','), NS('W'))
 		)
 	);
 
