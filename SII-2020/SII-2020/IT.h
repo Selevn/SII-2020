@@ -56,7 +56,8 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-		};Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, bool e) {
+		};
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, bool e) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
@@ -166,7 +167,8 @@ namespace IT	//таблица итендификаторов
 			//	}
 			//	this->value.vstr.str[len - 1] = '\0';
 			//}
-		};Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data) {
+		};
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data) {
 			this->isExternal = false;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
@@ -203,7 +205,6 @@ namespace IT	//таблица итендификаторов
 			//}
 		};
 
-
 		Entry() = default;
 	};
 
@@ -228,6 +229,7 @@ namespace IT	//таблица итендификаторов
 		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
 		char id[ID_MAXSIZE] //итендификатор
 	);
-
+	bool isUniq(IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
+		char id[ID_MAXSIZE]);
 	void Delete(IdTable& idtable);	//удалить таблицу итендификаторов
 }

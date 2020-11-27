@@ -10,6 +10,7 @@
 #include "In.h"
 #include "FST.h"
 #include "IT.h"
+#include "Semantic.h"
 #pragma region "Для вывода в консоль"
 
 std::string type(IT::IDTYPE type) {
@@ -50,11 +51,22 @@ int _tmain(int argc, _TCHAR* argv[])
 		Log::WriteIn(log, in);
 
 		LEX::LEX tables(LT::Create(in.lexems.size()), IT::Create(in.lexems.size()));
+
+		//лексический анализатор
 		FST::LexAnalyzer(in,out,log, tables.lextable,tables.idtable);
 		
+		//синтаксический анализ
 		MFST_TRACE_START(log)
 			MFST::Mfst mfst(tables, GRB::getGreibach());
 		mfst.start(log);
+		//семантический анализ
+		Semantic::doAnalyse(tables);
+		//польская запись
+
+		//генерация кода
+
+
+
 	}
 	catch (Error::ERROR e)
 	{

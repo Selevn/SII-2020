@@ -11,11 +11,15 @@ namespace GRB
 	Greibach greibach(NS('S'), TS('$'),
 		6,
 		Rule(NS('S'), GRB_ERROR_SERIES + 0,
-			4, //todo m{NrE;};     tfi(F){NrE;};S     m{NrE;};S           tfi(F){NrE;};
+			8, //todo m{NrE;};     tfi(F){NrE;};S     m{NrE;};S           tfi(F){NrE;};
 			Rule::Chain(8, TS(LEX_MAIN), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';')),
+			Rule::Chain(7, TS(LEX_MAIN), TS('{'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';')),
 			Rule::Chain(15,TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
+			Rule::Chain(14,TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS('{'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
 			Rule::Chain(9, TS(LEX_MAIN), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
-			Rule::Chain(14, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'))
+			Rule::Chain(8, TS(LEX_MAIN), TS('{'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
+			Rule::Chain(14, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';')),
+			Rule::Chain(13, TS(LEX_DECLARE), TS(LEX_TYPE), TS(LEX_FUNCTION), TS(LEX_ID), TS('('), NS('F'), TS(')'), TS('{'), TS(LEX_RETURN), NS('E'), TS(';'), TS('}'), TS(';'))
 		),
 		Rule(NS('N'), GRB_ERROR_SERIES + 1,
 			15, //todo dti;   rE;   i=E;   dtfi(F);   dti;N   rE;N   i=E;N   dtfi(F);N pl;N pi;N pl; pi; pi(W);

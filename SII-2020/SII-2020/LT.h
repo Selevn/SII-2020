@@ -26,6 +26,7 @@
 #define LEX_STAR		'v'
 #define LEX_DIRSLASH	'v'
 #define LEX_EQUAL		'v'
+#define LEX_OPERATOR		'v'
 
 #define EMPTY_DATA		'\0'
 
@@ -35,17 +36,20 @@ namespace LT
 	{
 		char lexema;//лексема
 		int sn; //номер строки в исходном тексте
+		int cn; //номер столбца в исходном тексте
 		int idxTI;	//индекс итендификатора в таблице
 		char data;
 
 		Entry(
 			char lexema,
 			int sn, //номер строки в исходном тексте
+			int cn, //номер столбца в исходном тексте
 			int idxTI,	//индекс итендификатора в таблице
 			char symbol = EMPTY_DATA
 		) {
 			this->lexema = lexema;
 			this->sn = sn;
+			this->cn = cn;
 			this->idxTI = idxTI;
 			this->data = data;
 		};

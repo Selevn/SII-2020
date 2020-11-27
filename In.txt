@@ -7,8 +7,8 @@ stop z;
 bind symbol func fs (symbol a,symbol b)
 {
 bind symbol c;
-extern symbol func substr(symbol a,   symbol p,uint n);
-c = substr(a, 1,3)+ b;
+extern symbol func substr(symbol a,  uint p,uint n);
+c = substr(a, 1,3)+ 'b';
 bind uint s;
 stop c;
 };

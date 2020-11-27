@@ -149,6 +149,7 @@
     <ClCompile Include="MFST.cpp" />
     <ClCompile Include="Out.cpp" />
     <ClCompile Include="Parm.cpp" />
+    <ClCompile Include="Semantic.cpp" />
     <ClCompile Include="SII-2020.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,11 @@
     <ClInclude Include="MFST.h" />
     <ClInclude Include="Out.h" />
     <ClInclude Include="Parm.h" />
+    <ClInclude Include="Semantic.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\In.txt" />
+    <Text Include="..\..\In.txt.log" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

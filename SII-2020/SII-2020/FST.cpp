@@ -1034,7 +1034,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			{
 				executedFlag = true;
 #pragma region "Установка флага"
-				LT::Entry lexTableObject(checkArr[j].lexName, lex.line, checkArr[j].position);
+				LT::Entry lexTableObject(checkArr[j].lexName, lex.line,lex.col, checkArr[j].position);
 				//нет until
 				//проверяем что за лексема
 				switch (checkArr[j].lexName)
@@ -1123,7 +1123,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					}
 					else {
 						if(isDeclare || isExported)
-							throw ERROR_THROW_IN(123, lex.line, lex.col);
+							throw ERROR_THROW_IN(700, lex.line, lex.col);
 						//если в таблице итендификаторов есть запись - ссылаемся на неё
 						lexTableObject.idxTI = IT::IsId(idtable, (char*)scope.c_str());
 					}
@@ -1194,8 +1194,8 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						scopeStack.pop_back();
 						isRequireBodyFunc = false;
 					}
-					else
-						throw ERROR_THROW_IN(127, lex.line, lex.col);
+					//else
+						//throw ERROR_THROW_IN(127, lex.line, lex.col);
 					break;
 				}
 								   //main
@@ -1279,40 +1279,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		if -1 == v -> pass
 		else -> error;
 		*/
-		int prevline = 1;
-		Out::WriteLine(out, " ", "");
-		for (int i = 0; i < lextable.size; i++)
-		{
-			char* tmpChar = new char[2];
-			tmpChar[0] = lextable.table[i].lexema;
-			tmpChar[1] = '\0';
-			if (lextable.table[i].sn == prevline)
-			{
-				Out::WriteLine(out, tmpChar, "");
-			}
-			else
-			{
-				prevline = lextable.table[i].sn;
-				char* intStr = new char[4];
-				_itoa_s(lextable.table[i].sn, intStr, 4, 10);
-				Out::WriteLine(out, "\n", "");
-				Out::WriteLine(out, intStr, "");
-				Out::WriteLine(out, " ", "");
-				Out::WriteLine(out, tmpChar, "");
-			}
-		}
-
-
-		/*Out::WriteLine(out, "\n", "");
-		Out::WriteLine(out, "Itendificators:\n", "");
-		prevline = 1;
-		for (int i = 0; i < idtable.size; i++)
-		{
-			IT::Entry a = IT::GetEntry(idtable, i);
-			char* intStr = new char[4];
-			_itoa_s(a.idxfirstLE, intStr, 4, 10);
-			Out::WriteLine(out, intStr, " ", a.id, "\n", "");
-		}*/
+		
 
 
 #pragma region "вывод в консоль итендификаторов"
@@ -1320,10 +1287,34 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
 		for (int i = 0; i < idtable.size; i++)
 		{
+			std::string type, datatype;
 			IT::Entry a = IT::GetEntry(idtable, i);
 			char* intStr = new char[4];
 			_itoa_s(a.idxfirstLE, intStr, 4, 10);
-			std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << a.idtype << std::setw(9) << a.iddatatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;
+			switch (a.idtype) {
+			case IT::V:
+				type = "var";
+				break;
+			case IT::F:
+				type = "func";
+				break;
+			case IT::L:
+				type = "Lit";
+				break;
+			case IT::P:
+				type = "Parm";
+				break;
+			}
+			switch (a.iddatatype) {
+			case IT::INT:
+				datatype = "INT";
+				break;
+			case IT::STR:
+				datatype = "CHR";
+				break;
+			}
+
+			std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;
 			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
 		}
 #pragma endregion

@@ -45,7 +45,6 @@ namespace IT
 		char id[ID_MAXSIZE] //итендификатор
 	) {
 		int flag = -1;
-		bool isRightScope = false;
 		bool bflag = false;
 		for (int i = 0; i < idtable.size; i++)
 		{
@@ -67,6 +66,33 @@ namespace IT
 		}
 		return TI_NULLIDX;
 	};
+	bool isUniq(
+		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLIDX(если нет)
+		char id[ID_MAXSIZE] //итендификатор
+	) {
+		bool bflag = false;
+		int isQ = 0;
+		for (int i = 0; i < idtable.size; i++)
+		{
+			if (strlen(id) != strlen(idtable.table[i].id))
+				continue;
+			for (int j = 0; j < strlen(id); j++)
+			{
+				if (idtable.table[i].id[j] != id[j])
+				{
+					bflag = false;
+					break;
+				}
+				else {
+					bflag = true;
+				}
+			}
+			if (bflag)
+				isQ++;
+		}
+		return isQ == 1;
+	};
+
 
 	void Delete(IdTable& idtable) {
 		delete &idtable;

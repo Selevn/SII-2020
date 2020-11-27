@@ -28,6 +28,7 @@ namespace In
 			lexem currentLex;
 			unsigned char * lexContainer= new unsigned char[MAX_LEXEM_LENGTH];
 			int lexContainerLen = 0;
+			bool Cflag = false;
 			//WriteLine(log, "Начало чтения файла!");
 			while (file >> tmp)
 			{
@@ -46,6 +47,49 @@ namespace In
 					lexContainer[lexContainerLen++] = tmp;
 					break;
 				}
+				case IN::C: //кавычка
+				{
+					line_counter++;
+					out.size++;
+					char data, commaAgain;
+					file >> data;
+					line_counter++;
+					out.size++;
+					if(!data)
+						throw ERROR_THROW_IN(114,out.lines,line_counter)
+					file >> commaAgain;
+					line_counter++;
+					out.size++;
+					if (!commaAgain || commaAgain != '\'')
+						throw ERROR_THROW_IN(114, out.lines, line_counter)
+					
+					if (lexContainerLen != 0) {
+						lexContainer[lexContainerLen++] = '\0';
+						currentLex.lexem = new unsigned char[lexContainerLen];
+						for (int i = 0; i < lexContainerLen; i++)
+							currentLex.lexem[i] = lexContainer[i];
+						out.lexems.push_back(currentLex);
+						delete[]lexContainer;
+						lexContainer = new unsigned char[MAX_LEXEM_LENGTH];
+						lexContainerLen = 0;
+					}
+
+					if (lexContainerLen == 0) {
+						currentLex.line = out.lines;
+						currentLex.col = line_counter;
+					}
+					currentLex.lexem = new unsigned char[lexContainerLen];
+					currentLex.lexem[0] = '\'';
+					currentLex.lexem[1] = data;
+					currentLex.lexem[2] = '\'';
+					currentLex.lexem[3] = '\0';
+					out.lexems.push_back(currentLex);
+
+					if (lexContainerLen > MAX_LEXEM_LENGTH)
+						throw ERROR_THROW_IN(113, out.lines, line_counter);
+					break;
+				}
+
 				case IN::S://space
 				{
 					out.size++;
