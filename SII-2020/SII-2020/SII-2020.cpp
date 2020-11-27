@@ -65,6 +65,25 @@ int _tmain(int argc, _TCHAR* argv[])
 		//польская запись
 		NotaciaPolska::Wykonac(tables);
 		//генерация кода
+
+		int strn = 1;
+		std::string a;
+		for (int i = 0; i < tables.lextable.size; i++) {
+			
+			if (tables.lextable.table[i].sn == strn)
+				a += tables.lextable.table[i].lexema;
+			else
+			{
+				strn = tables.lextable.table[i].sn;
+				
+				Out::WriteLine(out, a.c_str(),"\n","");
+				a = tables.lextable.table[i].lexema;;
+			}
+			
+		}
+
+
+
 		std::cout << "\n\n\n______LEXEMS_____\n";
 		std::cout << "Position   |StringNumber     |lexema     |idxTI\n";
 		for (int i = 0; i < tables.lextable.size; i++)
