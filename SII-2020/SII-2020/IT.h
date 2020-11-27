@@ -11,7 +11,7 @@
 
 namespace IT	//таблица итендификаторов
 {
-	enum IDDATATYPE { INT = 1, STR = 2 };//таблица данных итендификаторов fls - empty
+	enum IDDATATYPE { INT = 1, STR = 2, CHR = 3};//таблица данных итендификаторов fls - empty
 	enum IDTYPE { V = 1, F = 2, P = 3, L = 4 };//типы итендификаторов - переменная функция параметр литерал
 
 	struct Entry //строка таблицы итендификаторов
@@ -22,47 +22,21 @@ namespace IT	//таблица итендификаторов
 		IDDATATYPE iddatatype; //тип данных
 		IDTYPE idtype; //тип итендификатора
 		union {
-			int vint; //значение integer
+			unsigned int vint; //значение integer
 			char vchar;//значение sting
+			struct
+			{
+				char len;//кол-во символов в string
+				char* str;// [TI_STR_MAXSIZE] ;//символы стринг
+			} vstr;//значение sting
 		} value; //значение итендификатора
 
-		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype) {
-			this->isExternal = false;
-			this->idxfirstLE = idxfirstLE;
-			this->iddatatype = iddatatype;
-			this->idtype = idtype;
-			if (iddatatype == STR)
-			{
-				this->value.vchar = '\0';
-			}
-			if (iddatatype == INT)
-			{
-				this->value.vint = 0;
-			}
-
-
-#pragma region "Writedown id name"
-			int len = 0;
-			for (int i = 0; id[i] != '\0' && i < ID_MAXSIZE; i++)
-			{
-				len++;
-				this->id[i] = id[i];
-			}
-			if (len >= ID_MAXSIZE)
-				this->id[ID_MAXSIZE - 1] = '\0';
-			else
-			{
-				this->id[len] = '\0';
-			}
-#pragma endregion
-
-		};
-		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, bool e) {
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, bool e = false) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
-			if (iddatatype == STR)
+			if (iddatatype == CHR)
 			{
 				this->value.vchar = '\0';
 			}
@@ -70,6 +44,12 @@ namespace IT	//таблица итендификаторов
 			{
 				this->value.vint = 0;
 			}
+			if (iddatatype == STR)
+			{
+				this->value.vstr.len = 0;
+				this->value.vstr.str = nullptr;
+			}
+
 
 #pragma region "Writedown id name"
 			int len = 0;
@@ -87,29 +67,8 @@ namespace IT	//таблица итендификаторов
 #pragma endregion
 
 		};
-		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, int data) {
-			this->isExternal = false;
-			this->idxfirstLE = idxfirstLE;
-			this->iddatatype = iddatatype;
-			this->idtype = idtype;
-			this->value.vint = data;
-#pragma region "Writedown id name"
-			int len = 0;
-			for (int i = 0; id[i] != '\0' && i < ID_MAXSIZE; i++)
-			{
-				len++;
-				this->id[i] = id[i];
-			}
-			if (len >= ID_MAXSIZE)
-				this->id[ID_MAXSIZE - 1] = '\0';
-			else
-			{
-				this->id[len] = '\0';
-			}
-#pragma endregion
-
-		};
-		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, int data,bool e) {
+		
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, unsigned int data,bool e=false) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
@@ -132,7 +91,7 @@ namespace IT	//таблица итендификаторов
 
 		};
 
-		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data, bool e) {
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data, bool e = false) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
@@ -152,7 +111,7 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-			this->value.vchar = '\0';
+			this->value.vchar = data;
 			//if (len > TI_STR_MAXSIZE)
 			//{
 			//	//error
@@ -168,8 +127,10 @@ namespace IT	//таблица итендификаторов
 			//	this->value.vstr.str[len - 1] = '\0';
 			//}
 		};
-		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data) {
-			this->isExternal = false;
+		
+
+		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char* data, bool e = false) {
+			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
 			this->iddatatype = iddatatype;
 			this->idtype = idtype;
@@ -188,21 +149,21 @@ namespace IT	//таблица итендификаторов
 			}
 #pragma endregion
 
-			this->value.vchar = '\0';
-			//if (len > TI_STR_MAXSIZE)
-			//{
-			//	//error
-			//	//std::cout << "TI STR MAXSIZE ERROR" << std::endl;
-			//}
-			//else
-			//{
-			//	//this->value.vstr.str = new char[len];
-			//	for (int i = 1; i < len; i++)
-			//	{
-			//		this->value.vstr.str[i - 1] = data[i];
-			//	}
-			//	this->value.vstr.str[len - 1] = '\0';
-			//}
+			len = 0;
+			for (int i = 1; data[i] != '\"'; i++)
+			{
+				len++;
+			}
+			this->value.vstr.len = len+3;
+			this->value.vstr.str = new char[len+3];
+
+			for (int i = 0; i < len+3; i++)
+			{
+				this->value.vstr.str[i] = data[i];
+			}
+			this->value.vstr.str[len+3 - 1] = '\0';
+			this->value.vstr.len = len + 2;
+			
 		};
 
 		Entry() = default;
@@ -229,6 +190,22 @@ namespace IT	//таблица итендификаторов
 		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
 		char id[ID_MAXSIZE] //итендификатор
 	);
+	int IsLX(
+		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
+		IDDATATYPE type,
+		unsigned int data 
+	);
+	int IsLX(
+		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
+		IDDATATYPE type,
+		char data 
+	);
+	int IsLX(
+		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
+		IDDATATYPE type,
+		char* data
+	);
+	
 	bool isUniq(IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
 		char id[ID_MAXSIZE]);
 	void Delete(IdTable& idtable);	//удалить таблицу итендификаторов

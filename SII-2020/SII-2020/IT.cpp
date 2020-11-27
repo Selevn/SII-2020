@@ -66,6 +66,87 @@ namespace IT
 		}
 		return TI_NULLIDX;
 	};
+	int IsLX(
+		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
+		IDDATATYPE type,
+		unsigned int data
+	) {
+		int flag = -1;
+		bool bflag = false;
+		for (int i = 0; i < idtable.size; i++)
+		{
+				if (idtable.table[i].iddatatype != type
+					||
+					data != idtable.table[i].value.vint)
+					continue;
+				else
+					return i;
+		}
+		return TI_NULLIDX;
+	};
+	int IsLX(
+		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
+		IDDATATYPE type,
+		char data
+	) {
+		int flag = -1;
+		bool bflag = false;
+		for (int i = 0; i < idtable.size; i++)
+		{
+				if (idtable.table[i].iddatatype != type
+					||
+					data != idtable.table[i].value.vchar)
+					continue;
+				else
+					return i;
+		}
+		return TI_NULLIDX;
+	};
+	int IsLX(
+		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLID(если нет)
+		IDDATATYPE type,
+		char* data
+	) {
+		int len = 0;
+		while (true) {
+			if (data[len] == '\0')
+				break;
+			else
+				len++;
+		}
+		int flag = -1;
+		bool bflag = false;
+		for (int i = 0; i < idtable.size; i++)
+		{
+				if (idtable.table[i].iddatatype != type)
+					continue;
+				if (len != idtable.table[i].value.vstr.len)
+					continue;
+				else
+				{
+					bool f = false;
+					for (int j = 0; j < len; j++) {
+							if (idtable.table[i].value.vstr.str[j] != data[j])
+							{
+								f = false;
+								break;
+							}
+							else
+								f = true;
+						
+					}
+					if(f)
+						return i;
+				}
+					
+		}
+		return TI_NULLIDX;
+	};
+
+
+
+
+
 	bool isUniq(
 		IdTable& idtable,	//возврат: номер строки(если есть) TI_NULLIDX(если нет)
 		char id[ID_MAXSIZE] //итендификатор

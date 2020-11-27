@@ -42,8 +42,8 @@ namespace Error
 		ERROR_ENTRY(111, "[IN]: Недопустимый символ в исходном файле (-in)"),//+
 		ERROR_ENTRY(112, "[IN]: Превышен предел размера входного файла (-in)"),//+
 		ERROR_ENTRY(113, "[IN]: Превышен предел размера лексемы"),//+
-		ERROR_ENTRY(114, "[IN]: Отсуствует закрывающая кавычка"),//
-		ERROR_ENTRY_NODEF(115),
+		ERROR_ENTRY(114, "[IN]: Отсуствует закрывающая кавычка"),//+
+		ERROR_ENTRY(115, "[IN]: Входная строка превышает максималььный размер"),//+
 		ERROR_ENTRY_NODEF(116),
 		ERROR_ENTRY_NODEF(117),
 		ERROR_ENTRY_NODEF(118),

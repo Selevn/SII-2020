@@ -57,9 +57,16 @@ int _tmain(int argc, _TCHAR* argv[])
 		FST::LexAnalyzer(in,out,log, tables.lextable,tables.idtable);
 		
 		//синтаксический анализ
-		MFST_TRACE_START(log)
+		/*MFST_TRACE_START(log)
 			MFST::Mfst mfst(tables, GRB::getGreibach());
-		mfst.start(log);
+		mfst.start(log);*/
+		MFST_TRACE_START(log);
+		MFST::Mfst mfst(tables, GRB::getGreibach());
+		if (!mfst.start(log))
+			throw ERROR_THROW(609);
+		mfst.savededucation();
+		if (false)
+			mfst.printrules(log);
 		//семантический анализ
 		Semantic::doAnalyse(tables);
 		//польская запись
@@ -77,7 +84,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				strn = tables.lextable.table[i].sn;
 				
 				Out::WriteLine(out, a.c_str(),"\n","");
-				a = tables.lextable.table[i].lexema;;
+				a = tables.lextable.table[i].lexema;
 			}
 			
 		}
@@ -123,13 +130,25 @@ int _tmain(int argc, _TCHAR* argv[])
 			switch (a.iddatatype) {
 			case IT::INT:
 				datatype = "INT";
+				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint  << " | " << std::endl;
+
 				break;
 			case IT::STR:
+				datatype = "STR";
+				if(a.value.vstr.len !=0)
+				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vstr.str <<  " | " << std::endl;
+				else
+					std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << '$' << " | "<< std::endl;
+				break;
+			
+			case IT::CHR:
 				datatype = "CHR";
+				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vchar << " | " << std::endl;
+
 				break;
 			}
 
-			std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;
+
 			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
 		}
 	}

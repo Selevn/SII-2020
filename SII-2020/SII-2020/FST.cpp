@@ -158,6 +158,16 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		NODE(1, RELATION('n', 6)),
 		NODE()
 	);
+	
+	FST l_str(
+		str,
+		4, //количество состояний
+		NODE(1, RELATION('s', 1)),
+		NODE(1, RELATION('t', 2)),
+		NODE(1, RELATION('r', 3)),
+		NODE()
+	);
+
 
 	FST l_numberLiteral(
 		str,
@@ -187,12 +197,276 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		),
 		NODE()
 	);
+	FST l_charLiteral(
+	str,
+		4,
+		NODE(1, RELATION('\'', 1)),
+		NODE(256,
+			RELATION((char)39, 2),
+			RELATION((char)0, 2),
+			RELATION((char)1, 2),
+			RELATION((char)2, 2),
+			RELATION((char)3, 2),
+			RELATION((char)4, 2),
+			RELATION((char)5, 2),
+			RELATION((char)6, 2),
+			RELATION((char)7, 2),
+			RELATION((char)8, 2),
+			RELATION((char)9, 2),
+			RELATION((char)10, 2),
+			RELATION((char)11, 2),
+			RELATION((char)12, 2),
+			RELATION((char)13, 2),
+			RELATION((char)14, 2),
+			RELATION((char)15, 2),
+			RELATION((char)16, 2),
+			RELATION((char)17, 2),
+			RELATION((char)18, 2),
+			RELATION((char)19, 2),
+			RELATION((char)20, 2),
+			RELATION((char)21, 2),
+			RELATION((char)22, 2),
+			RELATION((char)23, 2),
+			RELATION((char)24, 2),
+			RELATION((char)25, 2),
+			RELATION((char)26, 2),
+			RELATION((char)27, 2),
+			RELATION((char)28, 2),
+			RELATION((char)29, 2),
+			RELATION((char)30, 2),
+			RELATION((char)31, 2),
+			RELATION((char)32, 2),
+			RELATION((char)33, 2),
+			RELATION((char)34, 2),
+			RELATION((char)35, 2),
+			RELATION((char)36, 2),
+			RELATION((char)37, 2),
+			RELATION((char)38, 2),
+			RELATION((char)40, 2),
+			RELATION((char)41, 2),
+			RELATION((char)42, 2),
+			RELATION((char)43, 2),
+			RELATION((char)44, 2),
+			RELATION((char)45, 2),
+			RELATION((char)46, 2),
+			RELATION((char)47, 2),
+			RELATION((char)48, 2),
+			RELATION((char)49, 2),
+			RELATION((char)50, 2),
+			RELATION((char)51, 2),
+			RELATION((char)52, 2),
+			RELATION((char)53, 2),
+			RELATION((char)54, 2),
+			RELATION((char)55, 2),
+			RELATION((char)56, 2),
+			RELATION((char)57, 2),
+			RELATION((char)58, 2),
+			RELATION((char)59, 2),
+			RELATION((char)60, 2),
+			RELATION((char)61, 2),
+			RELATION((char)62, 2),
+			RELATION((char)63, 2),
+			RELATION((char)64, 2),
+			RELATION((char)65, 2),
+			RELATION((char)66, 2),
+			RELATION((char)67, 2),
+			RELATION((char)68, 2),
+			RELATION((char)69, 2),
+			RELATION((char)70, 2),
+			RELATION((char)71, 2),
+			RELATION((char)72, 2),
+			RELATION((char)73, 2),
+			RELATION((char)74, 2),
+			RELATION((char)75, 2),
+			RELATION((char)76, 2),
+			RELATION((char)77, 2),
+			RELATION((char)78, 2),
+			RELATION((char)79, 2),
+			RELATION((char)80, 2),
+			RELATION((char)81, 2),
+			RELATION((char)82, 2),
+			RELATION((char)83, 2),
+			RELATION((char)84, 2),
+			RELATION((char)85, 2),
+			RELATION((char)86, 2),
+			RELATION((char)87, 2),
+			RELATION((char)88, 2),
+			RELATION((char)89, 2),
+			RELATION((char)90, 2),
+			RELATION((char)91, 2),
+			RELATION((char)92, 2),
+			RELATION((char)93, 2),
+			RELATION((char)94, 2),
+			RELATION((char)95, 2),
+			RELATION((char)96, 2),
+			RELATION((char)97, 2),
+			RELATION((char)98, 2),
+			RELATION((char)99, 2),
+			RELATION((char)100, 2),
+			RELATION((char)101, 2),
+			RELATION((char)102, 2),
+			RELATION((char)103, 2),
+			RELATION((char)104, 2),
+			RELATION((char)105, 2),
+			RELATION((char)106, 2),
+			RELATION((char)107, 2),
+			RELATION((char)108, 2),
+			RELATION((char)109, 2),
+			RELATION((char)110, 2),
+			RELATION((char)111, 2),
+			RELATION((char)112, 2),
+			RELATION((char)113, 2),
+			RELATION((char)114, 2),
+			RELATION((char)115, 2),
+			RELATION((char)116, 2),
+			RELATION((char)117, 2),
+			RELATION((char)118, 2),
+			RELATION((char)119, 2),
+			RELATION((char)120, 2),
+			RELATION((char)121, 2),
+			RELATION((char)122, 2),
+			RELATION((char)123, 2),
+			RELATION((char)124, 2),
+			RELATION((char)125, 2),
+			RELATION((char)126, 2),
+			RELATION((char)127, 2),
+			RELATION((char)128, 2),
+			RELATION((char)129, 2),
+			RELATION((char)130, 2),
+			RELATION((char)131, 2),
+			RELATION((char)132, 2),
+			RELATION((char)133, 2),
+			RELATION((char)134, 2),
+			RELATION((char)135, 2),
+			RELATION((char)136, 2),
+			RELATION((char)137, 2),
+			RELATION((char)138, 2),
+			RELATION((char)139, 2),
+			RELATION((char)140, 2),
+			RELATION((char)141, 2),
+			RELATION((char)142, 2),
+			RELATION((char)143, 2),
+			RELATION((char)144, 2),
+			RELATION((char)145, 2),
+			RELATION((char)146, 2),
+			RELATION((char)147, 2),
+			RELATION((char)148, 2),
+			RELATION((char)149, 2),
+			RELATION((char)150, 2),
+			RELATION((char)151, 2),
+			RELATION((char)152, 2),
+			RELATION((char)153, 2),
+			RELATION((char)154, 2),
+			RELATION((char)155, 2),
+			RELATION((char)156, 2),
+			RELATION((char)157, 2),
+			RELATION((char)158, 2),
+			RELATION((char)159, 2),
+			RELATION((char)160, 2),
+			RELATION((char)161, 2),
+			RELATION((char)162, 2),
+			RELATION((char)163, 2),
+			RELATION((char)164, 2),
+			RELATION((char)165, 2),
+			RELATION((char)166, 2),
+			RELATION((char)167, 2),
+			RELATION((char)168, 2),
+			RELATION((char)169, 2),
+			RELATION((char)170, 2),
+			RELATION((char)171, 2),
+			RELATION((char)172, 2),
+			RELATION((char)173, 2),
+			RELATION((char)174, 2),
+			RELATION((char)175, 2),
+			RELATION((char)176, 2),
+			RELATION((char)177, 2),
+			RELATION((char)178, 2),
+			RELATION((char)179, 2),
+			RELATION((char)180, 2),
+			RELATION((char)181, 2),
+			RELATION((char)182, 2),
+			RELATION((char)183, 2),
+			RELATION((char)184, 2),
+			RELATION((char)185, 2),
+			RELATION((char)186, 2),
+			RELATION((char)187, 2),
+			RELATION((char)188, 2),
+			RELATION((char)189, 2),
+			RELATION((char)190, 2),
+			RELATION((char)191, 2),
+			RELATION((char)192, 2),
+			RELATION((char)193, 2),
+			RELATION((char)194, 2),
+			RELATION((char)195, 2),
+			RELATION((char)196, 2),
+			RELATION((char)197, 2),
+			RELATION((char)198, 2),
+			RELATION((char)199, 2),
+			RELATION((char)200, 2),
+			RELATION((char)201, 2),
+			RELATION((char)202, 2),
+			RELATION((char)203, 2),
+			RELATION((char)204, 2),
+			RELATION((char)205, 2),
+			RELATION((char)206, 2),
+			RELATION((char)207, 2),
+			RELATION((char)208, 2),
+			RELATION((char)209, 2),
+			RELATION((char)210, 2),
+			RELATION((char)211, 2),
+			RELATION((char)212, 2),
+			RELATION((char)213, 2),
+			RELATION((char)214, 2),
+			RELATION((char)215, 2),
+			RELATION((char)216, 2),
+			RELATION((char)217, 2),
+			RELATION((char)218, 2),
+			RELATION((char)219, 2),
+			RELATION((char)220, 2),
+			RELATION((char)221, 2),
+			RELATION((char)222, 2),
+			RELATION((char)223, 2),
+			RELATION((char)224, 2),
+			RELATION((char)225, 2),
+			RELATION((char)226, 2),
+			RELATION((char)227, 2),
+			RELATION((char)228, 2),
+			RELATION((char)229, 2),
+			RELATION((char)230, 2),
+			RELATION((char)231, 2),
+			RELATION((char)232, 2),
+			RELATION((char)233, 2),
+			RELATION((char)234, 2),
+			RELATION((char)235, 2),
+			RELATION((char)236, 2),
+			RELATION((char)237, 2),
+			RELATION((char)238, 2),
+			RELATION((char)239, 2),
+			RELATION((char)240, 2),
+			RELATION((char)241, 2),
+			RELATION((char)242, 2),
+			RELATION((char)243, 2),
+			RELATION((char)244, 2),
+			RELATION((char)245, 2),
+			RELATION((char)246, 2),
+			RELATION((char)247, 2),
+			RELATION((char)248, 2),
+			RELATION((char)249, 2),
+			RELATION((char)250, 2),
+			RELATION((char)251, 2),
+			RELATION((char)252, 2),
+			RELATION((char)253, 2),
+			RELATION((char)254, 2),
+			RELATION((char)255, 2)),
+			NODE(1, RELATION('\'', 3)),
+		NODE());
+
 	FST l_stringLiteral(
 		str,
 		3, //количество состояний
-		NODE(1, RELATION('\'', 1)),
+		NODE(1, RELATION('\"', 1)),
 		NODE(256,
-			RELATION('\'', 2),
+			RELATION('\"', 2),
 			RELATION((char)0, 1),
 			RELATION((char)1, 1),
 			RELATION((char)2, 1),
@@ -227,11 +501,11 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			RELATION((char)31, 1),
 			RELATION((char)32, 1),
 			RELATION((char)33, 1),
-			RELATION((char)34, 1),
 			RELATION((char)35, 1),
 			RELATION((char)36, 1),
 			RELATION((char)37, 1),
 			RELATION((char)38, 1),
+			RELATION((char)39, 1),
 			RELATION((char)40, 1),
 			RELATION((char)41, 1),
 			RELATION((char)42, 1),
@@ -824,10 +1098,11 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 	Checker checkArr[] = {
 		Checker(&l_integer,LEX_INTEGER,IT::INT,0xffffffff),
-		Checker(&l_until,LEX_UNTIL,IT::INT,0xffffffff),
-		Checker(&l_string,LEX_STRING,IT::STR,0xffffffff),
+		Checker(&l_string,LEX_STRING,IT::CHR,0xffffffff),
+		Checker(&l_str,LEX_CHAR,IT::STR,0xffffffff),
 		Checker(&l_function,LEX_FUNCTION,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_declare,LEX_DECLARE,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		Checker(&l_until,LEX_UNTIL,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		
 		Checker(&l_return,LEX_RETURN,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_export,LEX_EXPORT,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
@@ -846,9 +1121,10 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		Checker(&l_itendificator,LEX_ID,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
 		Checker(&l_numberLiteral,LEX_LITERAL,IT::INT,0xffffffff),
 		Checker(&l_stringLiteral,LEX_LITERAL,IT::STR,0xffffffff),
-		//len = 20
+		Checker(&l_charLiteral,LEX_LITERAL,IT::CHR,0xffffffff),
+		//len = 22
 	};
-	const int checkArrLen = 20;
+	const int checkArrLen = 22;
 
 
 #pragma endregion
@@ -919,6 +1195,10 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					else if (checkArr[j].iddatatype == IT::STR)
 					{
 						dataType = IT::STR;
+					}
+					else if (checkArr[j].iddatatype == IT::CHR)
+					{
+						dataType = IT::CHR;
 					}
 					else
 					{
@@ -1080,28 +1360,68 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					//количество литералов
 					literalCount++;
 					lexTableObject.idxTI = idtable.size;
-					//формируем имя литерала
-					std::string scope;
-					for (int j = scopeStack.size() - 1; j >= 0; j--) {
-						scope = scope + scopeStack.at(j);
-					}
-					scope += "LEX";
-					char* t = new char[6];
-					_itoa_s(literalCount, t, 6, 10);
-					scope += t;
-
+					bool continueFlag = true;
 					if (checkArr[j].iddatatype == IT::INT)
 					{
-						int out = atoi(str);
-						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, out);
-						IT::Add(idtable, ttmp);
+						unsigned int out = atoi(str);
+						int positionInTable = IT::IsLX(idtable, checkArr[j].iddatatype, out);
+						if (positionInTable != TI_NULLIDX)
+						{
+							continueFlag = false;
+							lexTableObject.idxTI = positionInTable;
+						}
 					}
-					else if (checkArr[j].iddatatype == IT::STR)
+					if (checkArr[j].iddatatype == IT::CHR)
 					{
-						IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, str);
-						IT::Add(idtable, ttmp);
+						int positionInTable = IT::IsLX(idtable, checkArr[j].iddatatype, str[1]);
+						if (positionInTable != TI_NULLIDX)
+						{
+							continueFlag = false;
+							lexTableObject.idxTI = positionInTable;
+						}
 					}
-					else ERROR_THROW_IN(122, lex.line, lex.col);
+					if (checkArr[j].iddatatype == IT::STR)
+					{
+
+						int positionInTable = IT::IsLX(idtable, IT::STR, str);
+						if (positionInTable != TI_NULLIDX)
+						{
+							continueFlag = false;
+							lexTableObject.idxTI = positionInTable;
+						}
+					}
+					//если такого литерала нет
+					if (continueFlag)
+					{
+						//формируем имя литерала
+						std::string scope;
+						for (int j = scopeStack.size() - 1; j >= 0; j--) {
+							scope = scope + scopeStack.at(j);
+						}
+						scope += "LEX";
+						char* t = new char[6];
+						_itoa_s(literalCount, t, 6, 10);
+						scope += t;
+
+						if (checkArr[j].iddatatype == IT::INT)
+						{
+							int out = atoi(str);
+							IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, (unsigned int)out);
+							IT::Add(idtable, ttmp);
+						}
+						else if (checkArr[j].iddatatype == IT::STR)
+						{
+							IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, str);
+							IT::Add(idtable, ttmp);
+						}
+						else if (checkArr[j].iddatatype == IT::CHR)
+						{
+							IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, (char)str[1]);
+							IT::Add(idtable, ttmp);
+						}
+
+						else ERROR_THROW_IN(122, lex.line, lex.col);
+					}
 					break;
 				}
 								
@@ -1175,8 +1495,12 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		//		datatype = "INT";
 		//		break;
 		//	case IT::STR:
+		//		datatype = "STR";
+		//		break;
+		//	case IT::CHR:
 		//		datatype = "CHR";
 		//		break;
+
 		//	}
 
 		//	std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;

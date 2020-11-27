@@ -15,9 +15,19 @@ stop c;
 go
 {
 bind uint x;
+x=5;
+x=5;
+x=5;
+bind str sss;
+bind str ssa;
+bind str ssb;
+sss = "123";
+ssb = "123";
+ssa = "123";
 bind uint y;
 bind uint z;
 bind symbol sa;
+sa = '1';
 bind symbol sb;
 bind symbol sc;
 extern uint func strlen(symbol p);
