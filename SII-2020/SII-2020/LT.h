@@ -26,7 +26,7 @@
 #define LEX_STAR		'v'
 #define LEX_DIRSLASH	'v'
 #define LEX_EQUAL		'v'
-#define LEX_OPERATOR		'v'
+#define LEX_OPERATOR	'v'
 
 #define EMPTY_DATA		'\0'
 

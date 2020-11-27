@@ -11,6 +11,7 @@
 #include "FST.h"
 #include "IT.h"
 #include "Semantic.h"
+#include "NotaciaPolska.h"
 #pragma region "Для вывода в консоль"
 
 std::string type(IT::IDTYPE type) {
@@ -62,11 +63,56 @@ int _tmain(int argc, _TCHAR* argv[])
 		//семантический анализ
 		Semantic::doAnalyse(tables);
 		//польская запись
-
+		NotaciaPolska::Wykonac(tables);
 		//генерация кода
+		std::cout << "\n\n\n______LEXEMS_____\n";
+		std::cout << "Position   |StringNumber     |lexema     |idxTI\n";
+		for (int i = 0; i < tables.lextable.size; i++)
+		{
+			LT::Entry a = LT::GetEntry(tables.lextable, i);
+			char* intStr = new char[4];
+
+			std::cout << std::setw(9) << i << std::setw(9) << a.sn << std::setw(19) << a.lexema << std::setw(19) << a.idxTI << std::endl;
+			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
+		}
 
 
 
+
+		std::cout << "\n\n\n______ITENDIFICATORS_____\n";
+		std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
+		for (int i = 0; i < tables.idtable.size; i++)
+		{
+			std::string type, datatype;
+			IT::Entry a = IT::GetEntry(tables.idtable, i);
+			char* intStr = new char[4];
+			_itoa_s(a.idxfirstLE, intStr, 4, 10);
+			switch (a.idtype) {
+			case IT::V:
+				type = "var";
+				break;
+			case IT::F:
+				type = "func";
+				break;
+			case IT::L:
+				type = "Lit";
+				break;
+			case IT::P:
+				type = "Parm";
+				break;
+			}
+			switch (a.iddatatype) {
+			case IT::INT:
+				datatype = "INT";
+				break;
+			case IT::STR:
+				datatype = "CHR";
+				break;
+			}
+
+			std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;
+			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
+		}
 	}
 	catch (Error::ERROR e)
 	{

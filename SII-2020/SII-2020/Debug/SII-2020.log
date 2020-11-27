@@ -1,2 +1,6 @@
-﻿  Semantic.cpp
+﻿  FST.cpp
+C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\FST.cpp(113,36): warning C4267: инициализация: преобразование из "size_t" в "short"; возможна потеря данных
+C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\FST.cpp(955,25): warning C4018: <: несоответствие типов со знаком и без знака
+  SII-2020.cpp
+  Создание кода...
   SII-2020.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020.exe

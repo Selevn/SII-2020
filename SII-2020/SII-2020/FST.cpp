@@ -6,143 +6,8 @@
 #include "LT.h"
 #include "IT.h"
 #include <stack>
-//polish
-//получить приотритет для польской нотации
-short getPriority(char a)
-{
-	switch (a)
-	{
-	case '(':
-		return 0;
-	case ')':
-		return 0;
-	case ',':
-		return 1;
-	case '-':
-		return 2;
-	case '+':
-		return 2;
-	case '*':
-		return 3;
-	case '/':
-		return 3;
-	case '[':
-		return 4;
-	case ']':
-		return 4;
-	default: {
-		return 0;
-	}
-	}
-}
 
-std::stack<LT::Entry> EntryStack;
 
-//bool PolishNotation(
-//	int lextablePos,
-//	LT::LexTable& lextable,
-//	IT::IdTable& idtable
-//) {
-//	char inString[256];
-//	LT::Entry resultString[256];
-//	struct stack* stk;
-//	
-//	short inStringLength = 0;
-//	short resultStringLength = 0;
-//
-//	short vCount = 0;
-//	short lCount = 0;
-//	short counter = 0;
-//	for (short i = lextablePos; i < lextable.size; i++)
-//	{
-//		counter++;
-//		switch (lextable.table[i].lexema)
-//		{
-//		case LEX_LEFTHESIS:
-//		{
-//			push(stk, lextable.table[i]);
-//			break;
-//		}
-//		case LEX_RIGHTHESIS:
-//		{
-//			if (!find(stk, LEX_LEFTHESIS))
-//				return false;
-//			while (!isEmpty(stk) || get(stk).lexema == lextable.table[i].lexema)
-//			{
-//				if (get(stk).lexema != LEX_LEFTHESIS)
-//					resultString[resultStringLength++] = pop(stk);
-//				else if (get(stk).lexema == LEX_LEFTHESIS)
-//					pop(stk);
-//			}
-//			break;
-//		}
-//		case LEX_PLUS:
-//		{
-//			vCount++;
-//			//char tmp = get(stk).lexema[0];
-//			
-//			short currentPrior = getPriority(lextable.table[i].data);
-//			if (getPriority(get(stk).data) >= currentPrior)
-//				while (!isEmpty(stk))
-//				{
-//					if (getPriority(get(stk).data) >= currentPrior)
-//						resultString[resultStringLength++] = pop(stk);
-//					else 
-//						break;
-//				}
-//			push(stk, lextable.table[i]);
-//			
-//			break;
-//		}
-//		case LEX_SEMICOLON:
-//		{
-//			while (!isEmpty(stk))
-//			{
-//				if (get(stk).lexema == LEX_LEFTHESIS || get(stk).lexema == LEX_RIGHTHESIS || lCount - vCount != 1)
-//					return false;
-//				resultString[resultStringLength++] = pop(stk);
-//			}
-//			std::cout << std::endl;
-//			for (int pos = lextablePos; pos < resultStringLength; pos++)
-//			{
-//				if(resultString[pos].lexema == LEX_PLUS)
-//					std::cout << resultString[pos].data;
-//				else
-//					std::cout << resultString[pos].lexema;
-//				lextable.table[pos] = resultString[pos];
-//			}
-//			std::cout << std::endl;
-//			LT::Entry empty;
-//			empty.lexema = '\0';
-//			empty.sn = 0;
-//			empty.idxTI = 0;
-//			empty.data = '\0';
-//			for (int pos = resultStringLength; pos < counter; pos++)
-//			{
-//				lextable.table[pos] = empty;
-//			}
-//
-//			return true;
-//			break;
-//		}
-//		case LEX_COMMA:
-//		{
-//			while (!isEmpty(stk))
-//			{
-//				resultString[resultStringLength++] = pop(stk);
-//			}
-//		}
-//
-//		default:
-//		{
-//			if (lextable.table[i].lexema == LEX_ID || lextable.table[i].lexema == LEX_LITERAL)
-//				lCount++;
-//			resultString[resultStringLength++] = lextable.table[i];
-//			break;
-//		}
-//		}
-//	}
-//}
 
 FST::RELATION::RELATION(char c, short ns)
 {
@@ -1283,52 +1148,52 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 
 #pragma region "вывод в консоль итендификаторов"
-		std::cout << "\n\n\n______ITENDIFICATORS_____\n";
-		std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
-		for (int i = 0; i < idtable.size; i++)
-		{
-			std::string type, datatype;
-			IT::Entry a = IT::GetEntry(idtable, i);
-			char* intStr = new char[4];
-			_itoa_s(a.idxfirstLE, intStr, 4, 10);
-			switch (a.idtype) {
-			case IT::V:
-				type = "var";
-				break;
-			case IT::F:
-				type = "func";
-				break;
-			case IT::L:
-				type = "Lit";
-				break;
-			case IT::P:
-				type = "Parm";
-				break;
-			}
-			switch (a.iddatatype) {
-			case IT::INT:
-				datatype = "INT";
-				break;
-			case IT::STR:
-				datatype = "CHR";
-				break;
-			}
+		//std::cout << "\n\n\n______ITENDIFICATORS_____\n";
+		//std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
+		//for (int i = 0; i < idtable.size; i++)
+		//{
+		//	std::string type, datatype;
+		//	IT::Entry a = IT::GetEntry(idtable, i);
+		//	char* intStr = new char[4];
+		//	_itoa_s(a.idxfirstLE, intStr, 4, 10);
+		//	switch (a.idtype) {
+		//	case IT::V:
+		//		type = "var";
+		//		break;
+		//	case IT::F:
+		//		type = "func";
+		//		break;
+		//	case IT::L:
+		//		type = "Lit";
+		//		break;
+		//	case IT::P:
+		//		type = "Parm";
+		//		break;
+		//	}
+		//	switch (a.iddatatype) {
+		//	case IT::INT:
+		//		datatype = "INT";
+		//		break;
+		//	case IT::STR:
+		//		datatype = "CHR";
+		//		break;
+		//	}
 
-			std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;
-			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
-		}
+		//	std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint << " | " << a.value.vchar << " | " << std::endl;
+		//	//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
+		//}
 #pragma endregion
 
 #pragma region "вывод в консоль лексем"
-		std::cout << "\n\n\n______LEXEMS_____\n";
-		std::cout << "Position   |StringNumber     |lexema     |idxTI\n";
-		for (int i = 0; i < lextable.size; i++)
-		{
-			LT::Entry a = LT::GetEntry(lextable, i);
-			char* intStr = new char[4];
+		//std::cout << "\n\n\n______LEXEMS_____\n";
+		//std::cout << "Position   |StringNumber     |lexema     |idxTI\n";
+		//for (int i = 0; i < lextable.size; i++)
+		//{
+		//	LT::Entry a = LT::GetEntry(lextable, i);
+		//	char* intStr = new char[4];
 
-			std::cout << std::setw(9) << i << std::setw(9) << a.sn << std::setw(19) << a.lexema << std::setw(19) << a.idxTI << std::endl;
-			//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
-		}
+		//	std::cout << std::setw(9) << i << std::setw(9) << a.sn << std::setw(19) << a.lexema << std::setw(19) << a.idxTI << std::endl;
+		//	//std::cout <<  << "        " << a.id << "     " << a.scope << "     " << a.idtype << "     " << a.iddatatype<<'\n';
+		//}
 #pragma endregion
 }
