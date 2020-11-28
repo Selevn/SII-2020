@@ -12,6 +12,7 @@
 #include "IT.h"
 #include "Semantic.h"
 #include "NotaciaPolska.h"
+#include "CodeGeneration.h"
 #pragma region "Для вывода в консоль"
 
 std::string type(IT::IDTYPE type) {
@@ -72,6 +73,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		//польская запись
 		NotaciaPolska::Wykonac(tables);
 		//генерация кода
+		CG::Generate(tables);
 
 		int strn = 1;
 		std::string a;

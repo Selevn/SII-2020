@@ -1229,12 +1229,10 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						scope += str;
 					}
 					else {
-						/*for (int j = scopeStack.size() - 1; j >= 0; j--) {
-							scope = scope + scopeStack.at(j);
-						}*/
-						for (int j = 0; j < scopeStack.size(); j++) {
-							scope = scope + scopeStack.at(j);
-						}
+						if(!isExported)
+							for (int j = 0; j < scopeStack.size(); j++) {
+								scope = scope + scopeStack.at(j);
+							}
 
 						scope += str;
 					}
@@ -1360,6 +1358,10 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					//количество литералов
 					literalCount++;
 					lexTableObject.idxTI = idtable.size;
+
+					
+
+
 					bool continueFlag = true;
 					if (checkArr[j].iddatatype == IT::INT)
 					{
@@ -1389,6 +1391,13 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 							continueFlag = false;
 							lexTableObject.idxTI = positionInTable;
 						}
+					}
+
+					//если ретурним значит определили
+					if (lextable.table[lextable.size - 1].lexema == LEX_RETURN)
+					{
+						continueFlag = true;
+						lexTableObject.idxTI = idtable.size;
 					}
 					//если такого литерала нет
 					if (continueFlag)
@@ -1498,6 +1507,9 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		//		datatype = "STR";
 		//		break;
 		//	case IT::CHR:
+
+
+
 		//		datatype = "CHR";
 		//		break;
 

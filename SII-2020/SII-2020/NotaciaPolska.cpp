@@ -145,6 +145,12 @@ namespace NotaciaPolska {
 			if (t.lextable.table[i].lexema == LEX_EQUAL)
 				if (!NotaciaPolska(i + 1, t.lextable, t.idtable))
 					throw ERROR_THROW(130);
+		for (int i = 0; i < t.lextable.size; i++)
+			if (t.lextable.table[i].lexema == '+' || t.lextable.table[i].lexema == '-' || t.lextable.table[i].lexema == '*' || t.lextable.table[i].lexema == '/' || t.lextable.table[i].lexema == '%')
+			{
+				t.lextable.table[i].data = t.lextable.table[i].lexema;
+				t.lextable.table[i].lexema = LEX_OPERATOR;
+			}
 	}
 }
 

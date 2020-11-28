@@ -1,3 +1,3 @@
-﻿  In.cpp
-C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\In.cpp(22,13): warning C4244: инициализация: преобразование "std::streamoff" в "int", возможна потеря данных
+﻿  CodeGeneration.cpp
+C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\CodeGeneration.cpp(22,16): warning C4101: func: неиспользованная локальная переменная
   SII-2020.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020.exe

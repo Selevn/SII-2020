@@ -54,6 +54,9 @@
     <ClCompile Include="NotaciaPolska.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
+    <ClCompile Include="CodeGeneration.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error.h">
@@ -95,12 +98,18 @@
     <ClInclude Include="NotaciaPolska.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="CodeGeneration.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\In.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
     <Text Include="..\..\In.txt.log">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="..\..\baseIn.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
   </ItemGroup>

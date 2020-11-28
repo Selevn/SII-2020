@@ -77,9 +77,11 @@ namespace MFST
 				lenta_position++; st.pop(); nrulechain = -1; rc = TS_OK;
 				MFST_TRACE3(log);
 			}
-			else { MFST_TRACE4(log, "TS_NOK/NS_NORULECHAIN") rc = reststate(log) ? TS_NOK : NS_NORULECHAIN; };
+			else { MFST_TRACE4(log, "TS_NOK/NS_NORULECHAIN")
+				rc = reststate(log) ? TS_NOK : NS_NORULECHAIN; };
 		}
-		else { rc = LENTA_END; MFST_TRACE4(log,"LENTA_END") }
+		else { rc = LENTA_END; MFST_TRACE4(log,"LENTA_END")
+		}
 	  return rc;
 	}
 
@@ -145,9 +147,12 @@ namespace MFST
 			*log.stream << getDiagnosis(1, buf) << std::endl;
 			*log.stream << getDiagnosis(2, buf) << std::endl;
 			break;
-		case NS_NORULECHAIN:       MFST_TRACE4(log, "------>NS_NORULECHAIN") break;
-		case NS_ERROR:             MFST_TRACE4(log, "------>NS_ERROR") break;
-		case SURPRISE:             MFST_TRACE4(log, "------>SURPRISE") break;
+		case NS_NORULECHAIN:       MFST_TRACE4(log, "------>NS_NORULECHAIN") 
+			break;
+		case NS_ERROR:             MFST_TRACE4(log, "------>NS_ERROR") 
+			break;
+		case SURPRISE:             MFST_TRACE4(log, "------>SURPRISE") 
+			break;
 		};
 		return rc;
 

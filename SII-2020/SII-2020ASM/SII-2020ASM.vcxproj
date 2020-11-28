@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c04bb288-2624-4e7f-aafa-79f70f9e01c0}</ProjectGuid>
-    <RootNamespace>SII2020</RootNamespace>
+    <ProjectGuid>{ed3f1a3e-76d4-4be7-bc62-e6d9905cf2f3}</ProjectGuid>
+    <RootNamespace>SII2020ASM</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -54,6 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -139,43 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CodeGeneration.cpp" />
-    <ClCompile Include="Error.cpp" />
-    <ClCompile Include="FST.cpp" />
-    <ClCompile Include="GRB.cpp" />
-    <ClCompile Include="In.cpp" />
-    <ClCompile Include="IT.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="LT.cpp" />
-    <ClCompile Include="MFST.cpp" />
-    <ClCompile Include="NotaciaPolska.cpp" />
-    <ClCompile Include="Out.cpp" />
-    <ClCompile Include="Parm.cpp" />
-    <ClCompile Include="Semantic.cpp" />
-    <ClCompile Include="SII-2020.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CodeGeneration.h" />
-    <ClInclude Include="Error.h" />
-    <ClInclude Include="FST.h" />
-    <ClInclude Include="GRB.h" />
-    <ClInclude Include="In.h" />
-    <ClInclude Include="IT.h" />
-    <ClInclude Include="LEX.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="LT.h" />
-    <ClInclude Include="MFST.h" />
-    <ClInclude Include="NotaciaPolska.h" />
-    <ClInclude Include="Out.h" />
-    <ClInclude Include="Parm.h" />
-    <ClInclude Include="Semantic.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\baseIn.txt" />
-    <Text Include="..\..\In.txt" />
-    <Text Include="..\..\In.txt.log" />
+    <MASM Include="SII-2020ASM.asm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>
