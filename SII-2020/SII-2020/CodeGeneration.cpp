@@ -124,11 +124,10 @@ namespace CG {
 		*stream << ".586\n";
 		*stream << "\t.model flat, stdcall\n";
 		*stream << "\tincludelib libucrt.lib\n";
-		*stream << "\tincludelib libucrt.lib\n";
 		*stream << "\tincludelib kernel32.lib\n";
+		*stream << "\tincludelib ../Debug/SII-2020LIB.lib\n";
+
 		*stream << "\tExitProcess PROTO :DWORD\n\n";
-		*stream << "\tincludelib ../Debug/KDVlib.lib\n";
-		
 		for (int i = 0; i < t.idtable.size; i++)
 		{
 			if (t.idtable.table[i].idtype == IT::F)

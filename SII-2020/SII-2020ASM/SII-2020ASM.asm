@@ -1,21 +1,23 @@
 .586
 	.model flat, stdcall
 	includelib libucrt.lib
-	includelib libucrt.lib
 	includelib kernel32.lib
+	includelib ../Debug/SII-2020LIB.lib
 	ExitProcess PROTO :DWORD
 
-	includelib ../Debug/KDVlib.lib
 
+	RandUint PROTO :DWORD 
+	Ord PROTO :BYTE
 .stack 4096
 .const
 	fiLEX1 DWORD 1 ;INT
 	fiLEX2 DWORD 2 ;INT
 	mainLEX3 DWORD 5 ;INT
 	mainLEX5 DWORD 3 ;INT
-	mainLEX6 BYTE 'a' ;CHR
-	mainLEX8 DWORD 6663 ;INT
-	mainLEX9 BYTE '1' ;CHR
+	mainLEX6 DWORD 4 ;INT
+	mainLEX7 BYTE 'a' ;CHR
+	mainLEX9 DWORD 6663 ;INT
+	mainLEX10 BYTE '1' ;CHR
 .data
 	fiz DWORD ? ;INT
 	mainx DWORD ? ;INT
@@ -68,23 +70,33 @@ add eax, ebx
 push eax
 pop mainx
 
-; String #16 :ivl
-push DWORD ptr mainLEX6
+; String #16 :ivil@1
+invoke RandUint, mainLEX6
+push eax ;результат функции
+pop mainy
+
+; String #19 :ivl
+push DWORD ptr mainLEX7
 pop eax
 mov mainsa, al
 
-; String #19 :ivl
+; String #22 :ivl
 push mainLEX3
 pop mainy
 
-; String #20 :ivili@2!
-invoke fi, mainLEX8, mainy
+; String #23 :ivili@2!
+invoke fi, mainLEX9, mainy
 push eax ;результат функции
 pop mainz
 
-; String #21 :ivilv
+; String #24 :ivii@1
+invoke Ord, mainsa
+push eax ;результат функции
+pop mainz
+
+; String #25 :ivilv
 push DWORD ptr mainsa
-push DWORD ptr mainLEX9
+push DWORD ptr mainLEX10
 pop eax
 pop ebx
 add eax, ebx 

@@ -7,6 +7,15 @@
 #include "IT.h"
 #include <stack>
 
+struct libfuncs{
+	std::string name;
+	IT::IDDATATYPE params[255];
+	int parcount = 0;
+	IT::IDDATATYPE retval;
+};
+
+
+
 
 
 FST::RELATION::RELATION(char c, short ns)
@@ -123,6 +132,22 @@ bool FST::execute(FST& fst) //выполнить распознование цепочки
 }
 void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lextable, IT::IdTable& idtable) //выполнить распознование цепочки
 {
+	libfuncs libs[3];
+	int libslen = 2;
+	libs[0].name = "RandUint";
+	libs[0].params[0] = IT::INT;
+	libs[0].parcount = 1;
+	libs[0].retval = IT::INT;
+
+	libs[1].name = "Ord";
+	libs[1].params[0] = IT::CHR;
+	libs[1].parcount = 1;
+	libs[1].retval = IT::INT;
+
+	
+
+
+
 	char* str = new char[255];
 
 #pragma region "FSTS"
@@ -1151,6 +1176,11 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	IT::IDTYPE type = (IT::IDTYPE)FALSYNUMBER;
 #pragma endregion
 
+	int libPos = 0;
+	std::stack<IT::IDDATATYPE> params;
+	bool parmStackShouldWrite = false;
+
+
 	int sizze = in.lexems.size();
 #pragma region "перебор"
 	for (int i = 0; i < sizze; i++)
@@ -1239,6 +1269,26 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					//если нет такого итендфикатора
 					if (IT::IsId(idtable, (char*)scope.c_str()) == TI_NULLIDX)
 					{
+						if (isExported) {
+
+							bool isOk = false;
+							libPos = 0;
+
+							for (; libPos < libslen; libPos++) {
+								if (libs[libPos].name == str)
+								{
+									isOk = true;
+									break;
+								}
+							}
+							if (!isOk)
+								throw ERROR_THROW_IN(705, lex.line, lex.col)
+							else {
+								if (dataType != libs[libPos].retval)
+									throw ERROR_THROW_IN(707, lex.line, lex.col)
+									parmStackShouldWrite = true;
+							}
+						}
 						//если не параметр и не объ€влен
 						if (type != (IT::IDTYPE::P) && !isDeclare && !isExported) {
 							//то мы пытаемс€ работать с необъ€вленным итендификатором
@@ -1256,10 +1306,15 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 							//снимаем флаг объ€влЄнности и экспорта
 							isDeclare = false;
 							isExported = false;
+							
+							//записываем в стек параметры импортируемой функции
+							if (parmStackShouldWrite && type == IT::P) {
+								params.push(dataType); //проверка параметров экспортируемой функции
+							}
 							//занул€ем тип и вид
-							dataType = (IT::IDDATATYPE)FALSYNUMBER;
 							if (!isFunctionParam)
 								type = (IT::IDTYPE)FALSYNUMBER;
+							dataType = (IT::IDDATATYPE)FALSYNUMBER;
 						}
 						else //дропаем ошибку если тип или вид не определЄн
 							throw ERROR_THROW_IN(122, lex.line, lex.col);
@@ -1300,17 +1355,34 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					break; }
 					//права€ скобочка
 				case LEX_RIGHTHESIS: {
+					if (parmStackShouldWrite)
+					{
+						
+						for (int q = libs[libPos].parcount-1; q > -1; --q)
+						{
+							if (params.size() != libs[libPos].parcount)
+								throw ERROR_THROW_IN(706, lex.line, lex.col)
+							if (params.top() != libs[libPos].params[q])
+								throw ERROR_THROW_IN(706, lex.line, lex.col)
+							params.pop();
+						}
+						parmStackShouldWrite = false;
+					}
+					
+
 					//если параметры функции шли
 					if (isFunctionParam)
 					{
 						//убираем область видимости
 						scopeStack.pop_back();
-						//большене параметры функции
+						//больше не параметры функции
 						isFunctionParam = false;
 						//закончили смотреть параметры, сейчас ожидаем тело функции
 						isRequireBodyFunc = true;
 						//тип больше не параметр
 						type = (IT::IDTYPE)FALSYNUMBER;
+
+
 					}
 					//аргументы функции, то что передаЄтс€ в объ€вленную
 					else

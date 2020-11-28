@@ -1,0 +1,3 @@
+﻿  SII-2020LIB.cpp
+C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020LIB\SII-2020LIB.cpp(7,13): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  SII-2020LIB.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020LIB.lib

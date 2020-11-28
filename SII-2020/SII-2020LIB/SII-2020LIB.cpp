@@ -1,24 +1,14 @@
 ﻿#include <iostream>
+#include <ctime>
 extern "C"
 {
-	int getmin(int count, int* arr)
+	int __stdcall RandUint(int max)
 	{
-		int min = *arr;
-		for (int i = 0; i < count; i++)
-		{
-			if (*(arr + i) < min)
-				min = *(arr + i);
-		}
-		return min;
+		srand(time(NULL));
+		return rand() % max;
 	}
-	int getmax(int count, int* arr)
+	int __stdcall Ord(char ch)
 	{
-		int max = *arr;
-		for (int i = 0; i < count; i++)
-		{
-			if (*(arr + i) > max)
-				max = *(arr + i);
-		}
-		return max;
+		return (int)ch;
 	}
 }
