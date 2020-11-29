@@ -37,13 +37,28 @@ namespace CG {
 					{
 						if (t.idtable.table[t.lextable.table[i + pos].idxTI].idtype != IT::F)
 						{
-							if (t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype != IT::CHR)
+							switch (t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype)
 							{
-								*stream << "push " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
+							case (IT::CHR): {
+								*stream << "push DWORD ptr " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';
+								break;
 							}
-							else {
-								*stream << "push DWORD ptr " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
+							case (IT::STR): {
+								*stream << "push offset " << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+								break;
 							}
+							case (IT::INT): {
+								*stream << "push " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';
+								break;
+							}
+							}
+							//if (t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype != IT::CHR)
+							//{
+							//	*stream << "push " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
+							//}
+							//else {
+							//	*stream << "push DWORD ptr " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
+							//}
 							save = &t.idtable.table[t.lextable.table[i + pos].idxTI];
 						}
 						else
@@ -122,6 +137,29 @@ namespace CG {
 				else
 					*stream <<"DWORD ptr "<< t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n'; 
 			}
+			else if (t.lextable.table[i].lexema == LEX_PRINTI) {
+				*stream << "push ";
+				//pos++;
+				switch (t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype)
+				{
+					case (IT::CHR): {
+						*stream << "DWORD ptr " << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+					
+						*stream << "CALL outputchar" << '\n';
+						break;
+					}
+					case (IT::STR): {
+						*stream << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+						*stream << "CALL outputstr" << '\n';
+						break;
+					}
+					case (IT::INT): {
+						*stream << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+						*stream << "CALL outputuint" << '\n';
+						break;
+					}
+				}
+			}
 			//TODO: разобрать цикл
 		}
 	}
@@ -187,6 +225,9 @@ namespace CG {
 				}
 			}
 		}
+		*stream << "\noutputuint PROTO :DWORD";
+		*stream << "\noutputchar PROTO :BYTE";
+		*stream << "\noutputstr PROTO :DWORD\n";
 
 		*stream << "\n.stack 4096\n";
 	}

@@ -11,4 +11,19 @@ extern "C"
 	{
 		return (int)ch;
 	}
+	void __stdcall outputuint(unsigned int a)
+	{
+		std::cout << a << std::endl;
+	}
+	void __stdcall outputchar(char a)
+	{
+		std::cout << a <<std::endl;
+	}
+	void __stdcall outputstr(char* a)
+	{
+		std::cout << a << std::endl;
+	}
+
+
+
 }

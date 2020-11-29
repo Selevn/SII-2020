@@ -1,3 +1,3 @@
 ﻿  Assembling SII-2020ASM.asm...
-SII-2020ASM.asm(48): warning A6004: procedure argument or local not referenced : fiy
+SII-2020ASM.asm(54): warning A6004: procedure argument or local not referenced : fiy
   SII-2020ASM.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020ASM.exe

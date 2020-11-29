@@ -163,12 +163,12 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	);
 	FST l_until(
 		str,
-		5, //количество состояний
-		NODE(1, RELATION('u', 1)),
-		NODE(1, RELATION('n', 2)),
-		NODE(1, RELATION('t', 3)),
-		NODE(1, RELATION('i', 4)),
-		NODE(1, RELATION('l', 5)),
+		6, //количество состояний
+		NODE(1, RELATION('w', 1)),
+		NODE(1, RELATION('h', 2)),
+		NODE(1, RELATION('i', 3)),
+		NODE(1, RELATION('l', 4)),
+		NODE(1, RELATION('e', 5)),
 		NODE()
 	);
 
@@ -1035,11 +1035,13 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	);
 	FST l_printi(
 		str,
-		5, //количество состояний
-		NODE(1, RELATION('s', 1)),
-		NODE(1, RELATION('a', 2)),
-		NODE(1, RELATION('y', 3)),
-		NODE(1, RELATION('i', 4)),
+		7, //количество состояний
+		NODE(1, RELATION('o', 1)),
+		NODE(1, RELATION('u', 2)),
+		NODE(1, RELATION('t', 3)),
+		NODE(1, RELATION('p', 4)),
+		NODE(1, RELATION('u', 5)),
+		NODE(1, RELATION('t', 6)),
 		NODE()
 	);
 	FST l_prints(
