@@ -30,7 +30,7 @@ namespace NotaciaPolska {
 		return false;
 	}
 
-	int get_priority(char lexem) {
+	/*int get_priority(char lexem) {
 		std::vector<std::pair<int, char>> priority = { {0, LEX_LEFTHESIS}, {0, LEX_RIGHTHESIS},
 														{1, LEX_COMMA},
 														{2, LEX_PLUS}, {2, LEX_MINUS},
@@ -39,7 +39,41 @@ namespace NotaciaPolska {
 			if (lexem == priority[i].second)
 				return priority[i].first;
 		return 0;
-	}
+	}*/
+	int get_priority(char a)
+			{
+				switch (a)
+				{
+				case '(':
+					return 0;
+				case ')':
+					return 0;
+				case ',':
+					return 1;
+				case '-':
+					return 2;
+				case '+':
+					return 2;
+				case '*':
+					return 3;
+				case '%':
+					return 3;
+				case '/':
+					return 3;
+				case '\\':
+					return 3;
+				case '~':
+					return 3;
+
+				case '[':
+					return 4;
+				case ']':
+					return 4;
+				default: {
+					return 0;
+				}
+				}
+			}
 
 	void fix_lextable(LT::LexTable& lextable, const std::string& str, size_t length, size_t pos, const std::vector<int>& ids) {
 		for (size_t i = 0, q = 0; i < str.size(); i++) {
@@ -146,7 +180,7 @@ namespace NotaciaPolska {
 				if (!NotaciaPolska(i + 1, t.lextable, t.idtable))
 					throw ERROR_THROW(130);
 		for (int i = 0; i < t.lextable.size; i++)
-			if (t.lextable.table[i].lexema == '+' || t.lextable.table[i].lexema == '-' || t.lextable.table[i].lexema == '*' || t.lextable.table[i].lexema == '/' || t.lextable.table[i].lexema == '%')
+			if (t.lextable.table[i].lexema == '+' || t.lextable.table[i].lexema == '-' || t.lextable.table[i].lexema == '*' || t.lextable.table[i].lexema == '/' ||t.lextable.table[i].lexema == '\\' ||t.lextable.table[i].lexema == '~' || t.lextable.table[i].lexema == '%')
 			{
 				t.lextable.table[i].data = t.lextable.table[i].lexema;
 				t.lextable.table[i].lexema = LEX_OPERATOR;

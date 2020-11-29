@@ -134,12 +134,12 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 {
 	libfuncs libs[3];
 	int libslen = 2;
-	libs[0].name = "RandUint";
+	libs[0].name = "random";
 	libs[0].params[0] = IT::INT;
 	libs[0].parcount = 1;
 	libs[0].retval = IT::INT;
 
-	libs[1].name = "Ord";
+	libs[1].name = "ord";
 	libs[1].params[0] = IT::CHR;
 	libs[1].parcount = 1;
 	libs[1].retval = IT::INT;
@@ -998,13 +998,11 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 	FST l_string(
 		str,
-		7, //количество состояний
-		NODE(1, RELATION('s', 1)),
-		NODE(1, RELATION('y', 2)),
-		NODE(1, RELATION('m', 3)),
-		NODE(1, RELATION('b', 4)),
-		NODE(1, RELATION('o', 5)),
-		NODE(1, RELATION('l', 6)),
+		5, //количество состояний
+		NODE(1, RELATION('c', 1)),
+		NODE(1, RELATION('h', 2)),
+		NODE(1, RELATION('a', 3)),
+		NODE(1, RELATION('r', 4)),
 		NODE()
 	);
 
@@ -1101,7 +1099,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	FST l_verb(
 		str,
 		2, //количество состояний
-		NODE(5, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1), RELATION('/', 1), RELATION('=', 1)),
+		NODE(8, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1), RELATION('/', 1),RELATION('~', 1),RELATION('\\', 1), RELATION('%', 1), RELATION('=', 1)),
 		NODE()
 	);
 

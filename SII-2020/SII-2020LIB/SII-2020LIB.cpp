@@ -2,12 +2,12 @@
 #include <ctime>
 extern "C"
 {
-	int __stdcall RandUint(int max)
+	int __stdcall random(int max)
 	{
 		srand(time(NULL));
 		return rand() % max;
 	}
-	int __stdcall Ord(char ch)
+	int __stdcall ord(char ch)
 	{
 		return (int)ch;
 	}

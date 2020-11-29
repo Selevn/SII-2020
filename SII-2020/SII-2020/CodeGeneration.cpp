@@ -19,7 +19,7 @@ namespace CG {
 				*stream << '\n';
 				int pos = 0;
 				bool isArguments = false;
-				IT::Entry* func;//
+				IT::Entry* func, *save = nullptr;//
 				//полячка записывает в lexema знак, пофиксил УЖЕ!
 				IT::Entry* recipent = &t.idtable.table[t.lextable.table[i - 1].idxTI];
 				while (true)
@@ -37,11 +37,14 @@ namespace CG {
 					{
 						if (t.idtable.table[t.lextable.table[i + pos].idxTI].idtype != IT::F)
 						{
-							if(t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype != IT::CHR)
+							if (t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype != IT::CHR)
+							{
 								*stream << "push " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
-							else
+							}
+							else {
 								*stream << "push DWORD ptr " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
-
+							}
+							save = &t.idtable.table[t.lextable.table[i + pos].idxTI];
 						}
 						else
 						{
@@ -52,28 +55,14 @@ namespace CG {
 								*stream << ", " << t.idtable.table[t.lextable.table[i + pos].idxTI].id;
 								pos++;
 							}
-							/*std::stack<IT::Entry> st;
-							while (true) {
-								pos++;
-								if (t.lextable.table[i + pos].lexema != '@')
-									st.push(t.idtable.table[t.lextable.table[i + pos].idxTI]);
-								else {
-									pos++;
-									break;
-								}
-							}
-							while (st.size() != 0) {
-								*stream << ", " << st.top().id;
-								st.pop();
-							}*/
 							*stream << '\n';
 							*stream << "push eax ;результат функции";
 							*stream << '\n';
 						}
 					}
 					else if (t.lextable.table[i + pos].lexema == LEX_OPERATOR) {
-						*stream << "pop eax" << '\n';
 						*stream << "pop ebx" << '\n';
+						*stream << "pop eax" << '\n';
 						switch (t.lextable.table[i + pos].data)
 						{
 						case '+': {
@@ -88,10 +77,37 @@ namespace CG {
 							*stream << "imul ebx" << '\n';
 							break;
 						}
-						case '/': {
+						case '~': {
+							*stream << "push edx ; сохраняем данные регистра edx" << '\n';
+							*stream << "mov edx, 0" << '\n';
 							*stream << "div ebx" << '\n';
+							*stream << "pop edx" << '\n';
 							break;
 						}
+						case '%': {
+							*stream << "push edx ; сохраняем данные регистра edx" << '\n';
+							*stream << "mov edx, 0" << '\n';
+							*stream << "div ebx" << '\n';
+							*stream << "mov eax, edx" << '\n';
+							*stream << "pop edx" << '\n';
+							break;
+						}
+
+						case '/': {
+							*stream << "push ecx ; сохраняем данные регистра ecx"<<'\n';
+							*stream << "mov ecx, ebx" << '\n';
+							*stream << "SHL eax, cl"<< '\n';
+							*stream << "pop ecx" << '\n';
+							break;
+						}
+						case '\\': {
+							*stream << "push ecx ; сохраняем данные регистра ecx" << '\n';
+							*stream << "mov ecx, ebx" << '\n';
+							*stream << "SHR eax, cl" << '\n';
+							*stream << "pop ecx" << '\n';
+							break;
+						}
+
 						}
 						*stream << "push eax" << '\n';
 					}
