@@ -8,14 +8,14 @@
 #define LEX_TYPE	LEX_STRING //лексема типа(uint/symbol)
 #define LEX_ID		'i'
 #define LEX_UNTIL		'u'
+#define LEX_IF		'o'
 #define LEX_MAIN	'm'
 #define LEX_LITERAL	'l'
 #define LEX_FUNCTION 'f'
 #define LEX_DECLARE	'd'
 #define LEX_RETURN	'r'
 #define LEX_EXPORT	'e'
-#define LEX_PRINTI	'p'
-#define LEX_PRINTS	'P'
+#define LEX_PRINT	'p'
 #define LEX_SEMICOLON ';'
 #define LEX_COMMA	','
 #define LEX_LEFTBRACE '{'
@@ -28,7 +28,7 @@
 #define LEX_DIRSLASH	'v'
 #define LEX_EQUAL		'v'
 #define LEX_OPERATOR	'v'
-
+#define LEX_BOOL_OPERATOR 'b'
 #define EMPTY_DATA		'\0'
 
 namespace LT

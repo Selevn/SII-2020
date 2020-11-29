@@ -52,13 +52,6 @@ namespace CG {
 								break;
 							}
 							}
-							//if (t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype != IT::CHR)
-							//{
-							//	*stream << "push " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
-							//}
-							//else {
-							//	*stream << "push DWORD ptr " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';// << ";" << t.lextable.table[i + pos].idxTI;
-							//}
 							save = &t.idtable.table[t.lextable.table[i + pos].idxTI];
 						}
 						else
@@ -137,7 +130,7 @@ namespace CG {
 				else
 					*stream <<"DWORD ptr "<< t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n'; 
 			}
-			else if (t.lextable.table[i].lexema == LEX_PRINTI) {
+			else if (t.lextable.table[i].lexema == LEX_PRINT) {
 				*stream << "push ";
 				//pos++;
 				switch (t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype)
@@ -335,8 +328,8 @@ namespace CG {
 					pos += 4;
 					end = t.idtable.table[i].idxfirstLE + pos;
 					InvokeExpressions(stream, t, start, end);
-
-					*stream << "ret ";//<< retsize;
+					//TODO:проверь
+					*stream << "ret";//<< retsize;
 					*stream << "\n" << t.idtable.table[i].id << " ENDP\n\n";
 				}
 			}

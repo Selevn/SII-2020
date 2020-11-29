@@ -8,9 +8,12 @@ go
 {
 bind uint x;
 x= 5;
-x=x-91;
+x=x+91;
 output x;
-x=x+3;
+#while(x > 3)
+#[
+#x=x+3;
+#];
 extern uint func random(uint a);
 extern uint func ord(char q);
 bind uint y;

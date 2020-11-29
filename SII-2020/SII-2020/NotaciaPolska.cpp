@@ -65,10 +65,10 @@ namespace NotaciaPolska {
 				case '~':
 					return 3;
 
-				case '[':
+				/*case '[':
 					return 4;
 				case ']':
-					return 4;
+					return 4;*/
 				default: {
 					return 0;
 				}
@@ -171,8 +171,6 @@ namespace NotaciaPolska {
 			}
 		}
 		return true;
-
-
 	}
 	void Wykonac(LEX::LEX t) {
 		for (int i = 0; i < t.lextable.size; i++)

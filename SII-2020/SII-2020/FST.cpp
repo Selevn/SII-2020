@@ -171,6 +171,14 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		NODE(1, RELATION('e', 5)),
 		NODE()
 	);
+	FST l_if(
+		str,
+		3, //количество состояний
+		NODE(1, RELATION('o', 1)),
+		NODE(1, RELATION('n', 2)),
+		NODE()
+	);
+
 
 	FST l_export(
 		str,
@@ -1091,6 +1099,19 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		NODE(1, RELATION('(', 1)),
 		NODE()
 	);
+	FST l_cycleStart(
+		str,
+		2, //количество состояний
+		NODE(1, RELATION('[', 1)),
+		NODE()
+	);
+	FST l_cycleEnd(
+		str,
+		2, //количество состояний
+		NODE(1, RELATION(']', 1)),
+		NODE()
+	);
+
 	FST l_righthesis(
 		str,
 		2, //количество состояний
@@ -1101,9 +1122,16 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	FST l_verb(
 		str,
 		2, //количество состояний
-		NODE(8, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1), RELATION('/', 1),RELATION('~', 1),RELATION('\\', 1), RELATION('%', 1), RELATION('=', 1)),
+		NODE(8, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1), RELATION('/', 1),RELATION('~', 1),RELATION('\\', 1), RELATION('%', 1),RELATION('=', 1)),
 		NODE()
 	);
+	FST l_boolVerb(
+		str,
+		2, //количество состояний
+		NODE(3, RELATION('^',1), RELATION('<',1), RELATION('>',1)),
+		NODE()
+	);
+
 
 #pragma endregion
 
@@ -1111,45 +1139,56 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	struct Checker {
 		FST* chain;
 		IT::IDDATATYPE iddatatype;
-		int position;
+		
 		char lexName;
-		Checker(FST* f, char c, IT::IDDATATYPE t, int pos) {
+		Checker(FST* f, char c, IT::IDDATATYPE t) {
 			chain = f;
 			lexName = c;
 			iddatatype = t;
-			position = pos;
 		}
 	};
 
 	Checker checkArr[] = {
-		Checker(&l_integer,LEX_INTEGER,IT::INT,0xffffffff),
-		Checker(&l_string,LEX_STRING,IT::CHR,0xffffffff),
-		Checker(&l_str,LEX_CHAR,IT::STR,0xffffffff),
-		Checker(&l_function,LEX_FUNCTION,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_declare,LEX_DECLARE,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_until,LEX_UNTIL,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		Checker(&l_integer,LEX_INTEGER,IT::INT),
+		Checker(&l_string,LEX_STRING,IT::CHR),
 		
-		Checker(&l_return,LEX_RETURN,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_export,LEX_EXPORT,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_main,LEX_MAIN,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_printi,LEX_PRINTI,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_prints,LEX_PRINTS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		Checker(&l_str,LEX_CHAR,IT::STR),
+		Checker(&l_function,LEX_FUNCTION,(IT::IDDATATYPE)FALSYNUMBER),
 		
-		Checker(&l_braceleft,LEX_LEFTBRACE,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_braceright,LEX_RIGHTBRACE,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_lefthesis,LEX_LEFTHESIS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_righthesis,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_comma,LEX_COMMA,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
+		Checker(&l_declare,LEX_DECLARE,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_until,LEX_UNTIL,(IT::IDDATATYPE)FALSYNUMBER),
 		
-		Checker(&l_semicolon,LEX_SEMICOLON,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_verb,LEX_PLUS,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_itendificator,LEX_ID,(IT::IDDATATYPE)FALSYNUMBER,0xffffffff),
-		Checker(&l_numberLiteral,LEX_LITERAL,IT::INT,0xffffffff),
-		Checker(&l_stringLiteral,LEX_LITERAL,IT::STR,0xffffffff),
-		Checker(&l_charLiteral,LEX_LITERAL,IT::CHR,0xffffffff),
+		Checker(&l_if,LEX_IF,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_return,LEX_RETURN,(IT::IDDATATYPE)FALSYNUMBER),
+		
+		Checker(&l_export,LEX_EXPORT,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_main,LEX_MAIN,(IT::IDDATATYPE)FALSYNUMBER),
+		//
+		Checker(&l_printi,LEX_PRINT,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_braceleft,LEX_LEFTBRACE,(IT::IDDATATYPE)FALSYNUMBER),
+		
+		Checker(&l_braceright,LEX_RIGHTBRACE,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_lefthesis,LEX_LEFTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
+		
+		Checker(&l_righthesis,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_cycleStart,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
+		
+		Checker(&l_cycleEnd,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_comma,LEX_COMMA,(IT::IDDATATYPE)FALSYNUMBER),
+		
+		Checker(&l_semicolon,LEX_SEMICOLON,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_verb,LEX_PLUS,(IT::IDDATATYPE)FALSYNUMBER),
+		//
+		Checker(&l_boolVerb,LEX_BOOL_OPERATOR,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_itendificator,LEX_ID,(IT::IDDATATYPE)FALSYNUMBER),
+		
+		Checker(&l_numberLiteral,LEX_LITERAL,IT::INT),
+		Checker(&l_stringLiteral,LEX_LITERAL,IT::STR),
+		
+		Checker(&l_charLiteral,LEX_LITERAL,IT::CHR),
 		//len = 22
 	};
-	const int checkArrLen = 22;
+	const int checkArrLen = 25;
 
 
 #pragma endregion
@@ -1172,6 +1211,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	bool isParametr = false;
 	bool isLiteral = false;
 	bool wasMain = false;
+	bool isBoleanExpression = false;
 	IT::IDDATATYPE dataType = (IT::IDDATATYPE)FALSYNUMBER;
 	IT::IDTYPE type = (IT::IDTYPE)FALSYNUMBER;
 #pragma endregion
@@ -1205,7 +1245,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			{
 				executedFlag = true;
 #pragma region "Установка флага"
-				LT::Entry lexTableObject(checkArr[j].lexName, lex.line,lex.col, checkArr[j].position);
+				LT::Entry lexTableObject(checkArr[j].lexName, lex.line,lex.col, 0xffffffff);
 				//нет until
 				//проверяем что за лексема
 				switch (checkArr[j].lexName)
@@ -1216,6 +1256,16 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					type = IT::V;
 					break;
 				}
+				case LEX_UNTIL: {
+					isBoleanExpression = true;
+					break;
+				}
+				case LEX_BOOL_OPERATOR: {
+					lexTableObject.lexema = LEX_BOOL_OPERATOR;
+					break;
+				}
+
+
 								//если встретили uint/symbol
 				case LEX_TYPE: {
 					if (checkArr[j].iddatatype == IT::INT)
@@ -1243,10 +1293,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					break;
 				}
 								 //вывод
-				case LEX_PRINTI: {
-					break;
-				}
-				case LEX_PRINTS: {
+				case LEX_PRINT: {
 					break;
 				}
 								 //итендификатор
@@ -1352,9 +1399,13 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 							isFunctionParam = false;
 						}
 					}
+					//если ожидается булевское выражение
 					break; }
 					//правая скобочка
 				case LEX_RIGHTHESIS: {
+					if (isBoleanExpression) {
+						isBoleanExpression = false;
+					}
 					if (parmStackShouldWrite)
 					{
 						
@@ -1512,6 +1563,11 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 				if (lexTableObject.lexema == LEX_MINUS || lexTableObject.lexema == LEX_LEFTBRACE || lexTableObject.lexema == LEX_RIGHTBRACE || lexTableObject.lexema == LEX_LEFTHESIS || lexTableObject.lexema == LEX_RIGHTHESIS)
 					lexTableObject.data = str[0];
 #pragma endregion
+#pragma region "Если булевая лексема"
+				if (lexTableObject.lexema == LEX_BOOL_OPERATOR)
+					lexTableObject.data = str[0];	
+#pragma endregion
+
 #pragma endregion
 				LT::Add(lextable, lexTableObject);
 				break;

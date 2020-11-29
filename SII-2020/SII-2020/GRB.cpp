@@ -9,7 +9,7 @@ namespace GRB
 {
 
 	Greibach greibach(NS('S'), TS('$'),
-		6,
+		7,
 		Rule(NS('S'), GRB_ERROR_SERIES + 0,
 			8, //todo m{NrE;};     tfi(F){NrE;};S     m{NrE;};S           tfi(F){NrE;};
 			Rule::Chain(8, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';')),
@@ -22,7 +22,7 @@ namespace GRB
 			Rule::Chain(13, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'))
 		),
 		Rule(NS('N'), GRB_ERROR_SERIES + 1,
-			15, //todo dti;   rE;   i=E;   dtfi(F);   dti;N   rE;N   i=E;N   dtfi(F);N pl;N pi;N pl; pi; pi(W);
+			17, //todo dti;   rE;   i=E;   dtfi(F);   dti;N   rE;N   i=E;N   dtfi(F);N pl;N pi;N pl; pi; pi(W);
 			Rule::Chain(4, TS('d'), TS('t'), TS('i'), TS(';')),
 			Rule::Chain(3, TS('r'), NS('E'), TS(';')),
 			Rule::Chain(4, TS('i'), TS('v'), NS('E'), TS(';')),
@@ -41,7 +41,11 @@ namespace GRB
 			Rule::Chain(3, TS('p'), TS('i'), TS(';')),
 			Rule::Chain(3, TS('p'), TS('l'), TS(';')),
 
-			Rule::Chain(6, TS('p'), TS('i'), TS('('), NS('W'), TS(')'), TS(';'))
+			Rule::Chain(6, TS('p'), TS('i'), TS('('), NS('W'), TS(')'), TS(';')),
+			//15
+
+			Rule::Chain(8, TS('u'),TS('('), NS('B'), TS(')'),TS('['),NS('N'),TS(']'), TS(';')),
+			Rule::Chain(9, TS('u'),TS('('), NS('B'), TS(')'),TS('['),NS('N'),TS(']'), TS(';'),NS('N'))
 		),
 		Rule(NS('E'), GRB_ERROR_SERIES + 2,
 			8, //todo i   l   (E)   i(W)   iM   lM   (E)M   i(W)M
@@ -72,7 +76,15 @@ namespace GRB
 			Rule::Chain(1, TS('l')),
 			Rule::Chain(3, TS('i'), TS(','), NS('W')),
 			Rule::Chain(3, TS('l'), TS(','), NS('W'))
+		),
+		Rule(NS('B'), GRB_ERROR_SERIES + 6,
+			4, //todo i   l   i,W   l,W
+			Rule::Chain(3, TS('i'),TS('b'),TS('i')),
+			Rule::Chain(3, TS('i'),TS('b'),TS('l')),
+			Rule::Chain(3, TS('l'),TS('b'),TS('l')),
+			Rule::Chain(3, TS('l'),TS('b'),TS('i'))
 		)
+
 	);
 
 

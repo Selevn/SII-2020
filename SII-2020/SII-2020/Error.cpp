@@ -110,8 +110,8 @@ namespace Error
 		ERROR_ENTRY(704, "[Semantic]: Нарушены типы данных в выражении"),//+
 
 		ERROR_ENTRY(705, "[Semantic]: Ошибка экспорта: в библиотеке нет такой функции"),//+
-		ERROR_ENTRY(706, "[Semantic]: Ошибка экспорта: неверные параметры"),
-		ERROR_ENTRY(707, "[Semantic]: Ошибка экспорта: ошибочный тип возвращаемого значения"),
+		ERROR_ENTRY(706, "[Semantic]: Ошибка экспорта: неверные параметры"),//+
+		ERROR_ENTRY(707, "[Semantic]: Ошибка экспорта: ошибочный тип возвращаемого значения"),//+
 		ERROR_ENTRY_NODEF(708),	ERROR_ENTRY_NODEF(709),
 		ERROR_ENTRY_NODEF10(710),ERROR_ENTRY_NODEF10(720),ERROR_ENTRY_NODEF10(730),ERROR_ENTRY_NODEF10(740),
 		ERROR_ENTRY_NODEF10(750),ERROR_ENTRY_NODEF10(760),ERROR_ENTRY_NODEF10(770),ERROR_ENTRY_NODEF10(780),
