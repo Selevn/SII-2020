@@ -22,6 +22,7 @@ namespace Semantic {
 					case '=': 
 					{
 						int pos = -1;
+						int isPlus = true;
 						int datatype=-1;
 						while (t.lextable.table[i + pos].lexema != LEX_SEMICOLON) {
 							if (t.lextable.table[i + pos].lexema == LEX_LITERAL || t.lextable.table[i + pos].lexema == LEX_ID)
@@ -31,18 +32,35 @@ namespace Semantic {
 								else
 									if(datatype != t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype)
 										throw ERROR_THROW_IN(704,t.lextable.table[i + pos].sn,t.lextable.table[i + pos].cn)
-
+								
 								//если функция то пропускай gfhfvtnhs aeyrwbb
 								if (t.idtable.table[t.lextable.table[i + pos].idxTI].idtype == IT::F) {
 									while (t.lextable.table[i + pos].lexema != LEX_RIGHTHESIS)
 										pos++;
 								}
 							}
+							if (datatype == IT::STR && t.lextable.table[i + pos].lexema == LEX_OPERATOR && pos!=0 && t.lextable.table[i + pos].data !='+') {
+								throw ERROR_THROW_IN(708, t.lextable.table[i + pos].sn, t.lextable.table[i + pos].cn)
+							}
 							pos++;
 						}
 						i += pos-1;
 						break;
 					}
+				}
+			}
+			//проверка аргументов while
+			if (t.lextable.table[i].lexema == LEX_UNTIL) {
+				int pos = 2;
+				while (true) {
+					if (t.lextable.table[i + pos].lexema == LEX_LITERAL || t.lextable.table[i + pos].lexema == LEX_ID)
+					{
+						if (t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype == IT::STR)
+							throw ERROR_THROW_IN(709, t.lextable.table[i + pos].sn, t.lextable.table[i + pos].cn)
+					}
+					pos++;
+					if (t.lextable.table[i + pos].lexema == LEX_RIGHTHESIS || pos > 6)
+						break;
 				}
 			}
 		}
@@ -81,7 +99,7 @@ namespace Semantic {
 	//возврат функции!!!!
 	void returns(LEX::LEX t) {
 		for (int i = 0; i < t.lextable.size; i++) {
-			if (t.lextable.table[i].lexema == LEX_ID && t.idtable.table[t.lextable.table[i].idxTI].idtype == IT::F && (t.lextable.table[i - 3].lexema == LEX_EXPORT || t.lextable.table[i - 3].lexema == LEX_DECLARE))
+			if (t.lextable.table[i].lexema == LEX_ID && t.idtable.table[t.lextable.table[i].idxTI].idtype == IT::F &&  t.lextable.table[i - 3].lexema == LEX_DECLARE)
 			{
 				int pos = 1;
 				short retType = t.idtable.table[t.lextable.table[i].idxTI].iddatatype;

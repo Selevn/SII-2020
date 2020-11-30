@@ -4,10 +4,12 @@
 
 //TODO: Offset строк
 namespace CG {
+	
 
-	void InvokeExpressions(std::ofstream* stream, LEX::LEX t, int start, int end)
+	void InvokeExpressions(std::ofstream* stream, LEX::LEX t, int start, int end, int salt = 0)
 	{
-		for (int i = start; i < end; i++) {
+		for (int i = start; i < end; i++) 
+		{
 			//разобрать строку выражения
 			if (t.lextable.table[i].lexema == LEX_EQUAL && t.lextable.table[i].data == '=')
 			{
@@ -19,7 +21,7 @@ namespace CG {
 				*stream << '\n';
 				int pos = 0;
 				bool isArguments = false;
-				IT::Entry* func, *save = nullptr;//
+				IT::Entry* func, * save = nullptr;//
 				//полячка записывает в lexema знак, пофиксил УЖЕ!
 				IT::Entry* recipent = &t.idtable.table[t.lextable.table[i - 1].idxTI];
 				while (true)
@@ -27,10 +29,10 @@ namespace CG {
 					pos++;
 					if (t.lextable.table[i + pos].lexema == LEX_SEMICOLON || t.lextable.table[i + pos].lexema == '!')
 					{
-						if(recipent->iddatatype != IT::CHR)
+						if (recipent->iddatatype != IT::CHR)
 							*stream << "pop " << recipent->id << '\n';
 						else
-							*stream << "pop eax\nmov " << recipent->id <<", al" << '\n';
+							*stream << "pop eax\nmov " << recipent->id << ", al" << '\n';
 						break;
 					}
 					else if (t.lextable.table[i + pos].lexema == LEX_LITERAL || t.lextable.table[i + pos].lexema == LEX_ID)
@@ -40,11 +42,15 @@ namespace CG {
 							switch (t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype)
 							{
 							case (IT::CHR): {
-								*stream << "push DWORD ptr " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';
+								*stream << "movzx eax, "<< t.idtable.table[t.lextable.table[i + pos].idxTI].id<<'\n';
+								*stream << "push eax " << '\n';
 								break;
 							}
 							case (IT::STR): {
-								*stream << "push offset " << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+								if(t.idtable.table[t.lextable.table[i + pos].idxTI].idtype == IT::L)
+									*stream << "push offset " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';
+								else
+									*stream << "push " << t.idtable.table[t.lextable.table[i + pos].idxTI].id << '\n';
 								break;
 							}
 							case (IT::INT): {
@@ -59,7 +65,7 @@ namespace CG {
 							isArguments = true;
 							*stream << "invoke " << t.idtable.table[t.lextable.table[i + pos].idxTI].id;
 							pos++;
-							while (t.lextable.table[i + pos].lexema != '@'){
+							while (t.lextable.table[i + pos].lexema != '@') {
 								*stream << ", " << t.idtable.table[t.lextable.table[i + pos].idxTI].id;
 								pos++;
 							}
@@ -74,7 +80,17 @@ namespace CG {
 						switch (t.lextable.table[i + pos].data)
 						{
 						case '+': {
+							switch (t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype) {
+						case(IT::IDDATATYPE::STR):
+						{
+							*stream << "invoke strConcat, eax, ebx" << '\n';
+							break;
+						}
+						default:
 							*stream << "add eax, ebx " << '\n';
+							break;
+						}
+								
 							break;
 						}
 						case '-': {
@@ -85,7 +101,7 @@ namespace CG {
 							*stream << "imul ebx" << '\n';
 							break;
 						}
-						case '~': {
+						case ':': {
 							*stream << "push edx ; сохраняем данные регистра edx" << '\n';
 							*stream << "mov edx, 0" << '\n';
 							*stream << "div ebx" << '\n';
@@ -102,9 +118,9 @@ namespace CG {
 						}
 
 						case '/': {
-							*stream << "push ecx ; сохраняем данные регистра ecx"<<'\n';
+							*stream << "push ecx ; сохраняем данные регистра ecx" << '\n';
 							*stream << "mov ecx, ebx" << '\n';
-							*stream << "SHL eax, cl"<< '\n';
+							*stream << "SHL eax, cl" << '\n';
 							*stream << "pop ecx" << '\n';
 							break;
 						}
@@ -123,37 +139,159 @@ namespace CG {
 			}
 			//разобрать ретурн
 			else if (t.lextable.table[i].lexema == LEX_RETURN) {
-				*stream << "mov eax, ";
-				//pos++;
-				if (t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype != IT::CHR)
-					*stream << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
-				else
-					*stream <<"DWORD ptr "<< t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n'; 
+			if(t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype == IT::CHR)
+				*stream << "\nmovzx eax, "<< t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n'; 
+			else
+				*stream << "\nmov eax, " << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
 			}
+			//разобрать вывод
 			else if (t.lextable.table[i].lexema == LEX_PRINT) {
-				*stream << "push ";
 				//pos++;
 				switch (t.idtable.table[t.lextable.table[i + 1].idxTI].iddatatype)
 				{
-					case (IT::CHR): {
-						*stream << "DWORD ptr " << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
-					
-						*stream << "CALL outputchar" << '\n';
-						break;
-					}
-					case (IT::STR): {
+				case (IT::CHR): {
+					*stream << "push eax\n" ;
+					*stream << "movzx eax, " << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+					*stream << "push eax\n";
+					*stream << "CALL outputchar" << '\n';
+					*stream << "pop eax\n" << '\n';
+					break;
+				}
+				case (IT::STR): {
+					*stream << "\npush ";
+					if(t.idtable.table[t.lextable.table[i + 1].idxTI].idtype == IT::L)
+						*stream << "offset "<<t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+					else
 						*stream << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
-						*stream << "CALL outputstr" << '\n';
-						break;
-					}
-					case (IT::INT): {
-						*stream << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
-						*stream << "CALL outputuint" << '\n';
-						break;
-					}
+
+					*stream << "CALL outputstr" << '\n';
+					break;
+				}
+				case (IT::INT): {
+					*stream << "\npush ";
+					*stream << t.idtable.table[t.lextable.table[i + 1].idxTI].id << '\n';
+					*stream << "CALL outputuint" << '\n';
+					break;
+				}
 				}
 			}
 			//TODO: разобрать цикл
+			else if (t.lextable.table[i].lexema == LEX_UNTIL) {
+				int pos = 1;
+				int st;
+				int whileNumber = 0;
+				int leftSquareCount = 0;
+				bool getExpressionParams = true;
+				IT::Entry* firstId = nullptr, * secondId = nullptr;
+				std::string oper;
+				while (true) {
+
+					switch (t.lextable.table[i + pos].lexema)
+					{
+					case LEX_LEFTHESIS: {
+						if (getExpressionParams)
+						{
+							whileNumber = i+ salt;
+							*stream << "\nWhile" << whileNumber << "Start: " << '\n';
+
+						}
+						break;
+					}
+					case LEX_RIGHTHESIS: {
+						if (getExpressionParams)
+						{
+							st = i + 1;
+						}
+						break;
+					}
+					case LEX_ID: {
+						if (getExpressionParams)
+						{
+							if (firstId == nullptr)
+								firstId = &t.idtable.table[t.lextable.table[i + pos].idxTI];
+							else
+								secondId = &t.idtable.table[t.lextable.table[i + pos].idxTI];
+
+						}break;
+					}
+					case LEX_LITERAL: {
+						if (getExpressionParams)
+						{
+							if (firstId == nullptr)
+								firstId = &t.idtable.table[t.lextable.table[i + pos].idxTI];
+							else
+								secondId = &t.idtable.table[t.lextable.table[i + pos].idxTI];
+
+						}break;
+					}
+					case LEX_BOOL_OPERATOR: {
+						if (getExpressionParams)
+						{
+							switch (t.lextable.table[i + pos].data)
+							{
+							case '&': {
+								oper = "jne";
+								break;
+							}
+
+							case '^': {
+								oper = "je";
+								break;
+							}
+
+							case '<': {
+								oper = "ja";
+								break;
+							}
+
+							case '>': {
+								oper = "jl";
+								break;
+							}
+							}
+
+						}break;
+					}
+
+					case LEX_LEFT_SQUAREBRACE: {
+						if (getExpressionParams)
+						{
+							if(firstId->iddatatype == IT::CHR)
+								*stream << "movzx eax, " << firstId->id << '\n';
+							else
+								*stream << "mov eax, " << firstId->id << '\n';
+							if(secondId->iddatatype == IT::CHR)
+								*stream << "movzx ebx, " << secondId->id << '\n';
+							else
+								*stream << "mov ebx, " << secondId->id << '\n';
+							*stream << "cmp eax, ebx" << '\n';
+							*stream << oper << " While" << whileNumber << "End" << '\n';
+						}
+						getExpressionParams = false;
+						leftSquareCount++;
+
+						break;
+					}
+
+					case LEX_RIGHT_SQUAREBRACE: {
+						leftSquareCount--;
+						break;
+					}
+					}
+					//закончился наш цикл
+					if (leftSquareCount == 0 && !getExpressionParams)
+					{
+
+						InvokeExpressions(stream, t, st, i + pos, salt+1);
+						*stream << "jmp While" << whileNumber << "Start" << '\n';
+						*stream << "While" << whileNumber << "End: " << '\n';
+						i += pos;
+						break;
+					}
+					pos++;
+
+				}
+			}
 		}
 	}
 
@@ -221,6 +359,7 @@ namespace CG {
 		*stream << "\noutputuint PROTO :DWORD";
 		*stream << "\noutputchar PROTO :BYTE";
 		*stream << "\noutputstr PROTO :DWORD\n";
+		*stream << "\nstrConcat PROTO :DWORD,:DWORD\n";
 
 		*stream << "\n.stack 4096\n";
 	}
@@ -257,15 +396,15 @@ namespace CG {
 				*stream << "\t" << t.idtable.table[i].id;
 				switch (t.idtable.table[i].iddatatype) {
 				case IT::INT: {
-					*stream << " DWORD ? ;INT";
+					*stream << " DWORD 0 ;INT";
 					break;
 				}
 				case IT::CHR: {
-					*stream <<  " BYTE ? ;CHR";
+					*stream <<  " BYTE 0 ;CHR";
 					break;
 				}
 				case IT::STR: {
-					*stream << " DWORD ? ;STR";
+					*stream << " DWORD 0 ;STR";
 					break;
 				}
 				}
@@ -282,7 +421,7 @@ namespace CG {
 			{	//если не библиотечная
 				if (t.idtable.table[i].isExternal == false)
 				{
-					*stream  << t.idtable.table[i].id << " PROC uses ebx ecx edi esi, ";
+					*stream  << t.idtable.table[i].id << " PROC uses ebx ecx edi esi ";
 					int pos = 1;
 					int retsize = 0;
 					bool commaFlag = false;
@@ -293,11 +432,12 @@ namespace CG {
 							&&
 							t.idtable.table[t.lextable.table[t.idtable.table[i].idxfirstLE + pos].idxTI].idtype == IT::P)
 						{
+							*stream << ',';
 							if (commaFlag)
 							{
 								*stream << ',';
 							}
-							commaFlag = true;
+							commaFlag = false;
 							*stream << "\t" << t.idtable.table[t.lextable.table[t.idtable.table[i].idxfirstLE + pos].idxTI].id;
 							switch (t.idtable.table[t.lextable.table[t.idtable.table[i].idxfirstLE + pos].idxTI].iddatatype)
 							{

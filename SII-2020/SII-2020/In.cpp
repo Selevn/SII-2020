@@ -104,23 +104,21 @@ namespace In
 
 					line_counter++;
 					out.size++;
-					int pos = 1;
+					int pos = 0;
 					char* data = new char[TI_STR_MAXSIZE];
 					data[0] = '\"';
 					char t;
-					int strlinelen = 2;
-					file >> t;
-					while (t != '\"') {
-						strlinelen++;
+					do {
+						file >> t;
+						pos++;
 						line_counter++;
 						out.size++;
-						if(pos-2 > TI_STR_MAXSIZE)
+						if(pos-1 > TI_STR_MAXSIZE)
 							throw ERROR_THROW_IN(115, out.lines, line_counter)
 						data[pos] = t;
-						pos++;
-						file >> t;
-					}
-					data[pos] = t;
+					}while (t != '\"');
+					data[pos+1] = '\0';
+					int strlinelen=strlen(data);
 					line_counter++;
 					out.size++;
 					if (!data)
@@ -130,9 +128,10 @@ namespace In
 						currentLex.line = out.lines;
 						currentLex.col = line_counter;
 					}
-					currentLex.lexem = new unsigned char[lexContainerLen];
+					currentLex.lexem = new unsigned char[strlinelen];
 					for (int i = 0; i < strlinelen; i++)
 						currentLex.lexem[i] = data[i];
+					currentLex.lexem[strlinelen] = '\0';
 					
 					out.lexems.push_back(currentLex);
 
@@ -156,12 +155,7 @@ namespace In
 					}
 					break;
 				}
-				case IN::I://out.I://IN::T //введен
-				{
-					line_counter++;
-					out.ignor++;
-					break;
-				}
+				
 				case IN::L:// одиночная лексема
 				{
 					out.size++;

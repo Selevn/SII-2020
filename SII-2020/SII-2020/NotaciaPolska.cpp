@@ -62,7 +62,7 @@ namespace NotaciaPolska {
 					return 3;
 				case '\\':
 					return 3;
-				case '~':
+				case ':':
 					return 3;
 
 				/*case '[':
@@ -178,7 +178,7 @@ namespace NotaciaPolska {
 				if (!NotaciaPolska(i + 1, t.lextable, t.idtable))
 					throw ERROR_THROW(130);
 		for (int i = 0; i < t.lextable.size; i++)
-			if (t.lextable.table[i].lexema == '+' || t.lextable.table[i].lexema == '-' || t.lextable.table[i].lexema == '*' || t.lextable.table[i].lexema == '/' ||t.lextable.table[i].lexema == '\\' ||t.lextable.table[i].lexema == '~' || t.lextable.table[i].lexema == '%')
+			if (t.lextable.table[i].lexema == '+' || t.lextable.table[i].lexema == '-' || t.lextable.table[i].lexema == '*' || t.lextable.table[i].lexema == '/' ||t.lextable.table[i].lexema == '\\' ||t.lextable.table[i].lexema == ':' || t.lextable.table[i].lexema == '%')
 			{
 				t.lextable.table[i].data = t.lextable.table[i].lexema;
 				t.lextable.table[i].lexema = LEX_OPERATOR;

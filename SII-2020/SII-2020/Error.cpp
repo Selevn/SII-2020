@@ -48,18 +48,14 @@ namespace Error
 		ERROR_ENTRY_NODEF(117),
 		ERROR_ENTRY_NODEF(118),
 		ERROR_ENTRY_NODEF(119),
-		ERROR_ENTRY(120, "[LA]: Ошибка при разборе токена"),//+
-		ERROR_ENTRY(121, "[LA]: Используется необъявленный идентификатор"),//+
-		ERROR_ENTRY(122, "[LA]: Итендификатор не имеет типа"),//+
-		ERROR_ENTRY(123, "[LA]: Повторное объявление итедификатора"),//+
-		//ERROR_ENTRY_NODEF(123),
-		//ERROR_ENTRY_NODEF(123),
-		ERROR_ENTRY(124, "[LA]: Отсутствует точка входа"),//+
-		ERROR_ENTRY(125, "[LA]: Обнаружена вторая точка входа"),//+
-		ERROR_ENTRY(126, "[LA]: Ошибка закрывающей скобки - открывающая скобка не обработана"),//+
-		ERROR_ENTRY(127, "[LA]: Ошибка закрывающей фигурной скобки - открывающая скобка не обработана"),//+
-		//ERROR_ENTRY_NODEF(126),
-		//ERROR_ENTRY_NODEF(127),
+		ERROR_ENTRY(120, "[LA]: Ошибка при разборе токена"),
+		ERROR_ENTRY(121, "[LA]: Используется необъявленный идентификатор"),
+		ERROR_ENTRY(122, "[LA]: Итендификатор не имеет типа"),
+		ERROR_ENTRY_NODEF(123),
+		ERROR_ENTRY(124, "[LA]: Отсутствует точка входа"),
+		ERROR_ENTRY(125, "[LA]: Обнаружена вторая точка входа"),
+		ERROR_ENTRY_NODEF(126),
+		ERROR_ENTRY_NODEF(127),
 		ERROR_ENTRY_NODEF(128),
 		ERROR_ENTRY_NODEF(129),
 		ERROR_ENTRY(130, "[ITable]: Ошибка создания таблицы итендификаторов: размер превышает допустимое значение"),//+
@@ -83,16 +79,16 @@ namespace Error
 		ERROR_ENTRY_NODEF100(400),
 		ERROR_ENTRY_NODEF100(500),
 
-		ERROR_ENTRY(600, "[SA]: Неверная структура программы"),
-		ERROR_ENTRY(601, "[SA]: Ошибочный оператор"),
-		ERROR_ENTRY(602, "[SA]: Ошибка в выражении"),
-		ERROR_ENTRY(603, "[SA]: Ошибка в параметрах функции"),
-		ERROR_ENTRY(604, "[SA]: Ошибка в параметрах вызываемой функции"),
-		ERROR_ENTRY(605, "[SA]: Ошибка знака в выражении"),
-		ERROR_ENTRY(606, "[SA]: Ошибка в синтаксическом анализе"),
-		ERROR_ENTRY_NODEF(607),
+		ERROR_ENTRY(600, "[Syntaxis]: Неверная структура программы"),
+		ERROR_ENTRY(601, "[Syntaxis]: Ошибочный оператор"),
+		ERROR_ENTRY(602, "[Syntaxis]: Ошибка в выражении"),
+		ERROR_ENTRY(603, "[Syntaxis]: Ошибка в параметрах функции"),
+		ERROR_ENTRY(604, "[Syntaxis]: Ошибка в параметрах вызываемой функции"),
+		ERROR_ENTRY(605, "[Syntaxis]: Ошибка знака в выражении"),
+		ERROR_ENTRY(606, "[Syntaxis]: Ошибка синтаксического анализа"),
+		ERROR_ENTRY(607, "[Syntaxis]: Ошибка уловной конструкции"),
 		ERROR_ENTRY_NODEF(608),
-		ERROR_ENTRY(609, "[SA]: Обнаружена синтаксическая ошибка(смотри журнал Log)"),
+		ERROR_ENTRY(609, "[Syntaxis]: Обнаружена синтаксическая ошибка(смотри журнал Log)"),
 		ERROR_ENTRY_NODEF10(610),
 		ERROR_ENTRY_NODEF10(620),
 		ERROR_ENTRY_NODEF10(630),
@@ -103,16 +99,17 @@ namespace Error
 		ERROR_ENTRY_NODEF10(680),
 		ERROR_ENTRY_NODEF10(690),
 
-		ERROR_ENTRY(700, "[Semantic]: Повторное объявление идентификатора"),//+
-		ERROR_ENTRY(701, "[Semantic]: Ошибка в возвращаемом значении"),//+
-		ERROR_ENTRY(702, "[Semantic]: Ошибка в передаваемых значениях в функции: количество параметров не совпадает"),//+
-		ERROR_ENTRY(703, "[Semantic]: Ошибка в передаваемых значениях в функции: типы параметров не совпадают"),//+
-		ERROR_ENTRY(704, "[Semantic]: Нарушены типы данных в выражении"),//+
+		ERROR_ENTRY(700, "[Semantic]: Повторное объявление идентификатора"),
+		ERROR_ENTRY(701, "[Semantic]: Ошибка в возвращаемом значении"),
+		ERROR_ENTRY(702, "[Semantic]: Ошибка в передаваемых значениях в функции: количество параметров не совпадает"),
+		ERROR_ENTRY(703, "[Semantic]: Ошибка в передаваемых значениях в функции: типы параметров не совпадают"),
+		ERROR_ENTRY(704, "[Semantic]: Нарушены типы данных в выражении"),
 
-		ERROR_ENTRY(705, "[Semantic]: Ошибка экспорта: в библиотеке нет такой функции"),//+
-		ERROR_ENTRY(706, "[Semantic]: Ошибка экспорта: неверные параметры"),//+
-		ERROR_ENTRY(707, "[Semantic]: Ошибка экспорта: ошибочный тип возвращаемого значения"),//+
-		ERROR_ENTRY_NODEF(708),	ERROR_ENTRY_NODEF(709),
+		ERROR_ENTRY(705, "[Semantic]: Ошибка экспорта: в библиотеке нет такой функции"),
+		ERROR_ENTRY(706, "[Semantic]: Ошибка экспорта: неверные параметры"),
+		ERROR_ENTRY(707, "[Semantic]: Ошибка экспорта: ошибочный тип возвращаемого значения"),
+		ERROR_ENTRY(708, "[Semantic]: Ошибочный оператор: строки можно только складывать"),
+		ERROR_ENTRY(709, "[Semantic]: Ошибочные параметры условной конструкции: строки не могут быть параметрами условной конструкции"),
 		ERROR_ENTRY_NODEF10(710),ERROR_ENTRY_NODEF10(720),ERROR_ENTRY_NODEF10(730),ERROR_ENTRY_NODEF10(740),
 		ERROR_ENTRY_NODEF10(750),ERROR_ENTRY_NODEF10(760),ERROR_ENTRY_NODEF10(770),ERROR_ENTRY_NODEF10(780),
 		ERROR_ENTRY_NODEF10(790),

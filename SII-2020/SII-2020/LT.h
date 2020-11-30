@@ -20,6 +20,10 @@
 #define LEX_COMMA	','
 #define LEX_LEFTBRACE '{'
 #define LEX_RIGHTBRACE	'}'
+
+#define LEX_LEFT_SQUAREBRACE '['
+#define LEX_RIGHT_SQUAREBRACE	']'
+
 #define LEX_LEFTHESIS	'('
 #define LEX_RIGHTHESIS	')'
 #define LEX_PLUS		'v'

@@ -132,8 +132,8 @@ bool FST::execute(FST& fst) //выполнить распознование цепочки
 }
 void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lextable, IT::IdTable& idtable) //выполнить распознование цепочки
 {
-	libfuncs libs[3];
-	int libslen = 2;
+	libfuncs libs[4];
+	int libslen = 3;
 	libs[0].name = "random";
 	libs[0].params[0] = IT::INT;
 	libs[0].parcount = 1;
@@ -143,6 +143,12 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	libs[1].params[0] = IT::CHR;
 	libs[1].parcount = 1;
 	libs[1].retval = IT::INT;
+
+
+	libs[2].name = "chr";
+	libs[2].params[0] = IT::INT;
+	libs[2].parcount = 1;
+	libs[2].retval = IT::CHR;
 
 	
 
@@ -1122,13 +1128,13 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	FST l_verb(
 		str,
 		2, //количество состо€ний
-		NODE(8, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1), RELATION('/', 1),RELATION('~', 1),RELATION('\\', 1), RELATION('%', 1),RELATION('=', 1)),
+		NODE(8, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1), RELATION('/', 1),RELATION(':', 1),RELATION('\\', 1), RELATION('%', 1),RELATION('=', 1)),
 		NODE()
 	);
 	FST l_boolVerb(
 		str,
 		2, //количество состо€ний
-		NODE(3, RELATION('^',1), RELATION('<',1), RELATION('>',1)),
+		NODE(4, RELATION('^',1), RELATION('<',1), RELATION('>',1), RELATION('&',1)),
 		NODE()
 	);
 
@@ -1171,9 +1177,9 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		Checker(&l_lefthesis,LEX_LEFTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
 		
 		Checker(&l_righthesis,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
-		Checker(&l_cycleStart,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_cycleStart,LEX_LEFT_SQUAREBRACE,(IT::IDDATATYPE)FALSYNUMBER),
 		
-		Checker(&l_cycleEnd,LEX_RIGHTHESIS,(IT::IDDATATYPE)FALSYNUMBER),
+		Checker(&l_cycleEnd,LEX_RIGHT_SQUAREBRACE,(IT::IDDATATYPE)FALSYNUMBER),
 		Checker(&l_comma,LEX_COMMA,(IT::IDDATATYPE)FALSYNUMBER),
 		
 		Checker(&l_semicolon,LEX_SEMICOLON,(IT::IDDATATYPE)FALSYNUMBER),
@@ -1299,6 +1305,10 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 								 //итендификатор
 				case LEX_ID: {
 					//область видимости
+					if (strlen(str) > ID_CURRENT_MAXSIZE)
+					{
+						str[ID_CURRENT_MAXSIZE] = '\0';
+					}
 					std::string scope;
 					//если функци€, то не учитываем скоуп
 					if (IT::IsId(idtable, str) != TI_NULLIDX && IT::GetEntry(idtable, IT::IsId(idtable, str)).idtype == (IT::IDTYPE::F))
@@ -1438,7 +1448,6 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					//аргументы функции, то что передаЄтс€ в объ€вленную
 					else
 						type = (IT::IDTYPE)FALSYNUMBER;
-						//throw ERROR_THROW_IN(126, lex.line, lex.col);
 					break; }
 								   //лева€ фигурна€
 				case LEX_LEFTBRACE: {

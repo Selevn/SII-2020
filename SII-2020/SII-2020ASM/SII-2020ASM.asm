@@ -7,111 +7,163 @@
 
 
 	random PROTO :DWORD 
-	ord PROTO :BYTE
+	chr PROTO :DWORD 
 outputuint PROTO :DWORD
 outputchar PROTO :BYTE
 outputstr PROTO :DWORD
 
+strConcat PROTO :DWORD,:DWORD
+
 .stack 4096
 .const
-	fiLEX1 DWORD 1 ;INT
-	fiLEX2 DWORD 2 ;INT
-	mainLEX3 DWORD 5 ;INT
-	mainLEX4 DWORD 91 ;INT
-	mainLEX5 DWORD 4 ;INT
-	mainLEX6 BYTE 'a' ;CHR
-	mainLEX7 BYTE "akbar", 0  ;STR
-	mainLEX9 DWORD 6663 ;INT
-	mainLEX11 DWORD 6 ;INT
+	findFactLEX1 DWORD 1 ;INT
+	mainLEX4 DWORD 9 ;INT
+	mainLEX6 BYTE "Факториал числа", 0  ;STR
+	mainLEX7 BYTE "равен", 0  ;STR
+	mainLEX8 BYTE "Вывод символов от а до я", 0  ;STR
+	mainLEX9 BYTE 'а' ;CHR
+	mainLEX10 BYTE 'я' ;CHR
+	mainLEX12 BYTE "pen", 0  ;STR
+	mainLEX13 BYTE "123341", 0  ;STR
+	mainLEX14 DWORD 0 ;INT
 .data
-	fiz DWORD ? ;INT
-	mainx DWORD ? ;INT
-	mainy DWORD ? ;INT
-	mainz DWORD ? ;INT
-	mainsa BYTE ? ;CHR
-	mainallah DWORD ? ;STR
-	mainsb BYTE ? ;CHR
-	mainsc BYTE ? ;CHR
+	findFactanswer DWORD 0 ;INT
+	maina DWORD 0 ;INT
+	mainq BYTE 0 ;CHR
+	maina1 DWORD 0 ;STR
+	maina2 DWORD 0 ;STR
+	mainuu DWORD 0 ;STR
 
 .code
-fi PROC uses ebx ecx edi esi, 	fix: DWORD ,	fiy: DWORD 
-; String #4 :ivlivlv!!
-push fiLEX1
-push fix
-pop ebx
-pop eax
-add eax, ebx 
-push eax
-push fiLEX2
+findFact PROC uses ebx ecx edi esi ,	findFacta: DWORD 
+; String #3 :ivl
+push findFactLEX1
+pop findFactanswer
+
+While17Start: 
+mov eax, findFacta
+mov ebx, findFactLEX1
+cmp eax, ebx
+jl While17End
+
+; String #5 :iviiv
+push findFactanswer
+push findFacta
 pop ebx
 pop eax
 imul ebx
 push eax
-pop fiz
-mov eax, fiz
-ret
-fi ENDP
+pop findFactanswer
 
-main PROC
-
-; String #10 :ivl
-push mainLEX3
-pop mainx
-
-; String #11 :ivilv
-push mainx
-push mainLEX4
-pop ebx
-pop eax
-add eax, ebx 
-push eax
-pop mainx
-push mainx
-CALL outputuint
-
-; String #20 :ivil@1
-invoke random, mainLEX5
-push eax ;результат функции
-pop mainy
-
-; String #23 :ivl
-push DWORD ptr mainLEX6
-pop eax
-mov mainsa, al
-
-; String #25 :ivl
-push offset mainLEX7
-pop mainallah
-
-; String #28 :ivl
-push mainLEX3
-pop mainy
-
-; String #29 :ivili@2!
-invoke fi, mainLEX9, mainy
-push eax ;результат функции
-pop mainz
-
-; String #30 :ivii@1
-invoke ord, mainsa
-push eax ;результат функции
-pop mainz
-
-; String #32 :ivllv
-push mainLEX5
-push mainLEX11
+; String #6 :ivilv
+push findFacta
+push findFactLEX1
 pop ebx
 pop eax
 sub eax, ebx
 push eax
-pop mainz
-push DWORD ptr mainsa
-CALL outputchar
-push mainallah
+pop findFacta
+jmp While17Start
+While17End: 
+
+mov eax, findFactanswer
+ret
+findFact ENDP
+
+main PROC
+
+; String #13 :ivil@1
+invoke random, mainLEX4
+push eax ;результат функции
+pop maina
+
+; String #14 :ivilv
+push maina
+push findFactLEX1
+pop ebx
+pop eax
+add eax, ebx 
+push eax
+pop maina
+
+push offset mainLEX6
 CALL outputstr
-push mainz
+
+push maina
 CALL outputuint
-mov eax, mainz
+
+push offset mainLEX7
+CALL outputstr
+
+; String #18 :ivii@1
+invoke findFact, maina
+push eax ;результат функции
+pop maina
+
+push maina
+CALL outputuint
+
+push offset mainLEX8
+CALL outputstr
+
+; String #24 :ivl
+movzx eax, mainLEX9
+push eax 
+pop eax
+mov mainq, al
+push eax
+movzx eax, mainq
+push eax
+CALL outputchar
+pop eax
+
+
+While113Start: 
+movzx eax, mainq
+movzx ebx, mainLEX10
+cmp eax, ebx
+je While113End
+
+; String #27 :iviil@1v
+movzx eax, mainq
+push eax 
+invoke chr, findFactLEX1
+push eax ;результат функции
+pop ebx
+pop eax
+add eax, ebx 
+push eax
+pop eax
+mov mainq, al
+push eax
+movzx eax, mainq
+push eax
+CALL outputchar
+pop eax
+
+jmp While113Start
+While113End: 
+
+; String #32 :ivl
+push offset mainLEX12
+pop maina1
+
+; String #33 :ivilv
+push maina1
+push offset mainLEX13
+pop ebx
+pop eax
+invoke strConcat, eax, ebx
+push eax
+pop maina2
+
+push maina2
+CALL outputstr
+
+push mainuu
+CALL outputstr
+
+mov eax, mainLEX14
 	invoke		ExitProcess, eax
 main ENDP
 end main

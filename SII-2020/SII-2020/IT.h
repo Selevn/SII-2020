@@ -1,6 +1,8 @@
 #pragma once
 
-#define ID_MAXSIZE		25 //макс кол-во символов в итендиф
+#define ID_MAXSIZE		26 //макс кол-во символов в итендиф
+#define ID_CURRENT_MAXSIZE		8 //макс кол-во символов в итендиф
+
 #define	TI_MAXSIZE		4096 //макс кол-во строк в табл итендификаторов
 #define TI_INT_DEFAULT	0x00000000	//значение int по дефолту
 #define	TI_STR_DEFAULT	0x00		//значение string по дефолту
