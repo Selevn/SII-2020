@@ -1,38 +1,6 @@
-bind uint func findFactorial(uint a){ #объявление функции нахождения факториала числа
-bind uint answer;
-answer = 1;
-while(a>1)[
-	answer = answer*a;
-	a=a-1;
-];
-stop answer;
-};
 go{
-extern uint func random(uint max); #подключение функции random
 bind uint a;
-a = random(9);
-a = a+1;
-output "Факториал числа";
+a = a+25;
 output a;
-output "равен";
-a = findFactorial(a); #нахождение факториала
-output a;
-#output "Этот текст закомментирован и не будет выведен на экран"
-output "Вывод символов от а до я";
-bind char q;
-extern char func chr(uint symbol);
-q = 'а';
-output q;
-while(q^'я')[#цикл "пока а не равно 'я'"
-q=q+chr(1);
-output q;
-];
-bind str a1;
-bind str a2;
-a1 = "pen";
-a2 = a1+"123341";
-output a2;
-bind str uu;
-output uu;
 stop 0;
 };

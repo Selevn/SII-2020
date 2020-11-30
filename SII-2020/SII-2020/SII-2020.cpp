@@ -93,8 +93,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 
-		std::cout << "\n\n\n______LEXEMS_____\n";
-		std::cout << "Position   |StringNumber     |lexema     |idxTI\n";
+		std::cout << "\n\n\n______ЛЕКСЕМЫ_____\n";
+		std::cout << "Позиция   |Номер строки     |Лексема     |Индекс таблицы идентификаторов\n";
 		for (int i = 0; i < tables.lextable.size; i++)
 		{
 			LT::Entry a = LT::GetEntry(tables.lextable, i);
@@ -107,8 +107,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 
-		std::cout << "\n\n\n______ITENDIFICATORS_____\n";
-		std::cout << "Number   |Name    |IdTYPE     |IdDATATYPE     |Value\n";
+		std::cout << "\n\n\n______ИДЕНТИФИКАТОРЫ_____\n";
+		std::cout << "Позиция   |Имя    |Тип     |Тип данных     |Значение\n";
 		for (int i = 0; i < tables.idtable.size; i++)
 		{
 			std::string type, datatype;
@@ -132,20 +132,20 @@ int _tmain(int argc, _TCHAR* argv[])
 			switch (a.iddatatype) {
 			case IT::INT:
 				datatype = "INT";
-				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vint  << " | " << std::endl;
+				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << " | " << datatype << std::setw(9) << a.value.vint << std::endl;
 
 				break;
 			case IT::STR:
 				datatype = "STR";
 				if(a.value.vstr.len !=0)
-				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vstr.str <<  " | " << std::endl;
+				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << " | " << datatype << std::setw(9) << a.value.vstr.str  << std::endl;
 				else
-					std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << '$' << " | "<< std::endl;
+					std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << " | " <<  datatype << std::setw(9) << '$' << std::endl;
 				break;
 			
 			case IT::CHR:
 				datatype = "CHR";
-				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << datatype << std::setw(9) << a.value.vchar << " | " << std::endl;
+				std::cout << std::setw(9) << a.idxfirstLE << std::setw(9) << a.id << std::setw(9) << type << std::setw(9) << " | " << datatype << std::setw(9) << a.value.vchar << std::endl;
 
 				break;
 			}

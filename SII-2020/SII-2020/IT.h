@@ -19,8 +19,8 @@ namespace IT	//таблица итендификаторов
 	struct Entry //строка таблицы итендификаторов
 	{
 		int idxfirstLE; //индекс первой строки в таблице лексем
-		char id[ID_MAXSIZE]; //итендификатор
-		bool isExternal; //итендификатор
+		char id[ID_MAXSIZE]; //идентификатор
+		bool isExternal; //флаг подключения
 		IDDATATYPE iddatatype; //тип данных
 		IDTYPE idtype; //тип итендификатора
 		union {
@@ -32,7 +32,6 @@ namespace IT	//таблица итендификаторов
 				char* str;// [TI_STR_MAXSIZE] ;//символы стринг
 			} vstr;//значение sting
 		} value; //значение итендификатора
-
 		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, bool e = false) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
@@ -69,7 +68,6 @@ namespace IT	//таблица итендификаторов
 #pragma endregion
 
 		};
-		
 		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, unsigned int data,bool e=false) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
@@ -92,7 +90,6 @@ namespace IT	//таблица итендификаторов
 #pragma endregion
 
 		};
-
 		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char data, bool e = false) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
@@ -129,8 +126,6 @@ namespace IT	//таблица итендификаторов
 			//	this->value.vstr.str[len - 1] = '\0';
 			//}
 		};
-		
-
 		Entry(int idxfirstLE, const char* id, IDDATATYPE iddatatype, IDTYPE idtype, char* data, bool e = false) {
 			this->isExternal = e;
 			this->idxfirstLE = idxfirstLE;
@@ -167,10 +162,8 @@ namespace IT	//таблица итендификаторов
 			this->value.vstr.len = len + 2;
 			
 		};
-
 		Entry() = default;
 	};
-
 	struct IdTable		//экземпляр таблицы ид
 	{
 		int maxsize;	//ёмкость таблицы

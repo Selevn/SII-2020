@@ -1128,7 +1128,8 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	FST l_verb(
 		str,
 		2, //количество состояний
-		NODE(8, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1), RELATION('/', 1),RELATION(':', 1),RELATION('\\', 1), RELATION('%', 1),RELATION('=', 1)),
+		NODE(8, RELATION('+', 1), RELATION('-', 1), RELATION('*', 1),
+			RELATION('/', 1),RELATION(':', 1),RELATION('\\', 1), RELATION('%', 1),RELATION('=', 1)),
 		NODE()
 	);
 	FST l_boolVerb(
