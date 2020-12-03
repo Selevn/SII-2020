@@ -19,6 +19,4 @@ namespace LEX
 		}
 		LEX() {}
 	};
-
-	//LEX Lex(In::IN in);				//лексический анализ
 }

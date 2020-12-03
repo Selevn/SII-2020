@@ -116,11 +116,4 @@ namespace Semantic {
 			}
 		}
 	}
-
-	/*void returnCheck(LEX::LEX t) {
-		for (int i = 0; i < t.idtable.size; i++) {
-			if()
-		}
-	}*/
-
 }

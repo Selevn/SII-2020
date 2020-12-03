@@ -1,6 +1,4 @@
 bind uint func FindFactorial(uint a){
-extern uint func ord(char i);
-extern char func chr(uint i);
 	bind uint answer;
 	answer = 1;
 	while(a>1)[answer = answer*a; a = a-1;];
@@ -27,19 +25,5 @@ bind uint demo2;
 demo2 = demo \ 2;
 output "demo>>2";
 output demo2;
-output "Демонстрация конкатенации строк";
-bind str s1;
-bind str s2;
-s1 = "первая строка";	s2 = "вторая строка";	output s1;	output s2;	s2 = s1+s2;
-output s2;
-output "Вывод символов от 'а' до 'я':";
-bind char a;	a = 'а';	output a;
-while(a^'я')[	a = a+chr(1);	output a;	];
-
-bind char qq;
-qq = 'a';
-output qq;
-qq = qq/ chr(2);
-output qq;
 stop 0;
 }
