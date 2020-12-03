@@ -42,7 +42,7 @@ namespace In
 						currentLex.line = out.lines;
 						currentLex.col = line_counter;
 					}
-					if (lexContainerLen > MAX_LEXEM_LENGTH)
+					if (lexContainerLen >= MAX_LEXEM_LENGTH-1)
 						throw ERROR_THROW_IN(113, out.lines, line_counter);
 					lexContainer[lexContainerLen++] = tmp;
 					break;

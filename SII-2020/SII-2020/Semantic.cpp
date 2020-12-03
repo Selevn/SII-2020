@@ -42,6 +42,9 @@ namespace Semantic {
 							if (datatype == IT::STR && t.lextable.table[i + pos].lexema == LEX_OPERATOR && pos!=0 && t.lextable.table[i + pos].data !='+') {
 								throw ERROR_THROW_IN(708, t.lextable.table[i + pos].sn, t.lextable.table[i + pos].cn)
 							}
+							if (datatype == IT::CHR && t.lextable.table[i + pos].lexema == LEX_OPERATOR && pos != 0 && t.lextable.table[i + pos].data != '+' && t.lextable.table[i + pos].data != '-') {
+								throw ERROR_THROW_IN(710, t.lextable.table[i + pos].sn, t.lextable.table[i + pos].cn)
+							}
 							pos++;
 						}
 						i += pos-1;

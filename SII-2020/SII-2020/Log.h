@@ -2,7 +2,9 @@
 #include <fstream>
 #include "In.h"
 #include "Parm.h"
+#include "LEX.h"
 #include "Error.h"
+
 namespace Log //работа с протоколом
 {
 	struct LOG //протокол
@@ -19,5 +21,7 @@ namespace Log //работа с протоколом
 	void WriteParm(LOG log, Parm::PARM parm); //вывести в протокол информацию о входных параметрах
 	void WriteIn(LOG log, In::IN in); //вывести в протокол информацию о входном потоке
 	void WriteError(LOG log, Error::ERROR error); //вывести в протокол информацию об ошибке
+	void LogTables(LOG log, LEX::LEX t); //Вывод таблиц лексем
+	void LogIDTables(LOG log, LEX::LEX t); //Вывод таблиц идентификаторов
 	void Close(LOG log); //закрыть протокол
 }

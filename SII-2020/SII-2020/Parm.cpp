@@ -10,6 +10,9 @@ namespace Parm
 	{
 		setlocale(LC_CTYPE, "Russian");
 		Parm::PARM out;
+		out.showMfst = false;
+		out.showTables = false;
+		out.showITables = false;
 		out.in[0] = L'\0';
 		out.out[0] = L'\0';
 		out.log[0] = L'\0';
@@ -17,9 +20,22 @@ namespace Parm
 		wchar_t wst[100];
 		for (int i = 0; i < argc; i++)
 		{
+			if (argv[i][0] == 'm' && argv[i][1] == '\0') {
+				out.showMfst = true;
+			}
+			if (argv[i][0] == 'l' && argv[i][1] == '\0') {
+				out.showTables = true;
+			}
+			if (argv[i][0] == 'i' && argv[i][1] == '\0') {
+				out.showITables = true;
+			}
+
+
+
+
 			if (wcslen(argv[i]) > PARM_MAX_SIZE)
 				throw ERROR_THROW(104)
-				const wchar_t* in = wcsstr(argv[i], PARM_IN);
+			const wchar_t* in = wcsstr(argv[i], PARM_IN);
 			if (in != 0)
 			{
 				wcscpy_s(out.in, argv[i] + wcslen(PARM_IN));

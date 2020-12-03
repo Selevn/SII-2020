@@ -73,11 +73,13 @@ namespace MFST
 		GRB::Greibach greibach;			//грамматика Грейбах
 		LEX::LEX lex;				//результат работы лексического анализатора
 		MFSTSTACK st;					//стек автомата
+		bool shallWrite;
 		use_container<std::stack<MfstState>> storestate;	//стек сохранения состояний
 		Mfst();
 		Mfst(	
 			LEX::LEX plex,				//результат работы лексического анализатора
-			GRB::Greibach pgreibach		//грамматика грейбах
+			GRB::Greibach pgreibach,		//грамматика грейбах
+			bool shouldWrite
 		);
 		char* getCSt(char* buf);		//получить содержимое стека
 		char* getCLenta(char* buf, short pos, short n = 25);		//лента: n символов с pos

@@ -2,6 +2,7 @@
 #include <string.h>
 #include "stdarg.h"
 #include "Lt.h"
+#include <iostream>
 #define GRB_ERROR_SERIES 600
 
 
@@ -11,15 +12,13 @@ namespace GRB
 	Greibach greibach(NS('S'), TS('$'),
 		9,
 		Rule(NS('S'), GRB_ERROR_SERIES + 0,
-			8, //todo m{NrE;};     tfi(F){NrE;};S     m{NrE;};S           tfi(F){NrE;};
-			Rule::Chain(8, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}')),
-			Rule::Chain(7, TS('m'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}')),
+			10, //todo m{NrE;};     tfi(F){NrE;};S     m{NrE;};S           tfi(F){NrE;};
+			Rule::Chain(7, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}')),
+			Rule::Chain(6, TS('m'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}')),
 			Rule::Chain(15,TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
 			Rule::Chain(14,TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
 			Rule::Chain(14,TS('d'), TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
 			Rule::Chain(13,TS('d'), TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
-			//Rule::Chain(9, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S')),
-			//Rule::Chain(8, TS('m'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S')),
 			Rule::Chain(14, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';')),
 			Rule::Chain(13, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';')),
 			Rule::Chain(13, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';')),

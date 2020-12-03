@@ -1,7 +1,6 @@
 #include "CodeGeneration.h"
 #include <stack>
 
-
 //TODO: Offset строк
 namespace CG {
 	
@@ -380,7 +379,10 @@ namespace CG {
 						break;
 					}
 					case IT::STR: {
-						*stream << " BYTE " << t.idtable.table[i].value.vstr.str << ", 0 " <<" ;STR";
+						if(strlen(t.idtable.table[i].value.vstr.str)>2)
+							*stream << " BYTE " << t.idtable.table[i].value.vstr.str << ", 0 " <<" ;STR";
+						else
+							*stream << " BYTE " << "0 " << " ;STR";
 						break;
 					}
 				}
@@ -502,12 +504,12 @@ namespace CG {
 	
 	
 
-	void Generate(LEX::LEX t) {
-		std::ofstream out = std::ofstream("../SII-2020ASM/SII-2020ASM.asm");
-		Head(&out, t);
-		Constants(&out, t);
-		Data(&out,t);
-		Code(&out,t);
+	void Generate(LEX::LEX t, Out::OUT o) {
+		std::ofstream *out = o.stream;//std::ofstream("../SII-2020ASM/SII-2020ASM.asm");
+		Head(out, t);
+		Constants(out, t);
+		Data(out,t);
+		Code(out,t);
 
 	}
 	

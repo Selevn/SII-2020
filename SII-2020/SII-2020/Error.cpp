@@ -110,7 +110,8 @@ namespace Error
 		ERROR_ENTRY(707, "[Semantic]: Ошибка экспорта: ошибочный тип возвращаемого значения"),
 		ERROR_ENTRY(708, "[Semantic]: Ошибочный оператор: строки можно только складывать"),
 		ERROR_ENTRY(709, "[Semantic]: Ошибочные параметры условной конструкции: строки не могут быть параметрами условной конструкции"),
-		ERROR_ENTRY_NODEF10(710),ERROR_ENTRY_NODEF10(720),ERROR_ENTRY_NODEF10(730),ERROR_ENTRY_NODEF10(740),
+		ERROR_ENTRY(710, "[Semantic]: Ошибочный опреатор: для типа char разрешены только операции + и -"),
+		ERROR_ENTRY_NODEF10(720),ERROR_ENTRY_NODEF10(730),ERROR_ENTRY_NODEF10(740),
 		ERROR_ENTRY_NODEF10(750),ERROR_ENTRY_NODEF10(760),ERROR_ENTRY_NODEF10(770),ERROR_ENTRY_NODEF10(780),
 		ERROR_ENTRY_NODEF10(790),
 		ERROR_ENTRY_NODEF100(800), ERROR_ENTRY_NODEF100(900)

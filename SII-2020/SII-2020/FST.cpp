@@ -942,7 +942,6 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			RELATION('8', 1),
 			RELATION('9', 1),
 
-
 			RELATION('a', 2),
 			RELATION('b', 2),
 			RELATION('c', 2),
@@ -1498,7 +1497,8 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					bool continueFlag = true;
 					if (checkArr[j].iddatatype == IT::INT)
 					{
-						unsigned int out = atoi(str);
+
+						unsigned int out = strtoul(str, NULL, 10);
 						int positionInTable = IT::IsLX(idtable, checkArr[j].iddatatype, out);
 						if (positionInTable != TI_NULLIDX)
 						{
@@ -1547,8 +1547,8 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 						if (checkArr[j].iddatatype == IT::INT)
 						{
-							int out = atoi(str);
-							IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, (unsigned int)out);
+							unsigned int out = strtoul(str, NULL, 10);
+							IT::Entry ttmp(lextable.size - 1, scope.c_str(), checkArr[j].iddatatype, IT::L, out);
 							IT::Add(idtable, ttmp);
 						}
 						else if (checkArr[j].iddatatype == IT::STR)
@@ -1671,3 +1671,4 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		//}
 #pragma endregion
 }
+
