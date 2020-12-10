@@ -1,9 +1,7 @@
-﻿
-#include "tchar.h"
+﻿#include "tchar.h"
 #include <iostream>
 #include <locale>
 #include <cwchar>
-
 #include "MFST.h"
 #include "Error.h"
 #include "Parm.h"

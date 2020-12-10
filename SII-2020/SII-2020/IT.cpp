@@ -75,7 +75,7 @@ namespace IT
 		bool bflag = false;
 		for (int i = 0; i < idtable.size; i++)
 		{
-				if (idtable.table[i].iddatatype != type
+				if (idtable.table[i].idtype !=IT::L || idtable.table[i].iddatatype != type
 					||
 					data != idtable.table[i].value.vint)
 					continue;

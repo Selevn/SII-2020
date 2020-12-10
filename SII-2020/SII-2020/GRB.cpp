@@ -15,38 +15,25 @@ namespace GRB
 			6, //todo m{NrE;};     tfi(F){NrE;};S     m{NrE;};S           tfi(F){NrE;};
 			Rule::Chain(7, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}')),//+
 			Rule::Chain(6, TS('m'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}')),//+
-
 			Rule::Chain(15,TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),//+
-			
 			Rule::Chain(14, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
-
 			Rule::Chain(14, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S')),
-
 			Rule::Chain(13, TS('d'), TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), TS(';'), NS('S'))
 		),
 		Rule(NS('N'), GRB_ERROR_SERIES + 1,
 			14, //todo dti;   rE;   i=E;   dtfi(F);   dti;N   rE;N   i=E;N   dtfi(F);N pl;N pi;N pl; pi; pi(W);
 			Rule::Chain(4, TS('d'), TS('t'), TS('i'), TS(';')),//+
 			Rule::Chain(5, TS('d'), TS('t'), TS('i'), TS(';'), NS('N')), //+
-
-			//Rule::Chain(3, TS('r'), NS('E'), TS(';')),
-			//Rule::Chain(4, TS('r'), NS('E'), TS(';'), NS('N')),
-
 			Rule::Chain(4, TS('i'), TS('v'), NS('E'), TS(';')), //+
 			Rule::Chain(5, TS('i'), TS('v'), NS('E'), TS(';'), NS('N')),
-
 			Rule::Chain(9, TS('e'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS(';'), NS('N')), //+
 			Rule::Chain(8, TS('e'), TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS(';')),//+
-
 			Rule::Chain(8, TS('e'), TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS(';'), NS('N')),
 			Rule::Chain(7, TS('e'), TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS(';')),
-			
 			Rule::Chain(4, TS('p'), TS('i'), TS(';'), NS('N')),//+
 			Rule::Chain(3, TS('p'), TS('i'), TS(';')),//+
-
 			Rule::Chain(4, TS('p'), TS('l'), TS(';'), NS('N')),//+
 			Rule::Chain(3, TS('p'), TS('l'), TS(';')),//+
-
 			Rule::Chain(8, TS('u'),TS('('), NS('B'), TS(')'),TS('['),NS('N'),TS(']'), TS(';')),
 			Rule::Chain(9, TS('u'),TS('('), NS('B'), TS(')'),TS('['),NS('N'),TS(']'), TS(';'),NS('N'))
 		),

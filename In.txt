@@ -25,5 +25,10 @@ bind uint demo2;
 demo2 = demo \ 2;
 output "demo>>2";
 output demo2;
+bind uint a;
+bind uint qq;
+qq = 1;
+qq = qq : 0;
+output qq;
 stop 0;
 }

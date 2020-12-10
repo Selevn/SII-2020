@@ -103,6 +103,8 @@ namespace CG {
 						case ':': {
 							*stream << "push edx ; сохраняем данные регистра edx" << '\n';
 							*stream << "mov edx, 0" << '\n';
+							*stream << "TEST  EBX, EBX" << '\n';
+							*stream << "JZ    div_by_0" << '\n';
 							*stream << "div ebx" << '\n';
 							*stream << "pop edx" << '\n';
 							break;
@@ -110,6 +112,8 @@ namespace CG {
 						case '%': {
 							*stream << "push edx ; сохраняем данные регистра edx" << '\n';
 							*stream << "mov edx, 0" << '\n';
+							*stream << "TEST  EBX, EBX" << '\n';
+							*stream << "JZ    div_by_0" << '\n';
 							*stream << "div ebx" << '\n';
 							*stream << "mov eax, edx" << '\n';
 							*stream << "pop edx" << '\n';
@@ -364,6 +368,7 @@ namespace CG {
 	}
 	void Constants(std::ofstream *stream, LEX::LEX t) {
 		*stream << ".const\n";
+		*stream << "divideOnZeroExeption BYTE \"Попытка деления на ноль.\", 0  ;STR, для вывода ошибки при делении на ноль\n";
 		for (int i = 0; i < t.idtable.size; i++)
 		{
 			if (t.idtable.table[i].idtype == IT::L)
@@ -496,6 +501,10 @@ namespace CG {
 		InvokeExpressions(stream, t, st, i);
 
 
+		*stream << "\tjmp endPoint\n";
+		*stream << "\tdiv_by_0:\n";
+		*stream << "\tpush offset divideOnZeroExeption\nCALL outputstr\n";
+		*stream << "\endPoint:\n";
 		*stream << "\tinvoke\t\tExitProcess, eax\n";
 		*stream << "main ENDP\n";
 		*stream << "end main";

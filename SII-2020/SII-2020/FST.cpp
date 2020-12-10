@@ -7,16 +7,12 @@
 #include "IT.h"
 #include <stack>
 
-struct libfuncs{
+struct libfuncs {
 	std::string name;
 	IT::IDDATATYPE params[255];
 	int parcount = 0;
 	IT::IDDATATYPE retval;
 };
-
-
-
-
 
 FST::RELATION::RELATION(char c, short ns)
 {
@@ -132,6 +128,8 @@ bool FST::execute(FST& fst) //выполнить распознование цепочки
 }
 void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lextable, IT::IdTable& idtable) //выполнить распознование цепочки
 {
+	
+
 	libfuncs libs[4];
 	int libslen = 3;
 	libs[0].name = "random";
@@ -1495,16 +1493,16 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 
 
 					bool continueFlag = true;
+					
 					if (checkArr[j].iddatatype == IT::INT)
 					{
-
 						unsigned int out = strtoul(str, NULL, 10);
-						int positionInTable = IT::IsLX(idtable, checkArr[j].iddatatype, out);
-						if (positionInTable != TI_NULLIDX)
-						{
-							continueFlag = false;
-							lexTableObject.idxTI = positionInTable;
-						}
+							int positionInTable = IT::IsLX(idtable, checkArr[j].iddatatype, out);
+							if (positionInTable != TI_NULLIDX)
+							{
+								continueFlag = false;
+								lexTableObject.idxTI = positionInTable;
+							}
 					}
 					if (checkArr[j].iddatatype == IT::CHR)
 					{

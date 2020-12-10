@@ -15,6 +15,7 @@ strConcat PROTO :DWORD,:DWORD
 
 .stack 4096
 .const
+divideOnZeroExeption BYTE "ѕопытка делени€ на ноль.", 0  ;STR, дл€ вывода ошибки при делении на ноль
 	FindFactLEX1 DWORD 1 ;INT
 	mainLEX4 BYTE "Ќахождение факториала числа ", 0  ;STR
 	mainLEX5 DWORD 11 ;INT
@@ -24,13 +25,16 @@ strConcat PROTO :DWORD,:DWORD
 	mainLEX9 DWORD 2 ;INT
 	mainLEX10 BYTE "demo<<2", 0  ;STR
 	mainLEX12 BYTE "demo>>2", 0  ;STR
-	mainLEX13 DWORD 0 ;INT
+	mainLEX14 DWORD 0 ;INT
+	mainLEX15 DWORD 0 ;INT
 .data
 	FindFactanswer DWORD 0 ;INT
 	mainnumber DWORD 0 ;INT
 	maindemo DWORD 0 ;INT
 	maindemo1 DWORD 0 ;INT
 	maindemo2 DWORD 0 ;INT
+	maina DWORD 0 ;INT
+	mainqq DWORD 0 ;INT
 
 .code
 FindFact PROC uses ebx ecx edi esi ,	FindFacta: DWORD 
@@ -138,7 +142,33 @@ CALL outputstr
 push maindemo2
 CALL outputuint
 
-mov eax, mainLEX13
+; String #30 :ivl
+push FindFactLEX1
+pop mainqq
+
+; String #31 :ivilv
+push mainqq
+push mainLEX14
+pop ebx
+pop eax
+push edx ; сохран€ем данные регистра edx
+mov edx, 0
+TEST  EBX, EBX
+JZ    div_by_0
+div ebx
+pop edx
+push eax
+pop mainqq
+
+push mainqq
+CALL outputuint
+
+mov eax, mainLEX15
+	jmp endPoint
+	div_by_0:
+	push offset divideOnZeroExeption
+CALL outputstr
+endPoint:
 	invoke		ExitProcess, eax
 main ENDP
 end main
