@@ -1538,7 +1538,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						for (int j = scopeStack.size() - 1; j >= 0; j--) {
 							scope = scope + scopeStack.at(j);
 						}
-						scope += "LEX";
+						scope += "$LEX";
 						char* t = new char[6];
 						_itoa_s(literalCount, t, 6, 10);
 						scope += t;

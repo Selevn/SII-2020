@@ -1,8 +1,4 @@
 ﻿  FST.cpp
 C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\FST.cpp(118,36): warning C4267: инициализация: преобразование из "size_t" в "short"; возможна потеря данных
 C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\FST.cpp(1318,26): warning C4018: <: несоответствие типов со знаком и без знака
-  In.cpp
-C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\In.cpp(22,13): warning C4244: инициализация: преобразование "std::streamoff" в "int", возможна потеря данных
-  SII-2020.cpp
-  Создание кода...
   SII-2020.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020.exe

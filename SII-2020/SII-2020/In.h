@@ -282,7 +282,7 @@ namespace In
 		int lines;		//количество строк
 		int ignor;		//кол-во проигнорированных символов
 		//unsigned char* text;		
-		int code[256];		//таблица проверки T, F, I новое значение
+		//int code[256];		//таблица проверки T, F, I новое значение
 
 		std::list<lexem> lexems;//Исходный код (Windows - 1251)
 

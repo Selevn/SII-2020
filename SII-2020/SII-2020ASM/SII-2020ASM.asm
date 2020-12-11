@@ -16,17 +16,18 @@ strConcat PROTO :DWORD,:DWORD
 .stack 4096
 .const
 divideOnZeroExeption BYTE "Попытка деления на ноль.", 0  ;STR, для вывода ошибки при делении на ноль
-	FindFactLEX1 DWORD 1 ;INT
-	mainLEX4 BYTE "Нахождение факториала числа ", 0  ;STR
-	mainLEX5 DWORD 11 ;INT
-	mainLEX6 BYTE "Равен ", 0  ;STR
-	mainLEX7 BYTE "Демонстрация сдвига", 0  ;STR
-	mainLEX8 DWORD 32 ;INT
-	mainLEX9 DWORD 2 ;INT
-	mainLEX10 BYTE "demo<<2", 0  ;STR
-	mainLEX12 BYTE "demo>>2", 0  ;STR
-	mainLEX14 DWORD 0 ;INT
-	mainLEX15 DWORD 0 ;INT
+	FindFact$LEX1 DWORD 1 ;INT
+	main$LEX4 BYTE "Нахождение факториала числа ", 0  ;STR
+	main$LEX5 DWORD 11 ;INT
+	main$LEX6 BYTE "Равен ", 0  ;STR
+	main$LEX7 BYTE "Демонстрация сдвига", 0  ;STR
+	main$LEX8 DWORD 32 ;INT
+	main$LEX9 DWORD 2 ;INT
+	main$LEX10 BYTE "demo<<2", 0  ;STR
+	main$LEX12 BYTE "demo>>2", 0  ;STR
+	main$LEX14 DWORD 0 ;INT
+	main$LEX15 BYTE "q", 0  ;STR
+	main$LEX16 DWORD 0 ;INT
 .data
 	FindFactanswer DWORD 0 ;INT
 	mainnumber DWORD 0 ;INT
@@ -35,16 +36,17 @@ divideOnZeroExeption BYTE "Попытка деления на ноль.", 0  ;STR, для вывода ошибки
 	maindemo2 DWORD 0 ;INT
 	maina DWORD 0 ;INT
 	mainqq DWORD 0 ;INT
+	mainss DWORD 0 ;STR
 
 .code
 FindFact PROC uses ebx ecx edi esi ,	FindFacta: DWORD 
 ; String #3 :ivl
-push FindFactLEX1
+push FindFact$LEX1
 pop FindFactanswer
 
 While17Start: 
 mov eax, FindFacta
-mov ebx, FindFactLEX1
+mov ebx, FindFact$LEX1
 cmp eax, ebx
 jl While17End
 
@@ -59,7 +61,7 @@ pop FindFactanswer
 
 ; String #4 :ivilv
 push FindFacta
-push FindFactLEX1
+push FindFact$LEX1
 pop ebx
 pop eax
 sub eax, ebx
@@ -74,18 +76,18 @@ FindFact ENDP
 
 main PROC
 
-push offset mainLEX4
+push offset main$LEX4
 CALL outputstr
 
 ; String #11 :ivil@1
-invoke random, mainLEX5
+invoke random, main$LEX5
 push eax ;результат функции
 pop mainnumber
 
 push mainnumber
 CALL outputuint
 
-push offset mainLEX6
+push offset main$LEX6
 CALL outputstr
 
 ; String #14 :ivii@1
@@ -96,11 +98,11 @@ pop mainnumber
 push mainnumber
 CALL outputuint
 
-push offset mainLEX7
+push offset main$LEX7
 CALL outputstr
 
 ; String #18 :ivl
-push mainLEX8
+push main$LEX8
 pop maindemo
 
 push maindemo
@@ -108,7 +110,7 @@ CALL outputuint
 
 ; String #21 :ivilv
 push maindemo
-push mainLEX9
+push main$LEX9
 pop ebx
 pop eax
 push ecx ; сохраняем данные регистра ecx
@@ -118,7 +120,7 @@ pop ecx
 push eax
 pop maindemo1
 
-push offset mainLEX10
+push offset main$LEX10
 CALL outputstr
 
 push maindemo1
@@ -126,7 +128,7 @@ CALL outputuint
 
 ; String #25 :ivilv
 push maindemo
-push mainLEX9
+push main$LEX9
 pop ebx
 pop eax
 push ecx ; сохраняем данные регистра ecx
@@ -136,34 +138,33 @@ pop ecx
 push eax
 pop maindemo2
 
-push offset mainLEX12
+push offset main$LEX12
 CALL outputstr
 
 push maindemo2
 CALL outputuint
 
 ; String #30 :ivl
-push FindFactLEX1
+push FindFact$LEX1
 pop mainqq
 
 ; String #31 :ivilv
 push mainqq
-push mainLEX14
+push main$LEX14
 pop ebx
 pop eax
-push edx ; сохраняем данные регистра edx
-mov edx, 0
-TEST  EBX, EBX
-JZ    div_by_0
-div ebx
-pop edx
+imul ebx
 push eax
 pop mainqq
+
+; String #33 :ivl
+push offset main$LEX15
+pop mainss
 
 push mainqq
 CALL outputuint
 
-mov eax, mainLEX15
+mov eax, main$LEX16
 	jmp endPoint
 	div_by_0:
 	push offset divideOnZeroExeption

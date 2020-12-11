@@ -28,7 +28,9 @@ output demo2;
 bind uint a;
 bind uint qq;
 qq = 1;
-qq = qq : 0;
+qq = qq * 0;
+bind str ss;
+ss = "q";
 output qq;
 stop 0;
 }
