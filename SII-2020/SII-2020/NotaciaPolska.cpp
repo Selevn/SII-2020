@@ -7,7 +7,6 @@
 #include "Error.h"
 
 namespace NotaciaPolska {
-
 	template <typename T>
 	struct container : T
 	{
@@ -81,7 +80,6 @@ namespace NotaciaPolska {
 	{
 		container<std::stack<char>> stack;
 		std::string PolishString;
-		std::vector<char> operators = { LEX_MINUS, LEX_PLUS, LEX_DIRSLASH, LEX_STAR };
 		std::vector<int> ids;
 		int operators_count = 0, operands_count = 0, iterator = 0, right_counter = 0, left_counter = 0, params_counter = 0;
 
@@ -93,30 +91,38 @@ namespace NotaciaPolska {
 				stack.push('@');
 				operands_count--;
 			}
-			if (std::find(operators.begin(), operators.end(), lexem) != operators.end() || std::find(operators.begin(), operators.end(), data) != operators.end()) {
-				if (!stack.empty() && stack.top() != LEX_LEFTHESIS) {
-					while (!stack.empty() && get_priority(data) <= get_priority(stack.top())) {
+			switch (lexem) {
+			case LEX_OPERATOR: 
+				{
+					if (!stack.empty() && stack.top() != LEX_LEFTHESIS) {
+						while (!stack.empty() && get_priority(data) <= get_priority(stack.top())) {
+							PolishString += stack.top();
+							stack.pop();
+						}
+					}
+					stack.push(data);
+					operators_count++;
+					break;
+				}
+			case LEX_COMMA:
+				{
+					while (!stack.empty()) {
+						if (stack.top() == LEX_LEFTHESIS)
+							break;
 						PolishString += stack.top();
 						stack.pop();
 					}
+					operands_count--;
+					break;
 				}
-				stack.push(data);
-				operators_count++;
-			}
-			else if (lexem == LEX_COMMA) {
-				while (!stack.empty()) {
-					if (stack.top() == LEX_LEFTHESIS)
-						break;
-					PolishString += stack.top();
-					stack.pop();
-				}
-				operands_count--;
-			}
-			else if (lexem == LEX_LEFTHESIS) {
+			case LEX_LEFTHESIS:
+			{
 				left_counter++;
 				stack.push(lexem);
+				break;
 			}
-			else if (lexem == LEX_RIGHTHESIS) {
+			case LEX_RIGHTHESIS:
+			{
 				right_counter++;
 				if (!find_elem(stack, stack_size, LEX_LEFTHESIS))
 					return false;
@@ -130,27 +136,42 @@ namespace NotaciaPolska {
 					params_counter = 0;
 					stack.pop();
 				}
-			}
-			else if (lexem == LEX_SEMICOLON) {
-				if (operators_count != 0 && operands_count != 0)
-					if ((!stack.empty() && (stack.top() == LEX_RIGHTHESIS || stack.top() == LEX_LEFTHESIS))
-						|| right_counter != left_counter || operands_count - operators_count != 1)
-						return false;
-				while (!stack.empty()) {
-					PolishString += stack.top();
-					stack.pop();
-				}
-				fixIt(lextable, PolishString, iterator, lextable_pos, ids);
 				break;
 			}
-			else if (lexem == LEX_ID || lexem == LEX_LITERAL) {
+			case LEX_SEMICOLON:
+				{
+					if (operators_count != 0 && operands_count != 0)
+						if ((!stack.empty() && (stack.top() == LEX_RIGHTHESIS || stack.top() == LEX_LEFTHESIS))
+							|| right_counter != left_counter || operands_count - operators_count != 1)
+							return false;
+					while (!stack.empty()) {
+						PolishString += stack.top();
+						stack.pop();
+					}
+					fixIt(lextable, PolishString, iterator, lextable_pos, ids);
+					return true;
+					break;
+				}
+			case LEX_ID: {
 				if (std::find(stack.c.begin(), stack.c.begin(), '@') != stack.c.end())
 					params_counter++;
 				PolishString += lexem;
 				if (lextable.table[i].idxTI != LT_TI_NULLIDX)
 					ids.push_back(lextable.table[i].idxTI);
 				operands_count++;
+				break;
 			}
+			case LEX_LITERAL: {
+				if (std::find(stack.c.begin(), stack.c.begin(), '@') != stack.c.end())
+					params_counter++;
+				PolishString += lexem;
+				if (lextable.table[i].idxTI != LT_TI_NULLIDX)
+					ids.push_back(lextable.table[i].idxTI);
+				operands_count++;
+				break;
+			}
+			}
+			
 		}
 		return true;
 	}

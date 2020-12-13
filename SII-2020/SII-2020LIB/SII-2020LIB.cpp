@@ -5,6 +5,8 @@ extern "C"
 	unsigned int __stdcall random(unsigned int max)
 	{
 		srand(time(NULL));
+		if (max == 0)
+			return 1;
 		return (unsigned int)rand() % max;
 	}
 	unsigned int __stdcall ord(char ch)
