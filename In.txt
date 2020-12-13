@@ -1,15 +1,14 @@
-bind uint func QQQ(uint a, uint b){
-	stop a;
-};
 go{
-extern uint func random(uint a);
-bind uint a;
+extern char func chr(uint i);
+extern uint func ord(char i);
+bind char a;
+bind char c;
 bind uint b;
-bind uint c;
-bind uint verylog22;
-bind uint verylogni;
-bind str string;
-a = QQQ(5,6);
+a = chr(357);
+b = ord(a);
+c = chr(1);
 output a;
+output c;
+output b;
 stop 0;
 }

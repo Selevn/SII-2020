@@ -217,10 +217,13 @@ namespace In
 				}
 				default:
 				{
-					std::cout << "Default input: " << tmp;
+					//std::cout << "Default input: " << tmp;
 					break;
 				}
 				}
+			}
+			if (lexContainerLen != 0) {
+				throw ERROR_THROW_IN(600,out.lines, line_counter);
 			}
 			delete []lexContainer;
 			file.close();

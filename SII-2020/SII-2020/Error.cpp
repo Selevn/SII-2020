@@ -44,7 +44,7 @@ namespace Error
 		ERROR_ENTRY(113, "[IN]: ѕревышен предел размера лексемы"),//+
 		ERROR_ENTRY(114, "[IN]: ќтсуствует закрывающа€ кавычка"),//+
 		ERROR_ENTRY(115, "[IN]: ¬ходна€ строка превышает максималььный размер"),//+
-		ERROR_ENTRY_NODEF(116),
+		ERROR_ENTRY(116, "[IN]:  оличество открывающих фигурных скобок не совпадает с количеством закрывающих"),
 		ERROR_ENTRY_NODEF(117),
 		ERROR_ENTRY_NODEF(118),
 		ERROR_ENTRY_NODEF(119),

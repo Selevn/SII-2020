@@ -97,7 +97,7 @@ namespace CG {
 							break;
 						}
 						case '*': {
-							*stream << "imul ebx" << '\n';
+							*stream << "mul ebx" << '\n';
 							break;
 						}
 						case ':': {

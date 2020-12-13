@@ -1,10 +1,13 @@
 ﻿#include <iostream>
 #include <ctime>
+
+#include <time.h>
+
 extern "C"
 {
 	unsigned int __stdcall random(unsigned int max)
 	{
-		srand(time(NULL));
+ 		srand(time(NULL));
 		if (max == 0)
 			return 1;
 		return (unsigned int)rand() % max;

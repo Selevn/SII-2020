@@ -1216,6 +1216,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 	bool isLiteral = false;
 	bool wasMain = false;
 	bool isBoleanExpression = false;
+	int hesisCounter = 0;
 	IT::IDDATATYPE dataType = (IT::IDDATATYPE)FALSYNUMBER;
 	IT::IDTYPE type = (IT::IDTYPE)FALSYNUMBER;
 #pragma endregion
@@ -1407,7 +1408,13 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 							isFunctionParam = false;
 						}
 					}
-					//если ожидается булевское выражение
+					if (lextable.size != 0
+						&&
+						lextable.table[lextable.size - 1].idxTI != LT_TI_NULLIDX
+						&&
+						idtable.table[lextable.table[lextable.size - 1].idxTI].idtype != IT::F)
+							throw ERROR_THROW_IN(602, lex.line, lex.col)
+
 					break; }
 					//правая скобочка
 				case LEX_RIGHTHESIS: {
@@ -1449,6 +1456,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					break; }
 								   //левая фигурная
 				case LEX_LEFTBRACE: {
+					hesisCounter++;
 					//если предыдущая лексема закрытсая скобочка и ожидаем тело функции
 					if (lextable.table[lextable.size - 1].lexema == LEX_RIGHTHESIS && isRequireBodyFunc)
 						scopeStack.push_back(scopeName.c_str());
@@ -1462,6 +1470,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 				}
 								  //правая фигурная
 				case LEX_RIGHTBRACE: {
+					hesisCounter--;
 					if (isRequireBodyFunc)
 					{
 						scopeStack.pop_back();
@@ -1588,6 +1597,8 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 		//если не было main
 		if (!wasMain)
 			throw ERROR_THROW(124);
+		if(hesisCounter!=0)
+			throw ERROR_THROW(116);
 #pragma endregion
 }
 

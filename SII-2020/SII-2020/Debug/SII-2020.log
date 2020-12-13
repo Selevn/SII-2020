@@ -1,4 +1,4 @@
-﻿  FST.cpp
-C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\FST.cpp(118,36): warning C4267: инициализация: преобразование из "size_t" в "short"; возможна потеря данных
-C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\FST.cpp(1318,26): warning C4018: <: несоответствие типов со знаком и без знака
+﻿  CodeGeneration.cpp
+C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\CodeGeneration.cpp(23,16): warning C4101: func: неиспользованная локальная переменная
+C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\CodeGeneration.cpp(507,14): warning C4129: e: неизвестная escape-последовательность
   SII-2020.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020.exe
