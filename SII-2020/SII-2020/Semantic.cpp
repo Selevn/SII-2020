@@ -110,7 +110,6 @@ namespace Semantic {
 					pos++;
 				}
 				pos++;
-				//не обрабатывает вид stop(a+b*c)
 				if ((t.lextable.table[i + pos].lexema == LEX_ID || t.lextable.table[i + pos].lexema == LEX_LITERAL) && t.idtable.table[t.lextable.table[i + pos].idxTI].idtype!=IT::F && (short)t.idtable.table[t.lextable.table[i + pos].idxTI].iddatatype != retType)
 					throw ERROR_THROW_IN(701, t.lextable.table[i + pos].sn, t.lextable.table[i + pos].cn)
 			}

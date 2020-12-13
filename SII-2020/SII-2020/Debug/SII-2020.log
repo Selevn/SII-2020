@@ -1,4 +1,2 @@
-﻿  CodeGeneration.cpp
-C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\CodeGeneration.cpp(23,16): warning C4101: func: неиспользованная локальная переменная
-C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\SII-2020\CodeGeneration.cpp(507,14): warning C4129: e: неизвестная escape-последовательность
+﻿  Semantic.cpp
   SII-2020.vcxproj -> C:\Users\Selevn\Desktop\учеба\Kursach\SII-2020\Debug\SII-2020.exe

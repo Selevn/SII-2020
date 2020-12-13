@@ -16,7 +16,6 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
 	setlocale(LC_ALL, "rus");
-	//system("chcp 1251");
 
 	Log::LOG log = Log::INITLOG;
 	Out::OUT out = Out::INITOUT;
