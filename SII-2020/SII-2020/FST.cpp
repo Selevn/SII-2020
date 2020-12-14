@@ -821,7 +821,6 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			RELATION('Y', 1),
 			RELATION('Z', 1),
 			RELATION('_', 1),
-
 			RELATION('a', 2),
 			RELATION('b', 2),
 			RELATION('c', 2),
@@ -929,6 +928,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			RELATION('X', 1),
 			RELATION('Y', 1),
 			RELATION('Z', 1),
+			RELATION('_', 1),
 			RELATION('0', 1),
 			RELATION('1', 1),
 			RELATION('2', 1),
@@ -939,7 +939,6 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 			RELATION('7', 1),
 			RELATION('8', 1),
 			RELATION('9', 1),
-
 			RELATION('a', 2),
 			RELATION('b', 2),
 			RELATION('c', 2),
@@ -1251,7 +1250,7 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 				executedFlag = true;
 #pragma region "Установка флага"
 				LT::Entry lexTableObject(checkArr[j].lexName, lex.line,lex.col, 0xffffffff);
-				//нет until
+				//нет until (уже есть)
 				//проверяем что за лексема
 				switch (checkArr[j].lexName)
 				{
@@ -1312,14 +1311,15 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 					//если функция, то не учитываем скоуп
 					if (IT::IsId(idtable, str) != TI_NULLIDX && IT::GetEntry(idtable, IT::IsId(idtable, str)).idtype == (IT::IDTYPE::F))
 					{
-						scope += str;
+						scope+= str;
 					}
 					else {
-						if(!isExported)
+						if (!isExported)
+						{
 							for (int j = 0; j < scopeStack.size(); j++) {
 								scope = scope + scopeStack.at(j);
 							}
-
+						}
 						scope += str;
 					}
 					//если нет такого итендфикатора
@@ -1353,8 +1353,11 @@ void FST::LexAnalyzer(In::IN in, Out::OUT out, Log::LOG log, LT::LexTable& lexta
 						if (dataType != (IT::IDDATATYPE)FALSYNUMBER && type != (IT::IDTYPE)FALSYNUMBER)
 						{
 							if (type == IT::F)
+							{
 								scopeName = str;
+							}
 
+							
 							//добавляем в таблицу 
 							IT::Entry idTableObject(lextable.size, scope.c_str(), dataType, type, isExported);
 							IT::Add(idtable, idTableObject);

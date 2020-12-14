@@ -14,7 +14,7 @@ namespace NotaciaPolska {
 		using T::c;
 	};
 
-	std::string To_string(int n) {
+	std::string toString(int n) {
 		char buf[40];
 		sprintf_s(buf, "%d", n);
 		return buf;
@@ -132,7 +132,7 @@ namespace NotaciaPolska {
 				}
 				stack.pop();
 				if (!stack.empty() && stack.top() == '@') {
-					PolishString += stack.top() + To_string(params_counter - 1);
+					PolishString += stack.top() + toString(params_counter - 1);
 					params_counter = 0;
 					stack.pop();
 				}

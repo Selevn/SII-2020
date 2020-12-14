@@ -62,7 +62,11 @@ namespace CG {
 						else
 						{
 							isArguments = true;
-							*stream << "invoke " << t.idtable.table[t.lextable.table[i + pos].idxTI].id;
+							if(t.idtable.table[t.lextable.table[i + pos].idxTI].isExternal == false)
+								*stream << "invoke " <<"$"<< t.idtable.table[t.lextable.table[i + pos].idxTI].id;
+							else
+								*stream << "invoke " << t.idtable.table[t.lextable.table[i + pos].idxTI].id;
+
 							pos++;
 							while (t.lextable.table[i + pos].lexema != '@') {
 								*stream << ", " << t.idtable.table[t.lextable.table[i + pos].idxTI].id;
@@ -428,7 +432,8 @@ namespace CG {
 			{	//если не библиотечная
 				if (t.idtable.table[i].isExternal == false)
 				{
-					*stream  << t.idtable.table[i].id << " PROC uses ebx ecx edi esi ";
+
+					*stream  <<"$"<< t.idtable.table[i].id << " PROC uses ebx ecx edi esi ";
 					int pos = 1;
 					int retsize = 0;
 					bool commaFlag = false;
@@ -477,7 +482,7 @@ namespace CG {
 					InvokeExpressions(stream, t, start, end);
 					//TODO:проверь
 					*stream << "ret";//<< retsize;
-					*stream << "\n" << t.idtable.table[i].id << " ENDP\n\n";
+					*stream << "\n" <<"$"<< t.idtable.table[i].id << " ENDP\n\n";
 				}
 			}
 		}

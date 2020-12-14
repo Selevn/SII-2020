@@ -72,6 +72,8 @@ namespace Semantic {
 	//проверка передаваемых в функцию параметров
 	void parameters(LEX::LEX t) {
 		for (int i = 0; i < t.lextable.size; i++) {
+			if(t.lextable.table[i].lexema == LEX_PRINT && t.idtable.table[t.lextable.table[i+1].idxTI].idtype == IT::F)
+				throw ERROR_THROW_IN(701, t.lextable.table[i + 1].sn, t.lextable.table[i + 1].cn)
 			if (t.lextable.table[i].lexema == LEX_ID && t.idtable.table[t.lextable.table[i].idxTI].idtype == IT::F && t.lextable.table[i - 3].lexema != LEX_EXPORT && t.lextable.table[i - 3].lexema != LEX_DECLARE)
 			{
 				short* types = new short[256];

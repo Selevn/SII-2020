@@ -118,7 +118,7 @@ namespace Log //работа с протоколом
 			<< std::setw(25) << std::left << "Индекс таблицы идентификаторов"
 			<< std::endl;
 
-		for (int i = 0; i < t.idtable.size; i++)
+		for (int i = 0; i < t.lextable.size; i++)
 			{
 				LT::Entry a = LT::GetEntry(t.lextable, i);
 				*log.stream << std::setw(9) << std::left << i

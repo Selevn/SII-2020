@@ -1,14 +1,39 @@
+bind uint func FindFactorial(uint a){
+bind uint answer;
+answer = 1;
+while(a>1)
+[answer = answer*a;a = a-1;];
+stop answer;
+};
 go{
+output "Нахождение факториала числа ";
+extern uint func random(uint a);
+bind uint number;
+number = random(11);
+output number;
+output "Равен";
+number = FindFactorial(number);
+output number;
+output "Демонстрация сдвига";
+bind uint demo;
+demo = 32;
+output demo;
+bind uint demo1;
+demo1 = demo /2;
+output "demo<<2";
+output demo1;
+bind uint demo2;
+demo2 = demo\2;
+output "demo >>2";
+output demo2;
+bind char start_symbol;
+start_symbol = 'а';
+output start_symbol;
 extern char func chr(uint i);
-extern uint func ord(char i);
-bind char a;
-bind char c;
-bind uint b;
-a = chr(357);
-b = ord(a);
-c = chr(1);
-output a;
-output c;
-output b;
+while(start_symbol ^ 'я')
+[
+start_symbol = start_symbol+chr(1);
+output start_symbol;
+];
 stop 0;
 }

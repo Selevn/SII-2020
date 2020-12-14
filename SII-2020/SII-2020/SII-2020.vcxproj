@@ -172,7 +172,6 @@
     <ClInclude Include="Semantic.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\baseIn.txt" />
     <Text Include="..\..\In.txt" />
     <Text Include="..\..\In.txt.log" />
   </ItemGroup>
